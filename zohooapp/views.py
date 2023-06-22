@@ -217,12 +217,14 @@ def add_account(request):
     return render(request,'additem.html')
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def add(request):
     if request.user.is_authenticated:
         if request.method=='POST':
             radio=request.POST.get('radio')
+            
             if radio=='tax':
+                
     
                 
                 inter=request.POST['inter']
@@ -244,15 +246,37 @@ def add(request):
                 unit=Unit.objects.get(id=unit)
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
-                ad_item=AddItem(type=type,Name=name,p_desc=p_desc,s_desc=s_desc,s_price=sel_price,p_price=cost_price,hsn=hsn,unit=unit,
-                            sales=sel,purchase=cost,user=user,creat=history,interstate=inter,intrastate=intra
+                inventorystock = request.POST.get('track') == 'yes'
+                stock = int(request.POST.get('openstock'))
+                
+                if inventorystock:
+                    stock = int(request.POST.get('openstock'))
+                    
+                ad_item=AddItem(type=type,
+                                Name=name,
+                                p_desc=p_desc,
+                                s_desc=s_desc,
+                                s_price=sel_price,
+                                p_price=cost_price,
+                                hsn=hsn,
+                                unit=unit,
+                                sales=sel,
+                                purchase=cost,
+                                user=user,
+                                creat=history,
+                                interstate=inter,
+                                intrastate=intra,
+                                stock=stock
                                 )
+                ad_item.save()
                 
             else:
+                
                                                   
                 type=request.POST.get('type')
                 name=request.POST['name']
                 unit=request.POST['unit']
+                hsn=request.POST['hsn']
                 sel_price=request.POST.get('sel_price')
                 sel_acc=request.POST.get('sel_acc')
                 s_desc=request.POST.get('sel_desc')
@@ -266,11 +290,26 @@ def add(request):
                 unit=Unit.objects.get(id=unit)
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
-                ad_item=AddItem(type=type,Name=name,hsn=hsn,p_desc=p_desc,s_desc=s_desc,s_price=sel_price,p_price=cost_price,unit=unit,
-                            sales=sel,purchase=cost,user=user,creat=history,interstate='none',intrastate='none'
+                ad_item=AddItem(type=type,
+                                Name=name,
+                                hsn=hsn,
+                                p_desc=p_desc,
+                                s_desc=s_desc,
+                                s_price=sel_price,
+                                p_price=cost_price,
+                                unit=unit,
+                                sales=sel,
+                                purchase=cost,
+                                user=user,
+                                creat=history,
+                                interstate='none',
+                                intrastate='none',
+                                stock=stock
+                               
                                 )
-                ad_item.save()
+                
             ad_item.save()
+           
            
             return redirect("itemview")
     return render(request,'additem.html')

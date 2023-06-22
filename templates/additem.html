@@ -58,6 +58,8 @@
 
           
 
+          
+
 
 <section>
 
@@ -222,18 +224,18 @@ select2_div.style.display = "none";
       </div>
       <fieldset class="form-group">
         <div class="row">
-          <label class="col-form-label col-sm-2 pt-2">Type <i class="fa fa-question-circle"></i></label>
+          <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
           <div class="col-sm-10 form-inline">
             <div class="form-check ">
-              <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Goods" >
+              <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Activate" >
               <label class="form-check-label" for="gridRadios1">
-                Goods
+                Activate
               </label>
             </div>
             <div class="form-check ml-5">
-              <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Services">
+              <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Non-Activate">
               <label class="form-check-label" for="gridRadios2">
-              Services
+              Non-Activate
               </label>
             </div>
           
@@ -244,45 +246,80 @@ select2_div.style.display = "none";
       
 
       {% comment %} <section id="trackinventor">  {% endcomment %}
-        <div class="row">
-                <div class="col-md-6">
-                    <input  type="checkbox" name="track" onclick="toggleForm()" > <label >Track Inventory for this item</label>
-                    <form id="myForm" class="hidden">
+        {% comment %} <div class="container"> {% endcomment %}
+          <div class="row">
+            <div class="col-md-10">
+                <input  type="checkbox" value=' yes '  name="track" onclick="toggleForm()" > <label >Track Inventory for this item</label>
+                  <form id="myForm" class="hidden">
+                    
                       <div class="form-group row">
+                      
                         <label  class="col-sm-2 col-form-label">Inventory Account *</label>
-                        <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
-                          <input required type="number" class="form-control" name="inventoryaccnt">
-                        </div>
+                          <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
+                                {% comment %} <input required type="number" class="form-control" name="inventoryaccnt"> {% endcomment %}
+                            <select class="form-select form-select-sm mt-3">
+                              {% comment %} <option><input required type="search" class="form-control" name="inventoryaccnt"></option> {% endcomment %}
+                              <option>Inventory Asset</option>
+                                  
+                            </select>
+                          </div>
                       </div>
-                      <div class="form-group row ">
-                        <label  class="col-sm-2 col-form-label"> Opening Stock</label>
-                        <div class=" col-md-5">
-                          <input required type="text" class="form-control" name="inventoryaccnt">
+                      
+                        <div class="form-group row ">
+                          <label  class="col-sm-2 col-form-label"> Opening Stock</label>
+                          <div class=" col-md-5">
+                            <input required type="number" class="form-control" name="openstock">
+                          </div>
+                              
+                          <div class="col-md-5  ">
+                            <div class="row align-items-center">
+                              <label class=" col-sm-6 col-form-label">opening  stock rate per Unit</label>
+                              <div class="col-sm-6 ">
+                                <input required type="number" class="form-control" name="inventoryaccntperunit">
+                              </div>
+                          </div>
+                          </div>
+
+
                         </div>
                       
-                        <div class="col-md-5  ">
-                          <div class="row align-items-center">
-                            <label class=" col-sm-6 col-form-label">Inventory Account per Unit</label>
+                      
                           
-      
-                            <div class="col-sm-6 ">
-                              <input required type="number" class="form-control" name="inventoryaccntperunit">
-                            </div>
-                          </div>
-                        </div>
-
-
-                      </div>
-                    
-                    </form>
-                  </div>
-                </div>
+              </form>
+              
+          </div>
+      </div>
                 <script>
                   function toggleForm() {
                     var form = document.getElementById("myForm");
                     form.classList.toggle("hidden");
                   }
                 </script>
+                <fieldset class="form-group">
+                  <div class="row">
+                    <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
+                    <div class="col-sm-10 form-inline">
+                      <div class="form-check ">
+                        <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Activate" >
+                        <label class="form-check-label" for="gridRadios1">
+                          Activate
+                        </label>
+                      </div>
+                      <div class="form-check ml-5">
+                        <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Non-Activate">
+                        <label class="form-check-label" for="gridRadios2">
+                        Non-Activate
+                        </label>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="form-inline " style="margin-bottom: 30rem;">
+                  <input type="submit"  class="mr-3 btn btn-success"  value="Save">
+                  <input type="submit" class="btn btn-secondary " value="Cancel">
+                </div>
+              {% comment %} </section> {% endcomment %}
 
         
         
@@ -296,7 +333,7 @@ select2_div.style.display = "none";
 
 
 
-          {% comment %} <div class="popup" id="popup">
+        <div class="popup" id="popup">
           <div style="margin-top: 2rem;" class="display-flex">
             <h4 class="text-dark" >Add Account</h4>
             <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
@@ -313,7 +350,7 @@ select2_div.style.display = "none";
               <input type="text" name="acc_desc" id=""> <br> <br>
 
               <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-            <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closepopup()"  >Canvel</button>
+              <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closepopup()"  >Canvel</button>
             </form>
 
 
@@ -394,7 +431,7 @@ select2_div.style.display = "none";
                 pop.classList.remove("open-popup-2");
               }
       
-            </script> {% endcomment %}
+            </script> 
           </div>
 
     </div>
