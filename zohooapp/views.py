@@ -222,6 +222,7 @@ def add(request):
     if request.user.is_authenticated:
         if request.method=='POST':
             radio=request.POST.get('radio')
+           
             
             if radio=='tax':
                 
@@ -239,6 +240,7 @@ def add(request):
                 cost_price=request.POST.get('cost_price')
                 cost_acc=request.POST.get('cost_acc')      
                 p_desc=request.POST.get('cost_desc')
+                tax=request.POST.get('radio')
                 u=request.user.id
                 us=request.user
                 history="Created by" + str(us)
@@ -246,18 +248,18 @@ def add(request):
                 unit=Unit.objects.get(id=unit)
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
-                inventorystock = request.POST.get('track') == 'yes'
-                stock = int(request.POST.get('openstock'))
-                
-                if inventorystock:
-                    stock = int(request.POST.get('openstock'))
+                invacc=request.POST.get('invacc')
+                istock = request.POST.get('openstock')
+                print(cost_price)
                     
+                
                 ad_item=AddItem(type=type,
                                 Name=name,
                                 p_desc=p_desc,
                                 s_desc=s_desc,
                                 s_price=sel_price,
                                 p_price=cost_price,
+                                tax=tax,
                                 hsn=hsn,
                                 unit=unit,
                                 sales=sel,
@@ -266,7 +268,8 @@ def add(request):
                                 creat=history,
                                 interstate=inter,
                                 intrastate=intra,
-                                stock=stock
+                                invacc=invacc,
+                                stock=istock
                                 )
                 ad_item.save()
                 
@@ -283,6 +286,7 @@ def add(request):
                 cost_price=request.POST.get('cost_price')
                 cost_acc=request.POST.get('cost_acc')      
                 p_desc=request.POST.get('cost_desc')
+                tax=request.POST.get('radio')
                 u=request.user.id
                 us=request.user
                 history="Created by" + str(us)
@@ -290,6 +294,7 @@ def add(request):
                 unit=Unit.objects.get(id=unit)
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
+               
                 ad_item=AddItem(type=type,
                                 Name=name,
                                 hsn=hsn,
@@ -299,16 +304,17 @@ def add(request):
                                 p_price=cost_price,
                                 unit=unit,
                                 sales=sel,
+                                tax=tax,
                                 purchase=cost,
                                 user=user,
                                 creat=history,
                                 interstate='none',
                                 intrastate='none',
-                                stock=stock
+                            
                                
                                 )
                 
-            ad_item.save()
+                ad_item.save()
            
            
             return redirect("itemview")
@@ -347,7 +353,7 @@ def edit_db(request,id):
             edit.p_price=request.POST['cost_price']
             cost_acc=request.POST['cost_acc']        
             edit.p_desc=request.POST['cost_desc']
-            
+            edit.hsn=request.POST['hsn']
             
             edit.unit=Unit.objects.get(id=unit)
             edit.sales=Sales.objects.get(id=sel_acc)

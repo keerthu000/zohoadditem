@@ -8,318 +8,269 @@
     <div class="col-md-12 " style="width: 100%;">
         <h3  class="mb-3  text-white  " style="font-size: 2rem;">New item</h3>     
     
-      <div style="overflow-y: scroll;height: 600px;">
-        <form action="{% url 'add' %}" method="post">
-          {% csrf_token %}
-          <fieldset class="form-group">
+        <div style="overflow-y: scroll;height: 600px;">
+          <form action="{% url 'add' %}" method="post">
+            {% csrf_token %}
+            <fieldset class="form-group">
               <div class="row">
                 <label class="col-form-label col-sm-2 pt-2">Type <i class="fa fa-question-circle"></i></label>
                 <div class="col-sm-10 form-inline">
                   <div class="form-check ">
                     <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Goods" >
-                    <label class="form-check-label" for="gridRadios1">
-                      Goods
-                    </label>
+                    <label class="form-check-label" for="gridRadios1">Goods</label>
                   </div>
                   <div class="form-check ml-5">
                     <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Services">
-                    <label class="form-check-label" for="gridRadios2">
-                    Services
-                    </label>
+                    <label class="form-check-label" for="gridRadios2">Services</label>
                   </div>
-                
+                        
                 </div>
               </div>
             </fieldset>
-          <div class="form-group row">
-            <label  class="col-sm-2 col-form-label">Name *</label>
-            <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
-              <input required type="text" class="form-control" name="name">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label  class="col-sm-2 col-form-label">Unit <i class="fa fa-question-circle"></i></label>
-            <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
-              <select  name="unit" class="form-control ">
-                {% for u in unit %}
-                <option value="{{u.id}}">{{u.unit}}</option>
-                {% endfor %}
-                </select> 
-                  
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">Name *</label>
+              <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
+                <input required type="text" class="form-control" name="name">
               </div>
-              <button style="width: 5rem;"  type="button" onclick="openpop()" class="btn btn-secondary">Add unit</button>
-          </div>
-          <div class="form-group row">
-            <label  class="col-sm-2 col-form-label">HSN Code</label>
-            <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
-              <input required type="number" class="form-control" name="hsn">
             </div>
-          </div>
-
-          
-
-          
-
-
-<section>
-
-<div class="form-inline text-white">
-  
-<label class="text-danger mb-4 mr-4" for="">Tax Preference  :</label>
-
-
-
-<p class="text-white  ">
-<input type="radio"  name="radio" value="tax" onclick="showAllSelect()"> <p class="mr-4">Taxable</p></p>
-<p><input type="radio" name="radio" value="none" onclick="hideAllSelect()"> None-Taxable </p><br><br>
-</div>
-
-<div class="row">
-  <div class="col-md-3">
-    
-<div id="select1_div" style="display: none;">
-  <label for="select1">Intra-State TAX</label>
-  <select name="intra" class="form-control" id="select1">
-    <option value="GST0[0%]">GST0[0%]</option>
-    <option value="GST5[5%]">GST5[5%]</option>
-    <option value="GST12[12%]">GST12[12%]</option>
-    <option value="GST18[18%]">GST18[18%]</option>
-    <option value="GST28[28%]">GST28[28%]</option>
-  </select>
-</div>
-
-
-  </div>
-  <div class="col-md-6">
-    <div id="select2_div" style="display: none;">
-      <label for="select2">Inter-State TAX</label>
-      <select name="inter" class="form-control" id="select2">
-        <option value="IGST0[0%]">IGST0[0%]</option>
-        <option value="IGST5[5%]">IGST5[5%]</option>
-        <option value="IGST12[12%]">IGST12[12%]</option>
-        <option value="IGST18[18%]">IGST18[18%]]</option>
-        <option value="IGST28[28%]">IGST28[28%]</option>
-      </select>
-    </div>
-  </div>
-</div>
-
-
-<script>
-function showAllSelect() {
-var select1_div = document.getElementById("select1_div");
-var select2_div = document.getElementById("select2_div");
-select1_div.style.display = "block";
-select2_div.style.display = "block";
-}
-
-function hideAllSelect() {
-var select1_div = document.getElementById("select1_div");
-var select2_div = document.getElementById("select2_div");
-select1_div.style.display = "none";
-select2_div.style.display = "none";
-}
-</script>
-
-
-
-</section>
-
-          <section>
-              <div class="row">
-                      <div class="col-md-6">
-                          <input  type="checkbox" name="selling" checked> <label >selling  information</label>
-                          <div class="form-group row">
-                              <label  class="col-sm-2 col-form-label">Selling price *</label>
-                              <div class="col-sm-12 col-md-7 col-9 ml-5">
-                                  <div class="input-group mb-2">
-                                      <div class="input-group-prepend">
-                                        <div class="input-group-text">INR</div>
-                                      </div>
-                                      <input required type="text" name="sel_price" class="form-control">
-                                    </div>
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label  class="col-sm-2 col-form-label">Account *</label>
-                              <div class="col-sm-10 col-md-7 col-9 ml-5">
-                                  <select name="sel_acc" class="form-control">
-                                  
-                                    {% for account_type in account_type %}
-                                    <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
-                                        {% for account in account %}
-                                            {% if account.Account_type == account_type %}
-                                              <option value="{{account.id}}">{{ account.Account_name }}</option>
-                                                {% endif %}
-                                                {% endfor %}
-                                                      
-                                              {% endfor %}
-
-                                    </select>                                </div>
-
-                            </div>
-                            <div class="form-group row">
-                              <label  class="col-sm-2 col-form-label">Description </label>
-                              <div class="col-sm-10 col-md-7 col-9 ml-5">
-                                <input required  type="text" name="sel_desc" class="form-control" >
-                              </div>
-                            </div>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">Unit <i class="fa fa-question-circle"></i></label>
+                <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
+                  <select  name="unit" class="form-control ">
+                    {% for u in unit %}
+                      <option value="{{u.id}}">{{u.unit}}</option>
+                    {% endfor %}
+                  </select> 
                           
-                      </div>
-                      <div class="col-md-6">
-                        <input type="checkbox" name="purchase" checked> <label for="">Purchase information</label>
-                          <div class="form-group row">
-                              <label  class="col-sm-2 col-form-label">Cost Price *</label>
-                              <div class="col-sm-10 col-md-7 col-9">
-                                  <div class="input-group mb-2">
-                                      <div class="input-group-prepend">
-                                        <div class="input-group-text">INR</div>
-                                      </div>
-                                      <input required type="text" class="form-control" name="cost_price" >
-                                    </div>
-                              </div>
-                            </div>
-                            <div class="form-group row in">
-                              <label  class="col-sm-2 col-form-label">Account *</label>
-                              <div class="col-sm-10 col-md-7 col-9">
-
-<script>
-
-</script>
-                        
-          <select name="cost_acc" class="form-control">   
-                
-                {% for account_type in account_types %}
-              
-                  <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
-                      {% for account in accounts %}
-                          {% if account.Account_type == account_type %}
-                            <option value="{{account.id}}">{{ account.Account_name }}</option>
-                              {% endif %}
-                                {% endfor %}
-                                      
-                            {% endfor %}
-
-                                  </select>  
-                                
-
-                                  </div>
-                                  <button style="width: 4rem;height: 2rem;" class="btn btn-secondary"  type="button" onclick="openpopup()">Add</button>
-                            </div>
-                            <div class="form-group row">
-                              <label  class="col-sm-2 col-form-label">Description </label>
-                              <div class="col-sm-10 col-md-7 col-9">
-                                <input  type="text" name="cost_desc" class="form-control"  >
-                              </div>
-                            </div>
-                      </div>
-              
-        
-        {% comment %} <div class="form-inline " style="margin-bottom: 20rem;">
-    <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-    <input type="submit" class="btn btn-secondary but" value="Cancel">
-        </div> {% endcomment %}
-        </form>
-
-      </div>
-      <fieldset class="form-group">
-        <div class="row">
-          <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
-          <div class="col-sm-10 form-inline">
-            <div class="form-check ">
-              <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Activate" >
-              <label class="form-check-label" for="gridRadios1">
-                Activate
-              </label>
+                </div>
+                <button style="width: 5rem;"  type="button" onclick="openpop()" class="btn btn-secondary">Add unit</button>
             </div>
-            <div class="form-check ml-5">
-              <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Non-Activate">
-              <label class="form-check-label" for="gridRadios2">
-              Non-Activate
-              </label>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">HSN Code</label>
+              <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
+                <input required type="number" class="form-control" name="hsn">
+              </div>
             </div>
-          
-          </div>
-        </div>
-      </fieldset>
-      <br><br>
+            <div class="form-inline text-white">
+              <label class="text-danger mb-4 mr-4" for="">Tax Preference  :</label>
+              <p class="text-white  ">
+              <input type="radio"  name="radio" value="taxable" onclick="showAllSelect()"> <p class="mr-4">Taxable</p></p>
+              <p><input type="radio" name="radio" value="no-taxable" onclick="hideAllSelect()"> None-Taxable </p><br><br>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+            
+                <div id="select1_div" style="display: none;">
+                  <label for="select1">Intra-State TAX</label>
+                  <select name="intra" class="form-control" id="select1">
+                    <option value="GST0[0%]">GST0[0%]</option>
+                    <option value="GST5[5%]">GST5[5%]</option>
+                    <option value="GST12[12%]">GST12[12%]</option>
+                    <option value="GST18[18%]">GST18[18%]</option>
+                    <option value="GST28[28%]">GST28[28%]</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div id="select2_div" style="display: none;">
+                  <label for="select2">Inter-State TAX</label>
+                  <select name="inter" class="form-control" id="select2">
+                    <option value="IGST0[0%]">IGST0[0%]</option>
+                    <option value="IGST5[5%]">IGST5[5%]</option>
+                    <option value="IGST12[12%]">IGST12[12%]</option>
+                    <option value="IGST18[18%]">IGST18[18%]]</option>
+                    <option value="IGST28[28%]">IGST28[28%]</option>
+                  </select>
+                </div>
+              </div>
+            </div>
       
 
-      {% comment %} <section id="trackinventor">  {% endcomment %}
-        {% comment %} <div class="container"> {% endcomment %}
-          <div class="row">
-            <div class="col-md-10">
-                <input  type="checkbox" value=' yes '  name="track" onclick="toggleForm()" > <label >Track Inventory for this item</label>
-                  <form id="myForm" class="hidden">
-                    
-                      <div class="form-group row">
-                      
-                        <label  class="col-sm-2 col-form-label">Inventory Account *</label>
-                          <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
-                                {% comment %} <input required type="number" class="form-control" name="inventoryaccnt"> {% endcomment %}
-                            <select class="form-select form-select-sm mt-3">
-                              {% comment %} <option><input required type="search" class="form-control" name="inventoryaccnt"></option> {% endcomment %}
-                              <option>Inventory Asset</option>
+
+        <script>
+        function showAllSelect() {
+        var select1_div = document.getElementById("select1_div");
+        var select2_div = document.getElementById("select2_div");
+        select1_div.style.display = "block";
+        select2_div.style.display = "block";
+        }
+
+        function hideAllSelect() {
+        var select1_div = document.getElementById("select1_div");
+        var select2_div = document.getElementById("select2_div");
+        select1_div.style.display = "none";
+        select2_div.style.display = "none";
+        }
+        </script>
+        <div class="row">
+          <div class="col-md-6">
+            <input  type="checkbox" name="selling" checked> <label >selling  information</label>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">Selling price *</label>
+              <div class="col-sm-12 col-md-7 col-9 ml-5">
+                <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">INR</div>
+                  </div>
+                  <input required type="text" name="sel_price" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">Account *</label>
+              <div class="col-sm-10 col-md-7 col-9 ml-5">
+                <select name="sel_acc" class="form-control">
+                                          
+                  {% for account_type in account_type %}
+                    <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
+                    {% for account in account %}
+                    {% if account.Account_type == account_type %}
+                    <option value="{{account.id}}">{{ account.Account_name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+
+                </select>                              
+              </div>
+            </div>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">Description </label>
+              <div class="col-sm-10 col-md-7 col-9 ml-5">
+                <input required  type="text" name="sel_desc" class="form-control" >
+              </div>
+            </div>
                                   
-                            </select>
-                          </div>
-                      </div>
-                      
-                        <div class="form-group row ">
-                          <label  class="col-sm-2 col-form-label"> Opening Stock</label>
-                          <div class=" col-md-5">
-                            <input required type="number" class="form-control" name="openstock">
-                          </div>
-                              
-                          <div class="col-md-5  ">
-                            <div class="row align-items-center">
-                              <label class=" col-sm-6 col-form-label">opening  stock rate per Unit</label>
-                              <div class="col-sm-6 ">
-                                <input required type="number" class="form-control" name="inventoryaccntperunit">
-                              </div>
-                          </div>
-                          </div>
-
-
-                        </div>
-                      
-                      
-                          
-              </form>
-              
           </div>
-      </div>
-                <script>
-                  function toggleForm() {
-                    var form = document.getElementById("myForm");
-                    form.classList.toggle("hidden");
-                  }
-                </script>
-                <fieldset class="form-group">
-                  <div class="row">
-                    <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
-                    <div class="col-sm-10 form-inline">
-                      <div class="form-check ">
-                        <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Activate" >
-                        <label class="form-check-label" for="gridRadios1">
-                          Activate
-                        </label>
-                      </div>
-                      <div class="form-check ml-5">
-                        <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Non-Activate">
-                        <label class="form-check-label" for="gridRadios2">
-                        Non-Activate
-                        </label>
-                      </div>
-                    
+          <div class="col-md-6">
+            <input type="checkbox" name="purchase" checked> <label for="">Purchase information</label>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">Cost Price *</label>
+              <div class="col-sm-10 col-md-7 col-9">
+                <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">INR</div>
+                  </div>
+                  <input required type="text" class="form-control" name="cost_price" >
+                </div>
+              </div>
+            </div>
+            <div class="form-group row in">
+              <label  class="col-sm-2 col-form-label">Account *</label>
+                <div class="col-sm-10 col-md-7 col-9">
+                  <select name="cost_acc" class="form-control">
+                    {% for account_type in account_types %}
+                      
+                    <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
+                      {% for account in accounts %}
+                      {% if account.Account_type == account_type %}
+                    <option value="{{account.id}}">{{ account.Account_name }}</option>
+                      {% endif %}
+                      {% endfor %}
+                      {% endfor %}
+
+                  </select>  
+                                        
+
+                </div>
+                <button style="width: 4rem;height: 2rem;" class="btn btn-secondary"  type="button" onclick="openpopup()">Add</button>
+            </div>
+            <div class="form-group row">
+              <label  class="col-sm-2 col-form-label">Description </label>
+              <div class="col-sm-10 col-md-7 col-9">
+                <input  type="text" name="cost_desc" class="form-control"  >
+              </div>
+            </div>
+          </div>
+          <fieldset class="form-group">
+            <div class="row">
+              <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
+              <div class="col-sm-10 form-inline">
+                <div class="form-check ">
+                  <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Activate" >
+                  <label class="form-check-label" for="gridRadios1">Activate</label>
+                </div>
+                <div class="form-check ml-5">
+                  <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Non-Activate">
+                  <label class="form-check-label" for="gridRadios2">Non-Activate</label>
+                </div>
+                  
+              </div>
+            </div>
+          </fieldset>
+              <br><br>
+          <div class="row" >
+            <div class="col-md-10" >
+              <input  type="checkbox" value="on"  name="trackstate" onclick="toggleForm()"> 
+              <label >Track Inventory for this item</label>
+              <input type="hidden" name="trackState" id="trackState" value=""  unchecked>
+              <div class="form-group row">
+                <label  class="col-sm-2 col-form-label">Inventory Account *</label>
+                  <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
+                                    {% comment %} <input required type="number" class="form-control" name="inventoryaccnt">  {% endcomment %}
+                    <select class="form-select form-select-sm mt-3"  name="invacc">
+                      <option>Choose..</option> 
+                      <option value="inventory assets">Inventory Asset</option>
+                                          
+                    </select>
+                  </div>
+              </div>
+                              
+              <div class="form-group row ">
+                <label  class="col-sm-2 col-form-label"> Opening Stock</label>
+                <div class=" col-md-5">
+                  <input required type="number" class="form-control" name="openstock">
+                </div>
+                                      
+                <div class="col-md-5  ">
+                  <div class="row align-items-center">
+                    <label class=" col-sm-6 col-form-label">opening  stock rate per Unit</label>
+                    <div class="col-sm-6 ">
+                      <input required type="number" class="form-control" name="inventoryaccntperunit">
                     </div>
                   </div>
-                </fieldset>
-                <div class="form-inline " style="margin-bottom: 30rem;">
-                  <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-                  <input type="submit" class="btn btn-secondary " value="Cancel">
                 </div>
-              {% comment %} </section> {% endcomment %}
+              </div>    
+            </div>
+          </div>
+          <script>
+            function toggleForm() {
+              var form = document.getElementById("myForm");
+              var checkbox = document.querySelector("input[name=trackstate]");
+              var trackState = document.getElementById("trackState");
+                        
+              if (checkbox.checked) {
+                form.style.display = "block";
+                trackState.value = "yes";
+              } else {
+                
+                form.style.display = "none";
+                trackState.value = "";
+              }
+            }
+          </script>
+          <fieldset class="form-group">
+            <div class="row">
+              <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
+              <div class="col-sm-10 form-inline">
+                <div class="form-check ">
+                  <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Activate" >
+                  <label class="form-check-label" for="gridRadios1">Activate</label>
+                </div>
+                <div class="form-check ml-5">
+                  <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Non-Activate">
+                  <label class="form-check-label" for="gridRadios2">Non-Activate</label>
+                </div>
+                            
+              </div>
+            </div>
+          </fieldset>
+          <div class="form-inline " style="margin-bottom: 30rem;">
+            <button type="submit"  class="mr-3 btn btn-success"  value="Save">Save</button>
+            <button type="button" class="btn btn-secondary " value="Cancel">Cancel</button>
+          </div>
+      </form>
+ </section>
 
         
         
@@ -333,7 +284,7 @@ select2_div.style.display = "none";
 
 
 
-        <div class="popup" id="popup">
+        {% comment %} <div class="popup" id="popup">
           <div style="margin-top: 2rem;" class="display-flex">
             <h4 class="text-dark" >Add Account</h4>
             <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
@@ -437,7 +388,7 @@ select2_div.style.display = "none";
     </div>
   </div>
 
-</section>
+</section> {% endcomment %}
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

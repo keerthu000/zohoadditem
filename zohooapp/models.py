@@ -66,7 +66,9 @@ class AddItem(models.Model):
     satus=models.TextField(default='active')
     interstate=models.CharField(max_length=255,default='')
     intrastate=models.CharField(max_length=255,default='')
-    inventorystock=models.IntegerField(null=True,blank=True)
+    tax=models.TextField(max_length=255,null=True)
+    invacc=models.TextField(max_length=255,null=True)
+    stock=models.IntegerField(blank=True,null=True,)
     
 
 class History(models.Model):
@@ -406,6 +408,4 @@ class sales_item(models.Model):
     total=models.FloatField(null=True,blank=True)
     desc=models.TextField(max_length=255,null=True,blank=True)
     rate=models.TextField(max_length=255,null=True,blank=True)
-    sale=models.ForeignKey(SalesOrder,on_delete=models.CASCADE,null=True,blank=True)from django.db import models
-
-# Create your models here.
+    sale=models.ForeignKey(SalesOrder,on_delete=models.CASCADE,null=True,blank=True)
