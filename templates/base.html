@@ -9,7 +9,13 @@
   <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="{% static 'assets/vendors/js/vendor.bundle.base.js'%}"></script> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
 
 </head>
 <style>
@@ -43,7 +49,7 @@
   .sectionhtml{
     background-image: url("/static/images/wallpaper1.jpg");
 
-  min-height: 380px;
+  min-height: 1080px;
 
   /* Center and scale the image nicely */
   background-position: center;
@@ -231,6 +237,45 @@
 .form-row input[type="email"] {
   flex: 1;
 }
+.item{
+  height:1200px;
+  
+}
+.popup {
+  display: none;
+  float:left;
+  margin-left:1000px;
+  width:800px;
+  background-color:white
+  color:black;
+}
+.popup-1{
+  float:left;
+  margin-left:1000px;
+  width:800px;
+  background-color:white
+  color:black;
+  display: none;
+
+}
+
+/* Add this CSS to hide the popup by default */
+.popup-2 {
+    display: none;
+    float:left;
+    margin-left:1000px;
+    width:800px;
+    background-color:white
+    color:black;
+}
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 5px;
+  /* background-color: transparent; */
+  margin-left: 3px;
+}
+
 </style>
 
 <section class="sectionhtml">

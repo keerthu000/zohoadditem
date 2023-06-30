@@ -53,11 +53,16 @@
             <div class="tab-header">  {% endcomment %}
               
           
-          <div class="col-md-9" style="margin-left: 25rem;"  data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+          <div class="col-md-12" style="margin-left: 25rem;"  data-spy="scroll" data-target="#navbar-example2" data-offset="0">
             <div class="row" style="position: relative;z-index:0;">
-              <div class="col-md-4" style="position: fixed;"><a class="text-white" style="font-size: 1.5rem;"><h2>{{product.Name}}</h2></a></div>
+              <div class="col-md-12" ><a class="text-white" style="font-size: 1.5rem;position: relative;"><h2>{{product.Name}}</h2></a>
+                {%  if product.satus == 'active' %}
+                <button class="btn btn-dark text-white mt-2" style="border: 2px solid green;"  >{{product.satus}}</button>
+                {% else %}
+                  <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
+                {% endif %}</div>
               
-              <div class="col-md-4 " style="margin-top:-5rem;margin-left: 14rem;position: relative;"><a style="color:#ccc;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary text-light " onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></i></a>
+              <div class="col-md-6 " style="margin-top:-5rem;margin-left: 14rem;"><a style="color:#ccc;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary text-light " onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></i></a>
                 <a style="color: #ccc;"href="#3">      
                   <form action="{% url 'Action' product.id %}" method="post">
                     {% csrf_token %}
@@ -65,22 +70,20 @@
         
                       <option value="">More</option>
                       {% if product.satus == 'active' %}
-                      <option value="inactive">in Active</option>
-                      <option value="clone">clone</option>
-                      {% else %}
+                      <option value="inactive">In Active</option>
                       <option value="active">Active</option>
-                      <option value="clone">clone</option>
+                     
                       {% endif %}
                   </select>
                   <div class="col-md-4 " style="margin-top:-2rem;margin-left: 12rem;position: relative;">
                     <input type="file" id="attachment" style="display: none;">
-                    <button onclick="document.getElementById('attachment').click();" style= "font-size: 18px;"  class="btn btn-secondary text-secondary"> File</button>
+                    <button onclick="document.getElementById('attachment').click();" id="comment-box" style= "font-size: 18px;"  class="btn btn-secondary text-secondary"> File</button>
                     <a href="{% url 'cleer' product.id %}" style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 4rem;"  class="btn btn-danger  text-white " >Delete</a>
                   </div>
                 </div>
               </div>
               <div id="comment-container" class="col-md-4 " style="margin-top:-6rem;margin-left: 35rem;position: relative;">
-                <button id="show-comment-btn" onclick="toggleCommentBox()" style="margin-top:2.5rem;" class="btn btn-secondary text-secondary">Comment</button>
+                <button id="show-comment-btn"  onclick="toggleCommentBox()" style="margin-top:2.5rem;" class="btn btn-secondary text-secondary">Comment</button>
                 <div id="comment-box" style="display: none;">
                   <textarea id="comment-textarea" rows="4" cols="50"></textarea>
                   <button id="add-comment-btn" onclick="addComment()">Post Comment</button>
@@ -91,11 +94,11 @@
         </form> </a>
 
 
-          {%  if product.satus == 'active' %}
+          {% comment %} {%  if product.satus == 'active' %}
             <button class="btn btn-dark text-white mt-2" style="border: 2px solid green;"  >{{product.satus}}</button>
         {% else %}
           <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
-        {% endif %}
+        {% endif %} {% endcomment %}
             <!-- ============================ tab view (detail page )==================================== -->
         
         
@@ -136,7 +139,7 @@
           
      {% comment %} <div class="tabs"> 
       <div class="tab-header">  {% endcomment %}
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-top:4rem;">
           <div class="container-fluid">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
@@ -174,12 +177,12 @@
               </div><br><br>
             {% comment %} </div> {% endcomment %}
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
               <div class="card">
                 <div class="card-body">
                   <h4 class="mb-3"><b>Purchase Information</b></h4>
                   <h6 class="mr-5">Cost price</h6> <br>
-                  <h6 style="margin-top: -2.5rem; margin-left: 10rem;" >{{product.p_price}}</h6> <br>
+                  <h6 style="margin-top: -2.5rem; margin-left: 8rem;" >{{product.p_price}}</h6> <br>
                   <h6 class="mr-5">Purchase Account</h6>
                   <h6 style="margin-top: -1.5rem; margin-left: 10rem;" >{{product.purchase.Account_name}}</h6> <br>
                   <h6 class="mr-5">Description</h6>

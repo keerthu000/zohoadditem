@@ -13,6 +13,7 @@ from django.core.mail import EmailMessage
 from django.views import View
 from .forms import EmailForm
 from django.http import JsonResponse
+from django.core import serializers
 
 
 def index(request):
@@ -224,7 +225,8 @@ def add(request):
             radio=request.POST.get('radio')
            
             
-            if radio=='tax':
+            if radio =='taxable':
+                print('tax section')
                 
     
                 
@@ -249,8 +251,8 @@ def add(request):
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
                 invacc=request.POST.get('invacc')
-                istock = request.POST.get('openstock')
-                print(cost_price)
+                    
+                print(istock)
                     
                 
                 ad_item=AddItem(type=type,
@@ -274,7 +276,7 @@ def add(request):
                 ad_item.save()
                 
             else:
-                
+                print('nontaxsection')
                                                   
                 type=request.POST.get('type')
                 name=request.POST['name']
@@ -294,6 +296,7 @@ def add(request):
                 unit=Unit.objects.get(id=unit)
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
+                istock = request.POST['openstock']
                
                 ad_item=AddItem(type=type,
                                 Name=name,
@@ -310,6 +313,7 @@ def add(request):
                                 creat=history,
                                 interstate='none',
                                 intrastate='none',
+                                stock=istock
                             
                                
                                 )
@@ -320,8 +324,35 @@ def add(request):
             return redirect("itemview")
     return render(request,'additem.html')
 
+# def search_data(request):
+#     if request.method == 'GET':
+#         search_query = request.GET.get('search_query')
+#         print(search_query)
 
+#         # Build the query dynamically to search across all fields
+#         query = Q()
+#         fields = AddItem._meta.get_fields()
+#         for field in fields:
+#             if field.get_internal_type() == 'CharField':
+#                 query |= Q(**{f'{field.name}__icontains': search_query})
+#             elif field.get_internal_type() == 'IntegerField' or field.get_internal_type() == 'FloatField':
+#                 try:
+#                     search_value = int(search_query)
+#                 except ValueError:
+#                     try:
+#                         search_value = float(search_query)
+#                     except ValueError:
+#                         continue
+#                 query |= Q(**{f'{field.name}': search_value})
 
+#         # Perform the search query on your model
+#         results = AddItem.objects.filter(query)
+
+#         # Serialize the results to JSON
+#         serialized_results = serializers.serialize('json', results)
+
+#         # Return the serialized results as JSON response
+#         return JsonResponse(serialized_results, safe=False)
 # @login_required(login_url='login')
 def edititem(request,id):
     pedit=AddItem.objects.get(id=id)

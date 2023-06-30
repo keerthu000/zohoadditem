@@ -43,14 +43,38 @@
                   </select> 
                           
                 </div>
-                <button style="width: 5rem;"  type="button" onclick="openpop()" class="btn btn-secondary">Add unit</button>
+                <button style="width: 5rem;"  type="button" onclick="openForm()" class="btn btn-secondary">Add unit</button>
             </div>
             <div class="form-group row">
               <label  class="col-sm-2 col-form-label">HSN Code</label>
-              <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
-                <input required type="number" class="form-control" name="hsn">
+              <div class="col-sm-10 col-md-7 col-9"  style="margin-left: -2.2rem;" >
+                <input required type="number" class="form-control" name="hsn" id="myInputField" oninput="validateInput()">
+                <div id="validationResult"></div>
               </div>
             </div>
+            <script>
+              function validateSixDigits(field) {
+                // Define the regular expression pattern for exactly six digits
+                var pattern = /^\d{6}$/;
+              
+                // Check if the field matches the pattern
+                return pattern.test(field);
+              }
+              
+              function validateInput() {
+                var inputField = document.getElementById("myInputField");
+                var inputValue = inputField.value;
+              
+                var validationResultDiv = document.getElementById("validationResult");
+              
+                if (validateSixDigits(inputValue)) {
+                  validationResultDiv.textContent = "Valid: The field contains exactly six digits.";
+                } else {
+                  validationResultDiv.textContent = "Invalid: The field does not contain exactly six digits.";
+                }
+              }
+            
+            </script>
             <div class="form-inline text-white">
               <label class="text-danger mb-4 mr-4" for="">Tax Preference  :</label>
               <p class="text-white  ">
@@ -88,167 +112,165 @@
       
 
 
-        <script>
-        function showAllSelect() {
-        var select1_div = document.getElementById("select1_div");
-        var select2_div = document.getElementById("select2_div");
-        select1_div.style.display = "block";
-        select2_div.style.display = "block";
-        }
+          <script>
+          function showAllSelect() {
+          var select1_div = document.getElementById("select1_div");
+          var select2_div = document.getElementById("select2_div");
+          select1_div.style.display = "block";
+          select2_div.style.display = "block";
+          }
 
-        function hideAllSelect() {
-        var select1_div = document.getElementById("select1_div");
-        var select2_div = document.getElementById("select2_div");
-        select1_div.style.display = "none";
-        select2_div.style.display = "none";
-        }
-        </script>
-        <div class="row">
-          <div class="col-md-6">
-            <input  type="checkbox" name="selling" checked> <label >selling  information</label>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">Selling price *</label>
-              <div class="col-sm-12 col-md-7 col-9 ml-5">
-                <div class="input-group mb-2">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">INR</div>
+          function hideAllSelect() {
+          var select1_div = document.getElementById("select1_div");
+          var select2_div = document.getElementById("select2_div");
+          select1_div.style.display = "none";
+          select2_div.style.display = "none";
+          }
+          </script>
+          <div class="row">
+            <div class="col-md-6">
+              <input  type="checkbox" name="selling" checked> <label >selling  information</label>
+              <div class="form-group row">
+                <label  class="col-sm-2 col-form-label">Selling price *</label>
+                <div class="col-sm-12 col-md-7 col-9 ml-5">
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">INR</div>
+                    </div>
+                    <input required type="text" name="sel_price" class="form-control">
                   </div>
-                  <input required type="text" name="sel_price" class="form-control">
                 </div>
               </div>
-            </div>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">Account *</label>
-              <div class="col-sm-10 col-md-7 col-9 ml-5">
-                <select name="sel_acc" class="form-control">
-                                          
-                  {% for account_type in account_type %}
-                    <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
-                    {% for account in account %}
-                    {% if account.Account_type == account_type %}
-                    <option value="{{account.id}}">{{ account.Account_name }}</option>
-                    {% endif %}
-                    {% endfor %}
-                    {% endfor %}
-
-                </select>                              
-              </div>
-            </div>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">Description </label>
-              <div class="col-sm-10 col-md-7 col-9 ml-5">
-                <input required  type="text" name="sel_desc" class="form-control" >
-              </div>
-            </div>
-                                  
-          </div>
-          <div class="col-md-6">
-            <input type="checkbox" name="purchase" checked> <label for="">Purchase information</label>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">Cost Price *</label>
-              <div class="col-sm-10 col-md-7 col-9">
-                <div class="input-group mb-2">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">INR</div>
-                  </div>
-                  <input required type="text" class="form-control" name="cost_price" >
-                </div>
-              </div>
-            </div>
-            <div class="form-group row in">
-              <label  class="col-sm-2 col-form-label">Account *</label>
-                <div class="col-sm-10 col-md-7 col-9">
-                  <select name="cost_acc" class="form-control">
-                    {% for account_type in account_types %}
-                      
-                    <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
-                      {% for account in accounts %}
+              <div class="form-group row">
+                <label  class="col-sm-2 col-form-label">Account *</label>
+                <div class="col-sm-10 col-md-7 col-9 ml-5">
+                  <select name="sel_acc" class="form-control">
+                                            
+                    {% for account_type in account_type %}
+                      <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
+                      {% for account in account %}
                       {% if account.Account_type == account_type %}
-                    <option value="{{account.id}}">{{ account.Account_name }}</option>
+                      <option value="{{account.id}}">{{ account.Account_name }}</option>
                       {% endif %}
                       {% endfor %}
                       {% endfor %}
 
-                  </select>  
-                                        
-
+                  </select>                              
                 </div>
-                <button style="width: 4rem;height: 2rem;" class="btn btn-secondary"  type="button" onclick="openpopup()">Add</button>
-            </div>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">Description </label>
-              <div class="col-sm-10 col-md-7 col-9">
-                <input  type="text" name="cost_desc" class="form-control"  >
               </div>
-            </div>
-          </div>
-          <fieldset class="form-group">
-            <div class="row">
-              <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
-              <div class="col-sm-10 form-inline">
-                <div class="form-check ">
-                  <input required class="form-check-input" type="radio" name="type" id="gridRadios1" value="Activate" >
-                  <label class="form-check-label" for="gridRadios1">Activate</label>
-                </div>
-                <div class="form-check ml-5">
-                  <input required class="form-check-input" type="radio" name="type" id="gridRadios2" value="Non-Activate">
-                  <label class="form-check-label" for="gridRadios2">Non-Activate</label>
-                </div>
-                  
-              </div>
-            </div>
-          </fieldset>
-              <br><br>
-          <div class="row" >
-            <div class="col-md-10" >
-              <input  type="checkbox" value="on"  name="trackstate" onclick="toggleForm()"> 
-              <label >Track Inventory for this item</label>
-              <input type="hidden" name="trackState" id="trackState" value=""  unchecked>
               <div class="form-group row">
-                <label  class="col-sm-2 col-form-label">Inventory Account *</label>
-                  <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
-                                    {% comment %} <input required type="number" class="form-control" name="inventoryaccnt">  {% endcomment %}
-                    <select class="form-select form-select-sm mt-3"  name="invacc">
-                      <option>Choose..</option> 
-                      <option value="inventory assets">Inventory Asset</option>
-                                          
-                    </select>
-                  </div>
-              </div>
-                              
-              <div class="form-group row ">
-                <label  class="col-sm-2 col-form-label"> Opening Stock</label>
-                <div class=" col-md-5">
-                  <input required type="number" class="form-control" name="openstock">
+                <label  class="col-sm-2 col-form-label">Description </label>
+                <div class="col-sm-10 col-md-7 col-9 ml-5">
+                  <input required  type="text" name="sel_desc" class="form-control" >
                 </div>
-                                      
-                <div class="col-md-5  ">
-                  <div class="row align-items-center">
-                    <label class=" col-sm-6 col-form-label">opening  stock rate per Unit</label>
-                    <div class="col-sm-6 ">
-                      <input required type="number" class="form-control" name="inventoryaccntperunit">
+              </div>
+                                    
+            </div>
+            <div class="col-md-6">
+              <input type="checkbox" name="purchase" checked> <label for="">Purchase information</label>
+              <div class="form-group row">
+                <label  class="col-sm-2 col-form-label">Cost Price *</label>
+                <div class="col-sm-10 col-md-7 col-9">
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">INR</div>
+                    </div>
+                    <input required type="text" class="form-control" name="cost_price" >
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row in">
+                <label  class="col-sm-2 col-form-label">Account *</label>
+                  <div class="col-sm-10 col-md-7 col-9">
+                    <select name="cost_acc" class="form-control">
+                      {% for account_type in account_types %}
+                        
+                      <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
+                        {% for account in accounts %}
+                        {% if account.Account_type == account_type %}
+                      <option value="{{account.id}}">{{ account.Account_name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+
+                    </select>  
+                                          
+
+                  </div>
+                  <button style="width: 4rem;height: 2rem;" class="btn btn-secondary"  type="button" onclick="openpopup()">Add</button>
+              </div>
+              <div class="form-group row">
+                <label  class="col-sm-2 col-form-label">Description </label>
+                <div class="col-sm-10 col-md-7 col-9">
+                  <input  type="text" name="cost_desc" class="form-control"  >
+                </div>
+              </div>
+            </div>
+            <fieldset class="form-group">
+              <div class="row">
+                <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
+                <div class="col-sm-10 form-inline">
+                  <div class="form-check ">
+                    <input required class="form-check-input" type="radio" name="activate" id="gridRadios1" value="Activate" >
+                    <label class="form-check-label" for="gridRadios1">Activate</label>
+                  </div>
+                  <div class="form-check ml-5">
+                    <input required class="form-check-input" type="radio" name="nonactivate" id="gridRadios2" value="Non-Activate">
+                    <label class="form-check-label" for="gridRadios2">Non-Activate</label>
+                  </div>
+                    
+                </div>
+              </div>
+            </fieldset>
+              <br><br>
+              <div class="row" >
+                <div class="col-md-10">
+                  {% comment %} <label><input type="checkbox" value="trackstate" name="trackstate" onclick="toggleForm()" style="display: none;">
+                 Track Inventory for this item</label> {% endcomment %}
+                  {% comment %} <input type="hidden" name="trackState" id="trackState" value="" unchecked> {% endcomment %}
+                  <label>
+                    <input type="checkbox" name="trackstate" value="trackstate"  onclick="toggleFormFields()">
+                    Track Inventory for this item
+                  </label>
+                  <div id="formFields" style="display: none;"> 
+                    <div class="form-group row" >
+                      <label class="col-sm-2 col-form-label">Inventory Account *</label>
+                      <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
+                        <select class="form-select form-select-sm mt-3" name="invacc">
+                          <option>Choose..</option>
+                          <option value="inventory assets">Inventory Asset</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group row ">
+                      <label class="col-sm-2 col-form-label">Opening Stock</label>
+                      <div class=" col-md-5">
+                        <input  type="number" class="form-control" name="openstock" value="0">
+                      </div>
+                      <div class="col-md-5  ">
+                        <div class="row align-items-center">
+                          <label class="col-sm-6 col-form-label">Opening Stock Rate per Unit</label>
+                          <div class="col-sm-6">
+                            <input type="number" class="form-control" name="inventoryaccntperunit">
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>    
-            </div>
-          </div>
-          <script>
-            function toggleForm() {
-              var form = document.getElementById("myForm");
-              var checkbox = document.querySelector("input[name=trackstate]");
-              var trackState = document.getElementById("trackState");
-                        
-              if (checkbox.checked) {
-                form.style.display = "block";
-                trackState.value = "yes";
-              } else {
-                
-                form.style.display = "none";
-                trackState.value = "";
-              }
-            }
-          </script>
+              </div>
+              <script>
+                function toggleFormFields() {
+                  var formFields = document.getElementById("formFields");
+                  var checkbox = document.querySelector("input[name=trackstate]");
+            
+                  if (checkbox.checked) {
+                    formFields.style.display = "block";
+                  } else {
+                    formFields.style.display = "none";
+                  }
+                }
+              </script>
           <fieldset class="form-group">
             <div class="row">
               <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
@@ -269,7 +291,10 @@
             <button type="submit"  class="mr-3 btn btn-success"  value="Save">Save</button>
             <button type="button" class="btn btn-secondary " value="Cancel">Cancel</button>
           </div>
-      </form>
+        </form>
+      </div>
+    </div>
+  </div>
  </section>
 
         
@@ -284,24 +309,24 @@
 
 
 
-        {% comment %} <div class="popup" id="popup">
-          <div style="margin-top: 2rem;" class="display-flex">
-            <h4 class="text-dark" >Add Account</h4>
-            <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
+       <div class="popup" id="popup">
+          <div style="margin-top: 2rem;float:right" class="display-flex">
+            <h4 class="text-light" >Add Account</h4>
+            <h6 class="float-right text-light" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
           </div>
             
-            <form style="margin-top: 3rem;" action="{% url 'add_account' %}" method="post">
+            <form style="margin-top: 5rem;" action="{% url 'add_account' %}" method="post">
               {% csrf_token %}
-              <label class=" text-dark" >Accout type</label> <br>
+              <label class=" text-light" >Accout type</label> <br>
               <input class=""  type="text" value="EXPENCES" name="acc_type" id=""> <br>
-              <label  class="text-dark" >Accout Name</label> <br>
+              <label  class="text-light" >Accout Name</label> <br>
               <input required type="text" name="acc_name" id=""> <br>
             
-              <label class="text-dark" >Accout Description</label> <br>
+              <label class="text-light" >Accout Description</label> <br>
               <input type="text" name="acc_desc" id=""> <br> <br>
 
               <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-              <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closepopup()"  >Canvel</button>
+              <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closepopup()"  >Cancel</button>
             </form>
 
 
@@ -309,41 +334,43 @@
               let popup=document.getElementById("popup");
 
               function openpopup(){
-                  popup.classList.add("open-popup");
+                popup.style.display = "block";
               }
               function closepopup(){
-                  popup.classList.remove("open-popup");
+                popup.style.display = "none";
               }
+              
 
             </script>
           </div>
 
-          <div class="popup-1" id="popup-1">
+          <div class="popup-1" id="popup-1" >
             <div style="margin-top: 2rem;" class="display-flex">
-            <h4 class="text-dark" >Add Unit</h4>
-            <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepop()">X</h6>
+            <h4 class="text-light" >Add Unit</h4>
+            <button class="float-right text-light" style="margin-right: 1rem; margin-top: -2rem;" onclick=" closeForm()">X</button>
             </div>
             
             <form style="margin-top: 3rem;" action="{% url 'add_unit' %}" method="post">
               {% csrf_token %}
-              <label class="text-dark" >Unit</label> <br>
+              <label class="text-light" >Unit</label> <br>
               <input required  type="text" name="unit_name" id=""> <br>
               
               <br>
               <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-              <input type="submit" class=" mr-3 btn btn-secondary but" value="Cancel">
-          <p class="text-dark">eg:KL,PCS,BOX,LTR</p>
+              <input type="submitT" class=" mr-3 btn btn-secondary but"  onclick=" closeForm()"  value="Cancel">
+          <p class="text-light">eg:KL,PCS,BOX,LTR</p>
             </form>
       
       
             <script>
-              let popu=document.getElementById("popup-1");
-      
-              function openpop(){
-                popu.classList.add("open-popup-1");
+              function openForm() {
+                let formContainer = document.getElementById("popup-1");
+                formContainer.style.display = "block";
               }
-              function closepop(){
-                popu.classList.remove("open-popup-1");
+              
+              function closeForm() {
+                let formContainer = document.getElementById("popup-1");
+                formContainer.style.display = "none";
               }
       
             </script>
@@ -373,14 +400,16 @@
       
       
             <script>
-              let pop=document.getElementById("popup-2");
+              let pop = document.getElementById("popup-2");
+
+              function openp() {
+                  pop.style.display = "block";
+              }
       
-              function openp(){
-                pop.classList.add("open-popup-2");
+              function closep() {
+                  pop.style.display = "none";
               }
-              function closep(){
-                pop.classList.remove("open-popup-2");
-              }
+      
       
             </script> 
           </div>
@@ -388,7 +417,7 @@
     </div>
   </div>
 
-</section> {% endcomment %}
+</section>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
