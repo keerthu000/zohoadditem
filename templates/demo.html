@@ -62,8 +62,8 @@
                   <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
                 {% endif %}</div>
               
-              <div class="col-md-6 " style="margin-top:-5rem;margin-left: 14rem;"><a style="color:#ccc;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary text-light " onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></i></a>
-                <a style="color: #ccc;"href="#3">      
+              <div class="col-md-6 " style="margin-top:-5rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></i></a>
+                <a style="color: #e0e0e0;"href="#3">      
                   <form action="{% url 'Action' product.id %}" method="post">
                     {% csrf_token %}
                     <select name="action" style="width:5rem;margin-top: -2rem;margin-left: 5rem;height: 2rem;" class="form-control">
