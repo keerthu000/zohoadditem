@@ -1,7 +1,136 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    
+<style>
+  .open-button {
+    background-color: #ccc;
+    color: black;
+    padding: 5px 5px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    right: 260px;
+    bottom: 450px;
+    width: 180px;
+    z-index: 9;
+  }
+
+  /* The popup form - hidden by default */
+  .form-popup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    border: 3px solid black;
+    z-index: 9999;
+    padding: 20px;
+    max-width: 300px;
+  }
+
+  /* Full-width input fields */
+  .form-popup input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+
+  /* Set a style for the submit button */
+  .form-popup .btn {
+    background-color: #04aa6d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* Set a style for the close button */
+  .form-popup .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  /* Change the color of the close button on hover */
+  .form-popup .close:hover {
+    color: black;
+  }
+
+  .openbutton {
+    background-color: #ccc;
+    color: black;
+    padding: 5px 5px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    right: 80px;
+    bottom: 180px;
+    width: 180px;
+    z-index: 9999;
+  }
+
+  /* The popup form - hidden by default */
+  .form-popup1 {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    border: 3px solid black;
+    z-index: 9999;
+    padding: 20px;
+    max-width: 300px;
+  }
+
+  /* Full-width input fields */
+  .form-popup1 input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+
+  /* Set a style for the submit button */
+  .form-popup1 .btn.add-button {
+    background-color: #04aa6d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* Set a style for the close button */
+  .form-popup1 .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .form-popup1 .close:hover {
+    color: black;
+  }
+</style>
+
+
 <section >
   <div class="row fixed-top  " style="top: 6rem; margin-left: 20rem;" >
     
@@ -42,11 +171,16 @@
                     {% endfor %}
                   </select> 
                           
-                </div>
-                <button style="width: 5rem;"  type="button" onclick="openForm()" class="btn btn-secondary">Add unit</button>
             </div>
+            
+         {% comment %} <button class="trigger btn btn-secondary" style="width:5rem;" id="myBtn">Add Unit</button> {% endcomment %}
+         <button  style="width:5rem;" class="open-button" onclick="openForm()">Add Unit</button>
+        
+        </div>
+            
+
             <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">HSN Code</label>
+              <label  class="col-sm-2 col-form-label">HSN Code</label> 
               <div class="col-sm-10 col-md-7 col-9"  style="margin-left: -2.2rem;" >
                 <input required type="number" class="form-control" name="hsn" id="myInputField" oninput="validateInput()">
                 <div id="validationResult"></div>
@@ -129,7 +263,7 @@
           </script>
           <div class="row">
             <div class="col-md-6">
-              <input  type="checkbox" name="selling" checked> <label >selling  information</label>
+              <input  type="checkbox" name="selling" checked> <label >selling  information</label><br><br>
               <div class="form-group row">
                 <label  class="col-sm-2 col-form-label">Selling price *</label>
                 <div class="col-sm-12 col-md-7 col-9 ml-5">
@@ -167,7 +301,7 @@
                                     
             </div>
             <div class="col-md-6">
-              <input type="checkbox" name="purchase" checked> <label for="">Purchase information</label>
+              <input type="checkbox" name="purchase" checked> <label for="">Purchase information</label><br><br>
               <div class="form-group row">
                 <label  class="col-sm-2 col-form-label">Cost Price *</label>
                 <div class="col-sm-10 col-md-7 col-9">
@@ -197,7 +331,8 @@
                                           
 
                   </div>
-                  <button style="width: 4rem;height: 2rem;" class="btn btn-secondary"  type="button" onclick="openpopup()">Add</button>
+                  {% comment %} <button style="width: 4rem;height: 2rem;" class="openbutton" id="showFormButton"   onclick="showForm">Add</button> {% endcomment %}
+                  <button id="showFormButton" style="width:5rem;" class="openbutton" onclick="showForm()">Add</button>
               </div>
               
 
@@ -211,7 +346,7 @@
             </div>
             <fieldset class="form-group">
               <div class="row">
-                <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
+                <label class="col-form-label col-sm-2 pt-3">Activation tag<i class="fa fa-question-circle"></i></label>
                 <div class="col-sm-10 form-inline">
                   <div class="form-check ">
                     <input required class="form-check-input" type="radio" name="radio" id="gridRadios1" value="Activate" >
@@ -309,9 +444,67 @@
           
 <!-- ============================ modal for account adding  -->
 
+<div class="form-popup" id="myForm">
+<form action="{% url 'add_unit' %}" method="post" class="form-container">
+  {% csrf_token %}
+  <h1 class="text-dark">Add Unit</h1>
+
+  <label class="text-dark" for="unit"><b>Unit</b></label>
+  <input type="text" placeholder="Enter unit" id="unit" name="unit_name" required>
+  <p class="text-dark">eg:KL,PCS,BOX,LTR</p>
+
+  <button type="submit" class="btn">Add</button>
+  <span class="close" onclick="closeForm()">&times;</span>
+</form>
+</div>
 
 
 
+<script>
+function openForm() {
+  let formContainer = document.getElementById("myForm");
+  formContainer.style.display = "block";
+}
+
+function closeForm() {
+  let formContainer = document.getElementById("myForm");
+  formContainer.style.display = "none";
+}
+</script>
+
+<div class="form-popup1" id="myForm1">
+<form style="margin-top: 5rem;" action="{% url 'add_account' %}" method="post" class="form-container">
+  {% csrf_token %}
+  <h1 class="text-dark">Add Account</h1>
+  <label class="text-dark"><b>Account type</b></label>
+  <input type="text" placeholder="Enter account type" id="" name="acc_type" required>
+  <label class="text-dark"><b>Account Name</b></label>
+  <input type="text" placeholder="Enter account Name" id="unit" name="acc_name" required>
+  <label class="text-dark"><b>Description</b></label>
+  <input type="text" placeholder="Description"name="acc_desc">
+  <button type="submit" class="btn add-button">Add</button>
+  <span class="close" onclick="closeForm1()">&times;</span>
+</form>
+</div>
+
+
+<script>
+function showForm() {
+  let formContainer = document.getElementById("myForm1");
+  formContainer.style.display = "block";
+}
+
+function closeForm1() {
+  let formContainer = document.getElementById("myForm1");
+  formContainer.style.display = "none";
+}
+</script>
+
+ 
+  
+  
+
+      {% comment %} <div id="hider"></div>
         <div class="popup" id="popup">
           <form style="margin-top: 5rem;" action="{% url 'add_account' %}" method="post">
             {% csrf_token %}
@@ -351,7 +544,7 @@
           <div class="popup-1" id="popup-1" >
             <div style="margin-top: 2rem;" class="display-flex">
             <h4 class="text-light" >Add Unit</h4>
-            <button class="float-right text-light" style="margin-right: 1rem; margin-top: -2rem;" onclick=" closeForm()">X</button>
+            <button class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick=" closeForm()">X</button>
             </div>
             
             <form style="margin-top: 3rem;" action="{% url 'add_unit' %}" method="post">
@@ -361,7 +554,7 @@
               
               <br>
               <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-              <input type="button" class=" mr-3 btn btn-secondary but"  onclick=" closeForm()"  value="Cancel">
+              <input type="button" class=" mr-3 btn btn-secondary "  onclick=" closeForm()"  value="Cancel">
           <p class="text-light">eg:KL,PCS,BOX,LTR</p>
             </form>
       
@@ -398,7 +591,7 @@
               <label class="text-dark" >Accout Description</label> <br>
               <input type="text" name="acc_desc" id=""> <br> <br>
               <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-              <input type="button" class="mr-3 btn btn-secondary but" onclick="closep()" value="Cancel">
+              <input type="button" class="mr-3 btn btn-secondary but" onclick="close()" value="Cancel">
             </form>
 
       
@@ -416,15 +609,19 @@
       
       
             </script> 
-          </div>
+          </div>{% endcomment %}
 
         </div>
-       </div>
+       </div> 
 
 </section>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
 
 {% endblock %}
