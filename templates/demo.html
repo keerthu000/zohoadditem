@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    
+<style>
+  .comment-box {
+    display: none;
+    margin-top: 10px;
+    width:700px;
+  }
+</style>
+
 <section class="item" id="navbar-example2" >
   <div class="container">
     {% comment %} <div class="row fixed-top  " style="top: 8rem; margin-left: 18rem;" > {% endcomment %}
@@ -53,8 +60,8 @@
             <div class="tab-header">  {% endcomment %}
               
           
-          <div class="col-md-12" style="margin-left: 25rem;"  data-spy="scroll" data-target="#navbar-example2" data-offset="0">
-            <div class="row" style="position: relative;z-index:0;">
+          <div class="col-md-12 " style="margin-left: 25rem;"  data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+            <div class="row" style="position: relative;z-index:99">
               <div class="col-md-12" ><a class="text-white" style="font-size: 1.5rem;position: relative;"><h2>{{product.Name}}</h2></a>
                 {%  if product.satus == 'active' %}
                 <button class="btn btn-dark text-white mt-2" style="border: 2px solid green;"  >{{product.satus}}</button>
@@ -62,9 +69,9 @@
                   <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
                 {% endif %}</div>
               
-              <div class="col-md-6 " style="margin-top:-5rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></i></a>
-                <a style="color: #e0e0e0;"href="#3">      
-                  <form action="{% url 'Action' product.id %}" method="post">
+                  <div class="col-md-6 " style="margin-top:-3rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 1rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url "edititem" product.id %}' "><i class="fa fa-pencil"></i></i></a>
+                    <a style="color: #e0e0e0;"href="#3">      
+                  {% comment %} <form action="{% url 'Action' product.id %}" method="post">
                     {% csrf_token %}
                     <select name="action" style="width:5rem;margin-top: -2rem;margin-left: 5rem;height: 2rem;" class="form-control">
         
@@ -74,24 +81,41 @@
                       <option value="active">Active</option>
                      
                       {% endif %}
-                  </select>
-                  <div class="col-md-4 " style="margin-top:-2rem;margin-left: 12rem;position: relative;">
+                  </select> {% endcomment %}
+                  <div class="col-md-4 " style="margin-top:-2rem;margin-left:5rem;position: relative;z-index:9;">
                     <input type="file" id="attachment" style="display: none;">
-                    <button onclick="document.getElementById('attachment').click();" id="comment-box" style= "font-size: 18px;"  class="btn btn-secondary text-secondary"> File</button>
-                    <a href="{% url 'cleer' product.id %}" style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 4rem;"  class="btn btn-danger  text-white " >Delete</a>
+                    <button onclick="document.getElementById('attachment').click();" id="comment-box" style= "font-size: 18px;"  class="btn btn-secondary text-dark"> File</button>
+                    <a href="{% url 'cleer' product.id %}" style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 4.5rem;font-size: 18px"  class="btn btn-secondary  text-dark " >Delete</a>
                   </div>
                 </div>
-              </div>
-              <div id="comment-container" class="col-md-4 " style="margin-top:-6rem;margin-left: 35rem;position: relative;">
-                <button id="show-comment-btn"  onclick="toggleCommentBox()" style="margin-top:2.5rem;" class="btn btn-secondary text-secondary">Comment</button>
-                <div id="comment-box" style="display: none;">
-                  <textarea id="comment-textarea" rows="4" cols="50"></textarea>
-                  <button id="add-comment-btn" onclick="addComment()">Post Comment</button>
-                  <div id="previous-comments"></div>
-                </div>
-              </div>
+              </form> </a>
               
-        </form> </a>
+              <div class="col-md-4 " style="margin-top:-6rem;margin-left: 29rem;position: relative;">
+                <button  id="commentButton" onclick="toggleCommentBox()" style="margin-top:2.5rem;font-size: 18px" class="btn btn-secondary text-dark">Comment</button>
+              </div>
+              <div id="commentBox" class="comment-box">
+                <form action="" method="post">
+                  {% csrf_token %}
+                
+                  <textarea name="content"></textarea>
+                  <button type="submit">Submit Comment</button>
+                  <a href="{% url 'comment_view' %} " type="button">View Comment</a>
+                  <div class="container">
+                    <ul>
+                      {% for comment in comments %}
+                          <li>{{ comment.content }}</li>
+                      {% empty %}
+                          <li>No comments yet.</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  
+                  
+                </form>
+              </div>
+             
+                
+        
 
 
           {% comment %} {%  if product.satus == 'active' %}
@@ -100,46 +124,42 @@
           <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
         {% endif %} {% endcomment %}
             <!-- ============================ tab view (detail page )==================================== -->
+            <script>
+              function toggleCommentBox() {
+                var commentBox = document.getElementById("commentBox");
+                if (commentBox.style.display === "none") {
+                  commentBox.style.display = "block";
+                } else {
+                  commentBox.style.display = "none";
+                }
+              }
+              
+              // Function to add a new comment
+              function addComment() {
+                var commentInput = document.getElementById("commentInput");
+                var commentList = document.getElementById("commentList");
+              
+                // Create a new list item for the comment
+                var commentItem = document.createElement("li");
+                commentItem.innerText = commentInput.value;
+              
+                // Append the comment to the list
+                commentList.appendChild(commentItem);
+              
+                // Clear the comment input
+                commentInput.value = "";
+              }
+            </script>
         
         
           
       
-<script>
-  function toggleCommentBox() {
-    var commentBox = document.getElementById("comment-box");
-    if (commentBox.style.display === "none") {
-      commentBox.style.display = "block";
-      loadPreviousComments();
-    } else {
-      commentBox.style.display = "none";
-    }
-  }
+  
 
-  function addComment() {
-    var commentText = document.getElementById("comment-textarea").value;
-    if (commentText.trim() !== "") {
-      var commentElement = document.createElement("p");
-      commentElement.textContent = commentText;
-      document.getElementById("previous-comments").appendChild(commentElement);
-      document.getElementById("comment-textarea").value = "";
-    }
-  }
-
-  function loadPreviousComments() {
-    var previousComments = ["Previous Comment 1", "Previous Comment 2", "Previous Comment 3"];
-    var commentsContainer = document.getElementById("previous-comments");
-    commentsContainer.innerHTML = "";
-    previousComments.forEach(function(comment) {
-      var commentElement = document.createElement("p");
-      commentElement.textContent = comment;
-      commentsContainer.appendChild(commentElement);
-    });
-  }
-</script>
           
      {% comment %} <div class="tabs"> 
       <div class="tab-header">  {% endcomment %}
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-top:4rem;">
+        {% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-top:4rem;">
           <div class="container-fluid">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
@@ -156,7 +176,7 @@
             </nav>
           </div>
         </nav>
-      
+       {% endcomment %}
           
             {% comment %} <div class="col-sm-6"> {% endcomment %}
               <div class="card">
@@ -176,7 +196,7 @@
                 </div>
               </div><br><br>
             {% comment %} </div> {% endcomment %}
-          <div class="row">
+          <div class="row" style="margin-top:30px;">
             <div class="col-sm-5">
               <div class="card">
                 <div class="card-body">
@@ -234,7 +254,7 @@
         </div>
       
       
-          </div>
+  </div>
       
       <script>
       
@@ -265,6 +285,7 @@
   
   
 </section>
+  <script src="script.js"></script>
 
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

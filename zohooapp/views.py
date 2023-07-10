@@ -122,8 +122,7 @@ def base(request):
             }
     return render(request,'loginhome.html',context)
 
-
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def view_profile(request):
 
     company = company_details.objects.get(user = request.user)
@@ -174,7 +173,7 @@ def itemview(request):
     return render(request,'item_view.html',{'view':viewitem})
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def additem(request):
     unit=Unit.objects.all()
     sale=Sales.objects.all()
@@ -204,7 +203,7 @@ def additem(request):
                             
                             })
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def add_account(request):
     if request.method=='POST':
         Account_type  =request.POST['acc_type']
@@ -353,7 +352,7 @@ def add(request):
 
 #         # Return the serialized results as JSON response
 #         return JsonResponse(serialized_results, safe=False)
-# @login_required(login_url='login')
+login_required(login_url='login')
 def edititem(request,id):
     pedit=AddItem.objects.get(id=id)
     p=Purchase.objects.all()
@@ -371,7 +370,7 @@ def edititem(request,id):
     return render(request,'edititem.html',{"account":account,"account_type":account_type,'e':pedit,'p':p,'s':s,'u':u,"accounts":accounts,"account_types":account_types})
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def edit_db(request,id):
         if request.method=='POST':
             edit=AddItem.objects.get(id=id)
@@ -395,7 +394,7 @@ def edit_db(request,id):
         return render(request,'edititem.html')
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def detail(request,id):
     user_id=request.user
     items=AddItem.objects.all()
@@ -413,8 +412,16 @@ def detail(request,id):
     
     return render(request,'demo.html',context)
 
+def comment_view(request):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        comment = Comment.objects.create(content=content)
+        return redirect('comment_view')  # Redirect to the same page after submitting the comment
+    
+    comments = Comment.objects.all().order_by('-created_at')
+    return render(request, 'demo.html', {'comments': comments})
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def Action(request,id):
     user=request.user.id
     user=User.objects.get(id=user)
@@ -433,14 +440,14 @@ def Action(request,id):
             History(user=user,message="Item marked as inActive",p=event).save()
     return render(request,'item_view.html',{'view':viewitem})
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def cleer(request,id):
     dl=AddItem.objects.get(id=id)
     dl.delete()
     return redirect('itemview')
 
 
-# @login_required(login_url='login')
+login_required(login_url='login')
 def add_unit(request):
     if request.method=='POST':
         unit_name=request.POST['unit_name']
@@ -449,7 +456,7 @@ def add_unit(request):
     return render(request,"additem.html")
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def add_sales(request):
     if request.method=='POST':
         Account_type  =request.POST['acc_type']
