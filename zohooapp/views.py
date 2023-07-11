@@ -251,7 +251,7 @@ def add(request):
                 cost=Purchase.objects.get(id=cost_acc)
                 invacc=request.POST.get('invacc')
                     
-                print(istock)
+           
                     
                 
                 ad_item=AddItem(type=type,
@@ -412,13 +412,14 @@ def detail(request,id):
     
     return render(request,'demo.html',context)
 
+
 def comment_view(request):
     if request.method == 'POST':
         content = request.POST.get('content')
-        comment = Comment.objects.create(content=content)
+        comment = Comments_item.objects.create(content=content)
         return redirect('comment_view')  # Redirect to the same page after submitting the comment
     
-    comments = Comment.objects.all().order_by('-created_at')
+    comments = Comments_item.objects.all().order_by('-created_at')
     return render(request, 'demo.html', {'comments': comments})
 
 @login_required(login_url='login')

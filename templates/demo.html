@@ -3,9 +3,9 @@
 {% block content %}
 <style>
   .comment-box {
-    display: none;
-    margin-top: 10px;
-    width:700px;
+      display: none;
+      margin-top: 10px;
+      width:1000px;
   }
 </style>
 
@@ -19,7 +19,7 @@
           <div class="col-md-3" style="border-right: 1px solid white;height: 100vh;margin-left:;position: fixed;">
             <div class="row">
               <div class="col-md-4"><a class="text-white" style="font-size: 1.5rem;">All Items</a></div>
-              <div class="col-md-4 " style="margin-top: -3rem;"><a style="color: #ccc;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-success " href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New</a>
+              <div class="col-md-4 " style="margin-top: -3rem;"><a style="color: black;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary" href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New</a>
                 <a style="color: #ccc;"href="#3">      
                   <form action="">
                     <select name="" style="width: 4rem;margin-top: -2rem;margin-left: 5rem;" class="form-control">
@@ -69,7 +69,7 @@
                   <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
                 {% endif %}</div>
               
-                  <div class="col-md-6 " style="margin-top:-3rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 1rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url "edititem" product.id %}' "><i class="fa fa-pencil"></i></i></a>
+                  <div class="col-md-6 " style="margin-top:-3rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 1rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></i></a>
                     <a style="color: #e0e0e0;"href="#3">      
                   {% comment %} <form action="{% url 'Action' product.id %}" method="post">
                     {% csrf_token %}
@@ -90,72 +90,44 @@
                 </div>
               </form> </a>
               
-              <div class="col-md-4 " style="margin-top:-6rem;margin-left: 29rem;position: relative;">
-                <button  id="commentButton" onclick="toggleCommentBox()" style="margin-top:2.5rem;font-size: 18px" class="btn btn-secondary text-dark">Comment</button>
+                <div id="over"  class="toggle2">
+                  <button onclick="fieldset2_function()"  style="margin-top:-6.5rem;font-size: 18px;margin-left:29.5rem;" class="btn btn-secondary text-dark">Comments</button></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               </div>
-              <div id="commentBox" class="comment-box">
-                <form action="" method="post">
-                  {% csrf_token %}
+            
+       
+          
                 
-                  <textarea name="content"></textarea>
-                  <button type="submit">Submit Comment</button>
-                  <a href="{% url 'comment_view' %} " type="button">View Comment</a>
-                  <div class="container">
-                    <ul>
-                      {% for comment in comments %}
-                          <li>{{ comment.content }}</li>
-                      {% empty %}
-                          <li>No comments yet.</li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                  
-                  
-                </form>
-              </div>
-             
                 
-        
+ 
 
-
-          {% comment %} {%  if product.satus == 'active' %}
-            <button class="btn btn-dark text-white mt-2" style="border: 2px solid green;"  >{{product.satus}}</button>
-        {% else %}
-          <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
-        {% endif %} {% endcomment %}
-            <!-- ============================ tab view (detail page )==================================== -->
-            <script>
-              function toggleCommentBox() {
-                var commentBox = document.getElementById("commentBox");
-                if (commentBox.style.display === "none") {
-                  commentBox.style.display = "block";
-                } else {
-                  commentBox.style.display = "none";
-                }
-              }
-              
-              // Function to add a new comment
-              function addComment() {
-                var commentInput = document.getElementById("commentInput");
-                var commentList = document.getElementById("commentList");
-              
-                // Create a new list item for the comment
-                var commentItem = document.createElement("li");
-                commentItem.innerText = commentInput.value;
-              
-                // Append the comment to the list
-                commentList.appendChild(commentItem);
-              
-                // Clear the comment input
-                commentInput.value = "";
-              }
-            </script>
-        
         
           
       
-  
-
+              <fieldset id="comments" style="display: none;">
+                <form action="{% url 'comment_view' %}" method="post">
+                  {% csrf_token %}
+                  <div class="form-group row mt-4">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                      <textarea name="comment" id="" cols="60" rows="5" required></textarea>
+                      <div class="valid-feedback">Valid.</div>
+                      <div class="invalid-feedback">Please fill out this field.</div>
+                      <label>(For Internal Use)</label>
+                    </div>
+                  </div>
+                  <div class="row mt-4">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                      <input type="submit" class="btn btn-primary form-control" value="Add Comment">
+                    </div>
+                  </div>
+                </form>
+              </fieldset>
+              
+              <script>
+                function fieldset2_function() {
+                  document.getElementById("over").style.display = "none";
+                  document.getElementById("comments").style.display = "block";
+                }
+              </script>
           
      {% comment %} <div class="tabs"> 
       <div class="tab-header">  {% endcomment %}
