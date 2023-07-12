@@ -413,14 +413,31 @@ def detail(request,id):
     return render(request,'demo.html',context)
 
 
-def comment_view(request):
+
+def submit_comment(request, pk):
     if request.method == 'POST':
-        content = request.POST.get('content')
-        comment = Comments_item.objects.create(content=content)
-        return redirect('comment_view')  # Redirect to the same page after submitting the comment
-    
-    comments = Comments_item.objects.all().order_by('-created_at')
-    return render(request, 'demo.html', {'comments': comments})
+        comment_data = request.POST.get('comment')
+        item = AddItem.objects.get(pk=pk)
+
+        comment = Comments_item(
+            user=request.user,
+            item=item,
+            content=comment_data,
+        )
+
+        comment.save()
+
+        return redirect('submit_comment', pk=item.pk)
+
+    else:
+        return render(request, 'demo.html')
+        
+# def view_comments(request):
+#     comments = Comments_item.objects.all()
+#     return render(request, 'demo.html', {'comments': comments})
+
+
+
 
 @login_required(login_url='login')
 def Action(request,id):
