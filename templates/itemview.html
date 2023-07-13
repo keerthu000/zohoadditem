@@ -2,545 +2,120 @@
 {% load static %}
 {% block content %}
 <style>
-  <style>
-    .open-button {
-      background-color: #ccc;
-      color: black;
-      padding: 5px 5px;
-      border: none;
-      cursor: pointer;
-      opacity: 0.8;
-      position: relative;
-      {% comment %} right: 250px;
-      bottom: 450px; {% endcomment %}
-      width: 180px;
-      z-index: 0;
-    }
-  
-    /* The popup form - hidden by default */
-    .form-popup {
-      display: none;
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #f1f1f1;
-      border: 3px solid black;
-      z-index: 9999;
-      padding: 20px;
-      max-width: 300px;
-    }
-  
-    /* Full-width input fields */
-    .form-popup input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0 20px 0;
-      border: none;
-      background: #f1f1f1;
-    }
-  
-    /* Set a style for the submit button */
-    .form-popup .btn {
-      background-color: #04aa6d;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  
-    /* Set a style for the close button */
-    .form-popup .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-  
-    /* Change the color of the close button on hover */
-    .form-popup .close:hover {
-      color: black;
-    }
-    .openbutton {
-      background-color: #ccc;
-      color: black;
-      padding: 5px 5px;
-      border: none;
-      cursor: pointer;
-      opacity: 0.8;
-      position: relative;
-      {% comment %} right: 80px;
-      bottom: 180px; {% endcomment %}
-      width: 180px;
-      z-index:9;
-    }
-  
-    /* The popup form - hidden by default */
-    .form-popup1 {
-      display: none;
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #f1f1f1;
-      border: 3px solid black;
-      z-index: 9999;
-      padding: 20px;
-      max-width: 300px;
-    }
-  
-    /* Full-width input fields */
-    .form-popup1 input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0 20px 0;
-      border: none;
-      background: #f1f1f1;
-    }
-  
-    /* Set a style for the submit button */
-    .form-popup1 .btn.add-button {
-      background-color: #04aa6d;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  
-    /* Set a style for the close button */
-    .form-popup1 .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-  
-    .form-popup1 .close:hover {
-      color: black;
-    }
+  .dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: transparent; 
+    color:white;
+    margin-right:85px;
+}
 </style>
     
 <section >
-  <div class="row   " style="top: 8rem; margin-left: 7rem;" >
-   
+  <div class="row" style="top: 7rem; margin-left:1rem;" >
+  
     <div class="col-md-10 ">
-       <div class="row align-content-center">
-        <h3 class="mb-3  text-danger mr-2 mt-2 ">Edit </h3>  <h2 class="">{{e.Name}}</h2>   
-       </div>
-    
-        <form action="{% url 'edit_db' e.id %}" method="post">
-            {% csrf_token %}
-   
-            <fieldset class="form-group">
-                <div class="row">
-                  <label class="col-form-label col-sm-2 pt-3">Type <i class="fa fa-question-circle"></i></label>
-                  <div class="col-sm-10 form-inline">
-                    <div class="form-check ">
-                      <input class="form-check-input" type="radio" name="type" id="gridRadios1" value="Goods" required >
-                      <label class="form-check-label" for="gridRadios1">
-                        Goods
-                      </label>
-                    </div>
-                    <div class="form-check ml-5">
-                      <input class="form-check-input" type="radio" name="type" id="gridRadios2" value="Services" required>
-                      <label class="form-check-label" for="gridRadios2">
-                       Services
-                      </label>
-                    </div>
-                   
-                  </div>
-                </div>
-              </fieldset>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">Name *</label>
-              <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
-                <input type="text" class="form-control" name="name" value="{{e.Name}}" required>
+        <div class="row">
+            <div class="col-md-3"><a class="text-white" style="font-size: 2rem;">All Items</a></div>
+            <div class="col-md-6 form-inline" style="margin-left: 40rem;margin-top: -3rem;"><a style="color: #000;" class="btn btn-secondary mr-2" href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
+              <a style="color: #ccc;"href="#3"> </a>  
+              <div class="col-md-9 form-inline" style="margin-left: 7rem;margin-top: -2.9rem;">
+                <input type="text" id="searchInput" placeholder="Search..." style="background-color:black;color:white;">
+                <button class="btn btn-secondary" id="filterButton">Filter</button>
               </div>
-            </div>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">Unit <i class="fa fa-question-circle"></i></label>
-              <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
-                <select  name="unit" class="form-control ">
-                   {% for s in u %}    
-               {% if s.id == e.unit.id %}
-               <option value="{{s.id}} " selected >{{e.unit.unit}}</option>
-               {% else %}
-               <option value="{{s.id}} "  >{{s.unit}}</option>
-               {% endif %}
-           {% endfor %}
-                  </select>               
-                 </div>
-                 <button  style="width:5rem;" class="open-button" onclick="openForm()">Add Unit</button>
-            </div>
-            <div class="form-group row">
-              <label  class="col-sm-2 col-form-label">HSN Code</label>
-              <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
-                <input type="number" class="form-control" name="hsn" value="{{e.hsn}}" id="myInputField" oninput="validateInput()"  required>
-                <div id="validationResult"></div>
-              </div>
-            </div>
-            <script>
-              function validateSixDigits(field) {
-                // Define the regular expression pattern for exactly six digits
-                var pattern = /^\d{6}$/;
-              
-                // Check if the field matches the pattern
-                return pattern.test(field);
-              }
-              
-              function validateInput() {
-                var inputField = document.getElementById("myInputField");
-                var inputValue = inputField.value;
-              
-                var validationResultDiv = document.getElementById("validationResult");
-              
-                if (validateSixDigits(inputValue)) {
-                  validationResultDiv.textContent = "Valid: The field contains exactly six digits.";
-                } else {
-                  validationResultDiv.textContent = "Invalid: The field does not contain exactly six digits.";
-                }
-              }
-            
-            </script>
-    
-            <section>
-                <div class="row">
-                        <div class="col-md-6">
-                            <input type="checkbox" name="selling" checked> <label >selling  information</label><br><br>
-                            <div class="form-group row">
-                                <label  class="col-sm-2 col-form-label">Selling price *</label>
-                                <div class="col-sm-10 col-md-7 col-9 ml-5">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                          <div class="input-group-text">INR</div>
-                                        </div>
-                                        <input required type="text" name="sel_price" class="form-control" value="{{e.s_price}}" >
-                                      </div>
-                                </div>
-                              </div>
-                              <div class="form-group row">
-                                <label  class="col-sm-2 col-form-label">Account *</label>
-                                <div class="col-sm-10 col-md-7 col-9 ml-5">
-                                    <select name="sel_acc" class="form-control">
-                                      {% for s in s %}    
-                                      {% if s.id == e.sales.id %}
-                                      <option value="{{s.id}} " selected >{{e.sales.Account_name}}</option>
-                                      {% endif %}
-                                      {% endfor %}
-                                      {% for account_type in account_type %}
-                                      <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
-                                          {% for account in account %}
-                                              {% if account.Account_type == account_type %}
-                                                <option value="{{account.id}}">{{ account.Account_name }}</option>
-                                                  {% endif %}
-                                                   {% endfor %}
-                                                         
-                                                {% endfor %}
-                                               
-                                       
-                                      </select>                                
-                                    </div>
-                              </div>
-                              <div class="form-group row">
-                                <label  class="col-sm-2 col-form-label">Description </label>
-                                <div class="col-sm-10 col-md-7 col-9 ml-5">
-                                  <input required type="text" name="sel_desc" class="form-control" value="{{e.s_desc}}" >
-                                </div>
-                              </div>
-                             
-                        </div>
-                        <div class="col-md-6">
-                          <input  type="checkbox" name="purchase" checked> <label for="">Purchase information</label><br><br>
-                            <div class="form-group row">
-                                <label  class="col-sm-2 col-form-label">Cost Price *</label>
-                                <div class="col-sm-10 col-md-7 col-9">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                          <div class="input-group-text">INR</div>
-                                        </div>
-                                        <input required type="text" class="form-control" name="cost_price" value="{{e.p_price}}" >
-                                      </div>
-                                </div>
-                              </div>
-                              <div class="form-group row in">
-                                <label  class="col-sm-2 col-form-label">Account *</label>
-                                <div class="col-sm-10 col-md-7 col-9">
-   
-   
-   
-                                    <select name="cost_acc" class="form-control">
-                                      {% for s in p %}    
-                                      {% if s.id == e.purchase.id %}
-                                      <option value="{{s.id}} " selected >{{e.purchase.Account_name}}</option>
-                                      {% endif %}
-                                      {% endfor %}
-                                      {% for account_type in account_types %}
-                     <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
-                         {% for account in accounts %}
-                             {% if account.Account_type == account_type %}
-                               <option value="{{account.id}}">{{ account.Account_name }}</option>
-                                 {% endif %}
-                                  {% endfor %}
-                                        
-                               {% endfor %}
-
-
-                                     
-                                     
-                                     
-                
-                                    </select>  
-                                                                                     
-
-   
-                                     </div> 
-                                     <button id="showFormButton" style="width:5rem;" class="openbutton" onclick="showForm()">Add</button>
-                              </div>
-                              <div class="form-group row">
-                                <label  class="col-sm-2 col-form-label">Description </label>
-                                <div class="col-sm-10 col-md-7 col-9">
-                                  <input required  type="text" name="cost_desc" class="form-control" value="{{e.p_desc}}" >
-                                </div>
-                              </div>
-                        </div>
-                </div>
-                <div class="row" >
-                  <div class="col-md-10">
-                    {% comment %} <label><input type="checkbox" value="trackstate" name="trackstate" onclick="toggleForm()" style="display: none;">
-                   Track Inventory for this item</label> {% endcomment %}
-                    {% comment %} <input type="hidden" name="trackState" id="trackState" value="" unchecked> {% endcomment %}
-                    <label>
-                      <input type="checkbox" name="trackstate" value="trackstate"  onclick="toggleFormFields()">
-                      Track Inventory for this item
-                    </label><br><br>
-                    <div id="formFields" style="display: none;"> 
-                      <div class="form-group row" >
-                        <label class="col-sm-2 col-form-label">Inventory Account *</label>
-                        <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
-                          <select class="form-select form-select-sm mt-3" name="invacc" value="{{e.invacc}}" >
-                            <option>Choose..</option>
-                            <option value="inventory assets">Inventory Asset</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="form-group row ">
-                        <label class="col-sm-2 col-form-label">Opening Stock</label>
-                        <div class=" col-md-5">
-                          <input  type="number" class="form-control" name="openstock" value="{{e.stock}}">
-                        </div>
-                        <div class="col-md-5  ">
-                          <div class="row align-items-center">
-                            <label class="col-sm-6 col-form-label">Opening Stock Rate per Unit</label>
-                            <div class="col-sm-6">
-                              <input type="number" class="form-control" name="inventoryaccntperunit" >
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <script>
-                  function toggleFormFields() {
-                    var formFields = document.getElementById("formFields");
-                    var checkbox = document.querySelector("input[name=trackstate]");
-              
-                    if (checkbox.checked) {
-                      formFields.style.display = "block";
-                    } else {
-                      formFields.style.display = "none";
-                    }
-                  }
-                </script>
+                {% comment %} <form action="  " method="post">
+                  {% csrf_token %} {% endcomment %}
+                  {% comment %} <div class="input-group">
+                    <div class="form-outline">
+                      <input type="text" id="searchInput" name='search_query' placeholder="Search..." >
+                      <label class="form-label"  placeholder="Search"></label>
+                    </div> {% endcomment %}
+                    {% comment %} <button id="dataTable" type="button" class="btn btn-primary">
+                      <i class=" fas fa-search"></i>Search
+                    </button> {% endcomment %}
+                  {% comment %} </div> {% endcomment %}
+                {% comment %} </form> </a> {% endcomment %}
         
-                
-
-           
-          <div class="form-inline">
-            <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-            <input type="submit" class="btn btn-secondary but" value="Cancel">
-          </div>
-          </form>
-        </section>
-   
-   <!-- ============================ modal for account adding  -->
-   <div class="form-popup" id="myForm">
-    <form action="{% url 'add_unit' %}" method="post" class="form-container">
-      {% csrf_token %}
-      <span class="close" onclick="closeForm()">&times;</span><br>
-      <h1 class="text-dark">Add Unit</h1>
-  
-      <label class="text-dark" for="unit"><b>Unit</b></label>
-      <input type="text" placeholder="Enter unit" id="unit" name="unit_name" required>
-      <p class="text-dark">eg:KL,PCS,BOX,LTR</p>
-  
-      <button type="submit" class="btn">Add</button>
+            </div>
+          </div>   
+    
       
-    </form>
-  </div>
-  
- 
- 
- <script>
-   function openForm() {
-     let formContainer = document.getElementById("myForm");
-     formContainer.style.display = "block";
-   }
- 
-   function closeForm() {
-     let formContainer = document.getElementById("myForm");
-     formContainer.style.display = "none";
-   }
- </script>
- 
-   
-   
-   
-          {% comment %} <div class="popup" id="popup">
-           <div style="margin-top: 2rem;" class="display-flex">
-            <h4  >Add Account</h4>
-            <h6 class="float-right" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
-           </div>
-            
-            <form style="margin-top: 3rem;" action="{% url 'add_account' %}" method="post">
-              {% csrf_token %}
-              <label class="text-dark" >Accout type</label> <br>
-              <input  type="text" name="acc_type" id=""> <br>
-              <label class="text-dark" >Accout Name</label> <br>
-              <input type="text" name="acc_name" id=""> <br>
-              <label class="text-dark" >Accout Code</label> <br>
-              <input type="text" name="acc_code" id=""> <br>
-              <label class="text-dark" >Accout Description</label> <br>
-              <input type="text" name="acc_desc" id=""> <br> <br>
-              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-              <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closepopup()"  >Canvel</button>
-            </form> {% endcomment %}
-
 
           
-<!-- ============================ modal for account adding  -->
-
-
-
-
-          {% comment %} <div class="popup" id="popup">
-           <div style="margin-top: 2rem;" class="display-flex">
-            <h4 class="text-dark" >Add Account</h4>
-            <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;color: black;" onclick="closepopup()">X</h6>
-           </div>
-            
-            <form style="margin-top: 3rem;" action="{% url 'add_account' %}" method="post">
-              {% csrf_token %}
-              <label class="text-dark" >Accout type</label> <br>
-              <input required  type="text" name="acc_type" id=""> <br>
-              <label required class="text-dark" >Accout Name</label> <br>
-              <input type="text" name="acc_name" id=""> <br>
-              <label class="text-dark" >Accout Code</label> <br>
-              <input type="text" name="acc_code" id=""> <br>
-              <label class="text-dark" >Accout Description</label> <br>
-              <input type="text" name="acc_desc" id=""> <br> <br>
-              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-            <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closepopup()"  >Canvel</button>
-            </form>
-
-
-            <script>
-              let popup=document.getElementById("popup");
-
-              function openpopup(){
-                  popup.classList.add("open-popup");
-              }
-              function closepopup(){
-                  popup.classList.remove("open-popup");
-              }
-
-            </script>
           </div>
-
-          <div class="popup-1" id="popup-1">
-            <div style="margin-top: 2rem;" class="display-flex">
-             <h4 class="text-dark" >Add Unit</h4>
-             <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepop()">X</h6>
-            </div>
-             
-             <form style="margin-top: 3rem;" action="{% url 'add_unit' %}" method="post">
-               {% csrf_token %}
-               <label class="text-dark" >Unit</label> <br>
-               <input required  type="text" name="unit_name" id=""> <br>
-              
-               <br>
-               <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-               <input type="submit" class="btn btn-secondary but" value="Cancel">
-           <p class="text-dark">eg:KL,PCS,BOX,LTR</p>
-            </form>
-      
-      
-             <script>
-               let popu=document.getElementById("popup-1");
-      
-               function openpop(){
-                popu.classList.add("open-popup-1");
-               }
-               function closepop(){
-                popu.classList.remove("open-popup-1");
-               }
-      
-             </script>
-           </div>
-
-
-           <div class="popup-2" id="popup-2">
-            <div style="margin-top: 2rem;" class="display-flex">
-             <h4 class="text-dark" >Add SALES</h4>
-             <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closep()">X</h6>
-            </div>
-             
-            <form style="margin-top: 3rem;" action="{% url 'add_sales' %}" method="post">
-              {% csrf_token %}
-              <label class="text-dark" >Accout type</label> <br>
-              <input required  type="text" name="acc_type" id=""> <br>
-              <label class="text-dark" >Accout Name</label> <br>
-              <input required type="text" name="acc_name" id=""> <br>
-              <label class="text-dark" >Accout Code</label> <br>
-              <input type="text" name="acc_code" id=""> <br>
-              <label class="text-dark" >Accout Description</label> <br>
-              <input type="text" name="acc_desc" id=""> <br> <br>
-              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-            <button style="width: 5rem; height: 2rem; color: black;"  class="btn btn-secondary" type="submit" onclick="closep()"  >Canvel</button>
-            </form>
-
-      
-      
-             <script>
-               let pop=document.getElementById("popup-2");
-      
-               function openp(){
-                pop.classList.add("open-popup-2");
-               }
-               function closep(){
-                pop.classList.remove("open-popup-2");
-               }
-      
-             </script> {% endcomment %}
-           {% comment %} </div> {% endcomment %}
 
     </div>
   </div>
+  <table id="example"  class="table  text-white" style="overflow-y: scroll ;margin-bottom:20rem;">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Sales Rate</th>
+        <th>Purchase Rate</th>
+        <th>HSN/SAC</th> 
+        <th>Stock on Inventory</th>
+        <th>Usage Unit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in view %}
+
+      <tr>
+      
+
+        <td onclick="location.href ='{% url 'detail' v.id %}' " > {{v.Name}}</td>
+        <td>{{v.s_desc}}</td>
+        <td>{{v.s_price}}</td>
+        <td>{{v.p_price}}
+        <td>{{v.hsn}}</td> 
+    
+         <td>{{v.stock}}</td> 
+      
+        <td>{{v.unit.unit}}</td>
+
+      
+      </tr>
+      {% endfor %}
  
+    </tbody>
+  </table>
+ 
+
+<script>
+  $('#example').DataTable({
+    pagingType: 'full_numbers',
+});
+
+</script>
+<script>
+  $(document).ready(function() {
+    // Add click event listener to the filter button
+    $('#filterButton').click(function() {
+      var searchValue = $('#searchInput').val().toLowerCase(); // Get the search value
+      
+      // Loop through each table row
+      $('tbody tr').each(function() {
+        var name = $(this).find('td:first').text().toLowerCase(); // Get the name value
+        var stock = $(this).find('td:nth-child(6)').text().toLowerCase(); // Get the stock inventory value
+        
+        // Check if the name or stock inventory match the search value
+        if (name.includes(searchValue) || stock.includes(searchValue)) {
+          $(this).show(); // Show the row if it matches
+        } else {
+          $(this).hide(); // Hide the row if it doesn't match
+        }
+      });
+    });
+  });
+</script>
 </section>
 
- 
-   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
 {% endblock %}

@@ -18,17 +18,21 @@
           
           <div class="col-md-3" style="border-right: 1px solid white;height: 100vh;margin-left:;position: fixed;">
             <div class="row">
-              <div class="col-md-4"><a class="text-white" style="font-size: 1.5rem;">All Items</a></div>
-              <div class="col-md-4 " style="margin-top: -3rem;"><a style="color: black;width: 4rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary" href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New</a>
-                <a style="color: #ccc;"href="#3">      
-                  <form action="">
+              <div class="col-md-4"><a class="text-white" style="font-size: 1.5rem;margin-left:1rem;">All Items</a></div>
+              <div class="col-md-4 " style="margin-left:-2rem; margin-top: -3rem;"><a style="color: black;width: 2rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary" href="{% url 'additem' %}"><i class="fa fa-solid fa-plus "></i></a>
+                <a style="color: #ccc;"href="#3">
+                  <div class="col-md-4" style="margin-left:2.3rem;margin-top: -2rem;">
+                    <input type="text" id="searchInput" placeholder="Search" style="background-color:black;color:white;">
+                    <button class="btn btn-secondary" id="filterButton" style="width:2rem;margin-left:12.5rem;margin-top: -3.4rem;"><i class=" fa fa-solid fa-angle-down"></i></button>
+                  </div>      
+                  {% comment %} <form action="">
                     <select name="" style="width: 4rem;margin-top: -2rem;margin-left: 5rem;" class="form-control">
         
                       <option value="">...</option>
                       <option value="active" >Sort</option>
                       <option value="inactive" >Clone</option>
                   </select>
-                  </form> </a>
+                  </form> </a> {% endcomment %}
               </div>
             </div> 
             <table class="table  text-white">
@@ -69,7 +73,7 @@
                   <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
                 {% endif %}</div>
               
-                  <div class="col-md-6 " style="margin-top:-3rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 1rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></i></a>
+                  <div class="col-md-6 " style="margin-top:-3rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 1rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></a>
                     <a style="color: #e0e0e0;"href="#3">      
                   {% comment %} <form action="{% url 'Action' product.id %}" method="post">
                     {% csrf_token %}
@@ -88,26 +92,19 @@
                     <a href="{% url 'cleer' product.id %}" style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 4.5rem;font-size: 18px"  class="btn btn-secondary  text-dark " >Delete</a>
                   </div>
                 </div>
-              </form> </a>
+              
               
                 <div id="over"  class="toggle2">
                   <button onclick="fieldset2_function()"  style="margin-top:-6.5rem;font-size: 18px;margin-left:29.5rem;" class="btn btn-secondary text-dark">Comments</button></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               </div>
-            
-       
-          
-                
-                
- 
-
-        
-          
-      
+              <button type="button" class="bg-secondary" onclick="viewComment()">View Comment</button>
               <fieldset id="comments" style="display: none;">
-                <form action="{% url 'comment_view' %}" method="post">
+                <form action="{% url 'commentdb' id=item.id %}" method="post">
+
                   {% csrf_token %}
                   <div class="form-group row mt-4">
                     <div class="col-sm-12 col-md-6 col-lg-6">
+
                       <textarea name="comment" id="" cols="60" rows="5" required></textarea>
                       <div class="valid-feedback">Valid.</div>
                       <div class="invalid-feedback">Please fill out this field.</div>
@@ -116,7 +113,9 @@
                   </div>
                   <div class="row mt-4">
                     <div class="col-sm-12 col-md-6 col-lg-6">
-                      <input type="submit" class="btn btn-primary form-control" value="Add Comment">
+                      <input type="submit" id="addCommentBtn" class="btn btn-primary form-control" value="Add Comment">
+
+                    
                     </div>
                   </div>
                 </form>
@@ -126,9 +125,22 @@
                 function fieldset2_function() {
                   document.getElementById("over").style.display = "none";
                   document.getElementById("comments").style.display = "block";
+                  document.getElementById("addCommentBtn").style.display = "block"; // Show the "Add Comment" button
                 }
+              
               </script>
-          
+              <script>
+                function viewComment() {
+                    var commentContainer = document.getElementById("commentContainer");
+                    var commentText = document.getElementById("commentText");
+                    
+                    if (commentContainer.style.display === "none") {
+                        commentContainer.style.display = "block";
+                    } else {
+                        commentContainer.style.display = "none";
+                    }
+                }
+            </script>
      {% comment %} <div class="tabs"> 
       <div class="tab-header">  {% endcomment %}
         {% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-top:4rem;">
@@ -227,6 +239,27 @@
       
       
   </div>
+  <script>
+    $(document).ready(function() {
+      // Add click event listener to the filter button
+      $('#filterButton').click(function() {
+        var searchValue = $('#searchInput').val().toLowerCase(); // Get the search value
+        
+        // Loop through each table row
+        $('tbody tr').each(function() {
+          var name = $(this).find('td:first').text().toLowerCase(); // Get the name value
+          var stock = $(this).find('td:nth-child(6)').text().toLowerCase(); // Get the stock inventory value
+          
+          // Check if the name or stock inventory match the search value
+          if (name.includes(searchValue) || stock.includes(searchValue)) {
+            $(this).show(); // Show the row if it matches
+          } else {
+            $(this).hide(); // Hide the row if it doesn't match
+          }
+        });
+      });
+    });
+  </script>
       
       <script>
       
@@ -257,7 +290,8 @@
   
   
 </section>
-  <script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

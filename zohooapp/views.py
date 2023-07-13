@@ -414,27 +414,23 @@ def detail(request,id):
 
 
 
-def submit_comment(request, pk):
+def comment(request,id):
+    item_id = AddItem.objects.get(id=id)
+    item=AddItem.objects.filter(user=request.user)
+    return render(request,'comment.html',{'itemid':item_id,'item':item})
+def commentdb(request, id):
     if request.method == 'POST':
-        comment_data = request.POST.get('comment')
-        item = AddItem.objects.get(pk=pk)
+        comment = request.POST['comment']
+        user_id = request.user.id
+        user= User.objects.get(id=user_id)
+        item = AddItem.objects.get(id=id)  # Retrieve the project with the provided ID
+        item.comment = comment  # Set the comment field of the project
+        item.user = user  # Associate the project with the user
+        item.save()  # Save the project object with the updated comment
+        return redirect('/', id=id)
 
-        comment = Comments_item(
-            user=request.user,
-            item=item,
-            content=comment_data,
-        )
 
-        comment.save()
-
-        return redirect('submit_comment', pk=item.pk)
-
-    else:
-        return render(request, 'demo.html')
-        
-# def view_comments(request):
-#     comments = Comments_item.objects.all()
-#     return render(request, 'demo.html', {'comments': comments})
+ 
 
 
 
