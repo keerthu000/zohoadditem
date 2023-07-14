@@ -8,7 +8,7 @@
     padding: 5px;
     background-color: transparent; 
     color:white;
-    margin-right:85px;
+    margin-right:700px;
 }
 </style>
     
@@ -21,9 +21,17 @@
             <div class="col-md-6 form-inline" style="margin-left: 40rem;margin-top: -3rem;"><a style="color: #000;" class="btn btn-secondary mr-2" href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
               <a style="color: #ccc;"href="#3"> </a>  
               <div class="col-md-9 form-inline" style="margin-left: 7rem;margin-top: -2.9rem;">
-                <input type="text" id="searchInput" placeholder="Search..." style="background-color:black;color:white;">
-                <button class="btn btn-secondary" id="filterButton">Filter</button>
+                <div class="btn-group">
+                  <select id="sortingOption" class="btn btn-secondary form-control">
+                    <option >Filter</option>
+                    <option value="name">Name</option>
+                    <option value="stock">Stock on Inventory</option>
+                  </select>
+                </div>
+                <button class="btn btn-secondary" id="filterButton" style="height:2.5rem;"><i class="fa fa-light fa-chevron-down"></i></button>
               </div>
+              
+              
                 {% comment %} <form action="  " method="post">
                   {% csrf_token %} {% endcomment %}
                   {% comment %} <div class="input-group">
@@ -50,12 +58,12 @@
   <table id="example"  class="table  text-white" style="overflow-y: scroll ;margin-bottom:20rem;">
     <thead>
       <tr>
-        <th>Name</th>
+        <th id="nameHeader">Name</th>
         <th>Description</th>
         <th>Sales Rate</th>
         <th>Purchase Rate</th>
         <th>HSN/SAC</th> 
-        <th>Stock on Inventory</th>
+        <th id="stockHeader">Stock on Inventory</th>
         <th>Usage Unit</th>
       </tr>
     </thead>
@@ -90,26 +98,48 @@
 
 </script>
 <script>
-  $(document).ready(function() {
-    // Add click event listener to the filter button
-    $('#filterButton').click(function() {
-      var searchValue = $('#searchInput').val().toLowerCase(); // Get the search value
-      
-      // Loop through each table row
-      $('tbody tr').each(function() {
-        var name = $(this).find('td:first').text().toLowerCase(); // Get the name value
-        var stock = $(this).find('td:nth-child(6)').text().toLowerCase(); // Get the stock inventory value
-        
-        // Check if the name or stock inventory match the search value
-        if (name.includes(searchValue) || stock.includes(searchValue)) {
-          $(this).show(); // Show the row if it matches
-        } else {
-          $(this).hide(); // Hide the row if it doesn't match
-        }
-      });
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const filterButton = document.getElementById('filterButton');
+
+    filterButton.addEventListener('click', () => {
+      const sortingOption = document.getElementById('sortingOption').value;
+      sortTable(sortingOption);
     });
+
+    function sortTable(sortingOption) {
+      const table = document.getElementById('example');
+      const tbody = table.tBodies[0];
+      const rows = Array.from(tbody.rows);
+
+      if (sortingOption === 'name') {
+        rows.sort((a, b) => {
+          const aValue = a.cells[0].innerText.toLowerCase();
+          const bValue = b.cells[0].innerText.toLowerCase();
+          return aValue.localeCompare(bValue);
+        });
+      } else if (sortingOption === 'stock') {
+        rows.sort((a, b) => {
+          const aValue = parseFloat(a.cells[5].innerText);
+          const bValue = parseFloat(b.cells[5].innerText);
+          return aValue - bValue;
+        });
+      }
+
+      // Remove the current sorted rows
+      rows.forEach((row) => {
+        tbody.removeChild(row);
+      });
+
+      // Append the sorted rows back to the table body
+      rows.forEach((row) => {
+        tbody.appendChild(row);
+      });
+    }
   });
 </script>
+
+
+
 </section>
 
 

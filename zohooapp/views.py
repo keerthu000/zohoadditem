@@ -414,20 +414,42 @@ def detail(request,id):
 
 
 
-def comment(request,id):
-    item_id = AddItem.objects.get(id=id)
-    item=AddItem.objects.filter(user=request.user)
-    return render(request,'comment.html',{'itemid':item_id,'item':item})
+def comment(request):
+    product_id = request.GET.get('product_id') # Retrieve the product ID from the AJAX request
+   
+    
+    user=User.objects.get(id=int(request.user.id))
+    
+    product=AddItem.objects.get(id=product_id)
+    # Filter the data based on the product ID
+    comment = Comments_item.objects.filter(item=product,user=user)
+    comments = [c.content for c in comment]
+    
+   
+
+    
+    response_data = {'comments': comments}
+    return JsonResponse(response_data)
+
+
 def commentdb(request, id):
     if request.method == 'POST':
         comment = request.POST['comment']
         user_id = request.user.id
         user= User.objects.get(id=user_id)
         item = AddItem.objects.get(id=id)  # Retrieve the project with the provided ID
-        item.comment = comment  # Set the comment field of the project
+          # Set the comment field of the project
         item.user = user  # Associate the project with the user
-        item.save()  # Save the project object with the updated comment
-        return redirect('/', id=id)
+        item.save()
+        comments=Comments_item()
+        comments.content=comment
+        comments.item=item
+        comments.user=user
+        
+        comments.save()  # Save the project object with the updated comment
+        print(item)
+        return redirect('detail',item.id)
+
 
 
  

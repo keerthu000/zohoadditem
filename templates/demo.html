@@ -2,300 +2,150 @@
 {% load static %}
 {% block content %}
 <style>
-  .comment-box {
-      display: none;
-      margin-top: 10px;
-      width:1000px;
-  }
+  .dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: transparent; 
+    color:white;
+    margin-right:700px;
+}
 </style>
-
-<section class="item" id="navbar-example2" >
-  <div class="container">
-    {% comment %} <div class="row fixed-top  " style="top: 8rem; margin-left: 18rem;" > {% endcomment %}
     
-      <div class="col-md-12" style="right: 0;">
+<section >
+  <div class="row" style="top: 7rem; margin-left:1rem;" >
+  
+    <div class="col-md-10 ">
         <div class="row">
-          
-          <div class="col-md-3" style="border-right: 1px solid white;height: 100vh;margin-left:;position: fixed;">
-            <div class="row">
-              <div class="col-md-4"><a class="text-white" style="font-size: 1.5rem;margin-left:1rem;">All Items</a></div>
-              <div class="col-md-4 " style="margin-left:-2rem; margin-top: -3rem;"><a style="color: black;width: 2rem;height: 2rem;margin-top: 3rem;" class="btn btn-secondary" href="{% url 'additem' %}"><i class="fa fa-solid fa-plus "></i></a>
-                <a style="color: #ccc;"href="#3">
-                  <div class="col-md-4" style="margin-left:2.3rem;margin-top: -2rem;">
-                    <input type="text" id="searchInput" placeholder="Search" style="background-color:black;color:white;">
-                    <button class="btn btn-secondary" id="filterButton" style="width:2rem;margin-left:12.5rem;margin-top: -3.4rem;"><i class=" fa fa-solid fa-angle-down"></i></button>
-                  </div>      
-                  {% comment %} <form action="">
-                    <select name="" style="width: 4rem;margin-top: -2rem;margin-left: 5rem;" class="form-control">
-        
-                      <option value="">...</option>
-                      <option value="active" >Sort</option>
-                      <option value="inactive" >Clone</option>
+            <div class="col-md-3"><a class="text-white" style="font-size: 2rem;">All Items</a></div>
+            <div class="col-md-6 form-inline" style="margin-left: 40rem;margin-top: -3rem;"><a style="color: #000;" class="btn btn-secondary mr-2" href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
+              <a style="color: #ccc;"href="#3"> </a>  
+              <div class="col-md-9 form-inline" style="margin-left: 7rem;margin-top: -2.9rem;">
+                <div class="btn-group">
+                  <select id="sortingOption" class="btn btn-secondary form-control">
+                    <option >Filter</option>
+                    <option value="name">Name</option>
+                    <option value="stock">Stock on Inventory</option>
                   </select>
-                  </form> </a> {% endcomment %}
-              </div>
-            </div> 
-            <table class="table  text-white">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  
-                </tr>
-                
-              </thead>
-              <tbody>
-                {% for v in allproduct %}
-        
-                <tr>
-        
-                  <td ><a class="text-white " href="{% url 'detail' v.id %}">{{v.Name}}</a></td>
-                
-                </tr>
-                
-                {% endfor %}
-                <tr>
-                  <td><hr></td>
-                  </tr>
-              </tbody>
-            </table>
-          
-          </div> 
-          {% comment %} <div class="tabs"> 
-            <div class="tab-header">  {% endcomment %}
-              
-          
-          <div class="col-md-12 " style="margin-left: 25rem;"  data-spy="scroll" data-target="#navbar-example2" data-offset="0">
-            <div class="row" style="position: relative;z-index:99">
-              <div class="col-md-12" ><a class="text-white" style="font-size: 1.5rem;position: relative;"><h2>{{product.Name}}</h2></a>
-                {%  if product.satus == 'active' %}
-                <button class="btn btn-dark text-white mt-2" style="border: 2px solid green;"  >{{product.satus}}</button>
-                {% else %}
-                  <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
-                {% endif %}</div>
-              
-                  <div class="col-md-6 " style="margin-top:-3rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 1rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></a>
-                    <a style="color: #e0e0e0;"href="#3">      
-                  {% comment %} <form action="{% url 'Action' product.id %}" method="post">
-                    {% csrf_token %}
-                    <select name="action" style="width:5rem;margin-top: -2rem;margin-left: 5rem;height: 2rem;" class="form-control">
-        
-                      <option value="">More</option>
-                      {% if product.satus == 'active' %}
-                      <option value="inactive">In Active</option>
-                      <option value="active">Active</option>
-                     
-                      {% endif %}
-                  </select> {% endcomment %}
-                  <div class="col-md-4 " style="margin-top:-2rem;margin-left:5rem;position: relative;z-index:9;">
-                    <input type="file" id="attachment" style="display: none;">
-                    <button onclick="document.getElementById('attachment').click();" id="comment-box" style= "font-size: 18px;"  class="btn btn-secondary text-dark"> File</button>
-                    <a href="{% url 'cleer' product.id %}" style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 4.5rem;font-size: 18px"  class="btn btn-secondary  text-dark " >Delete</a>
-                  </div>
                 </div>
-              
-              
-                <div id="over"  class="toggle2">
-                  <button onclick="fieldset2_function()"  style="margin-top:-6.5rem;font-size: 18px;margin-left:29.5rem;" class="btn btn-secondary text-dark">Comments</button></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-secondary" id="filterButton" style="height:2.5rem;"><i class="fa fa-light fa-chevron-down"></i></button>
               </div>
-              <button type="button" class="bg-secondary" onclick="viewComment()">View Comment</button>
-              <fieldset id="comments" style="display: none;">
-                <form action="{% url 'commentdb' id=item.id %}" method="post">
-
-                  {% csrf_token %}
-                  <div class="form-group row mt-4">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-
-                      <textarea name="comment" id="" cols="60" rows="5" required></textarea>
-                      <div class="valid-feedback">Valid.</div>
-                      <div class="invalid-feedback">Please fill out this field.</div>
-                      <label>(For Internal Use)</label>
-                    </div>
-                  </div>
-                  <div class="row mt-4">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                      <input type="submit" id="addCommentBtn" class="btn btn-primary form-control" value="Add Comment">
-
-                    
-                    </div>
-                  </div>
-                </form>
-              </fieldset>
               
-              <script>
-                function fieldset2_function() {
-                  document.getElementById("over").style.display = "none";
-                  document.getElementById("comments").style.display = "block";
-                  document.getElementById("addCommentBtn").style.display = "block"; // Show the "Add Comment" button
-                }
               
-              </script>
-              <script>
-                function viewComment() {
-                    var commentContainer = document.getElementById("commentContainer");
-                    var commentText = document.getElementById("commentText");
-                    
-                    if (commentContainer.style.display === "none") {
-                        commentContainer.style.display = "block";
-                    } else {
-                        commentContainer.style.display = "none";
-                    }
-                }
-            </script>
-     {% comment %} <div class="tabs"> 
-      <div class="tab-header">  {% endcomment %}
-        {% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-top:4rem;">
-          <div class="container-fluid">
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                  <a href="#">OverView</a>
-                </li>
-                <li class="breadcrumb-item">
-                  <a href="#">Description</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                  <a href="#">History</a>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </nav>
-       {% endcomment %}
-          
-            {% comment %} <div class="col-sm-6"> {% endcomment %}
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="mr-5">Account Type</h5>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.type}}</h6> 
-              
-                  <h5 class="mr-5">Unit</h5>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.unit.unit}}</h6> 
-              
-                  <h6 class="mr-4 ">Created Source</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem; margin-bottom: 2rem;"  >{{product.user.username}}</h6> 
-                  <h6 class="mr-4 ">HSN Code</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem; margin-bottom: 2rem;"  >{{product.hsn}}</h6> 
-                  <h6 class="mr-4 ">Tax Prefrence</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem; margin-bottom: 2rem;"  >{{product.tax}}</h6> 
-                </div>
-              </div><br><br>
-            {% comment %} </div> {% endcomment %}
-          <div class="row" style="margin-top:30px;">
-            <div class="col-sm-5">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="mb-3"><b>Purchase Information</b></h4>
-                  <h6 class="mr-5">Cost price</h6> <br>
-                  <h6 style="margin-top: -2.5rem; margin-left: 8rem;" >{{product.p_price}}</h6> <br>
-                  <h6 class="mr-5">Purchase Account</h6>
-                  <h6 style="margin-top: -1.5rem; margin-left: 10rem;" >{{product.purchase.Account_name}}</h6> <br>
-                  <h6 class="mr-5">Description</h6>
-                  <h6 style="margin-top: -1.8rem; margin-left: 10rem;" >{{product.p_desc}}</h6> 
-                </div>
-              </div>
+                {% comment %} <form action="  " method="post">
+                  {% csrf_token %} {% endcomment %}
+                  {% comment %} <div class="input-group">
+                    <div class="form-outline">
+                      <input type="text" id="searchInput" name='search_query' placeholder="Search..." >
+                      <label class="form-label"  placeholder="Search"></label>
+                    </div> {% endcomment %}
+                    {% comment %} <button id="dataTable" type="button" class="btn btn-primary">
+                      <i class=" fas fa-search"></i>Search
+                    </button> {% endcomment %}
+                  {% comment %} </div> {% endcomment %}
+                {% comment %} </form> </a> {% endcomment %}
+        
             </div>
-            <div class="col-sm-6">
-              <div class="card" >
-                <div class="card-body">
+          </div>   
+    
       
-                  <h4 class="mb-2 mt-3"><b>Sales Information</b></h4>
-                  <h6 class="mr-5">Selling  price</h6> <br>
-                  <h6 style="margin-top: -3rem; margin-left: 10rem;" >{{product.s_price}}</h6> <br>
-                  <h6 class="mr-5">Sales  Account</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.sales.Account_name}}</h6> <br>
-                  <h6 class="mr-5">Description</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.s_desc}}</h6>
-                </div> 
-              </div>
-            </div>
-          <div>
-          <div class="container" >
-            <h2 >There is no transaction yet</h2>
-            <p style="text-align:center;">do something</p>
-       
-      
-      
-            <div style="overflow: hidden;" >
-              <h6>{{product.date}}</h6>
-              <h6 style="margin-left: 15rem ;margin-top: -1.8rem;">{{product.creat}}</h6>
+
           
-              <table class="table text-white">
-                <thead>
-                  {% for i in history %}
-                  <tr>
-                    <th>{{i.date}}</th>
-                    <th>{{i.message}}</th>
-          
-                  </tr>
-                  {% endfor %}
-                </thead>
-              </table>
-                
-              
-                
-            
           </div>
-        </div>
-      
-      
+
+    </div>
   </div>
-  <script>
-    $(document).ready(function() {
-      // Add click event listener to the filter button
-      $('#filterButton').click(function() {
-        var searchValue = $('#searchInput').val().toLowerCase(); // Get the search value
-        
-        // Loop through each table row
-        $('tbody tr').each(function() {
-          var name = $(this).find('td:first').text().toLowerCase(); // Get the name value
-          var stock = $(this).find('td:nth-child(6)').text().toLowerCase(); // Get the stock inventory value
-          
-          // Check if the name or stock inventory match the search value
-          if (name.includes(searchValue) || stock.includes(searchValue)) {
-            $(this).show(); // Show the row if it matches
-          } else {
-            $(this).hide(); // Hide the row if it doesn't match
-          }
-        });
-      });
-    });
-  </script>
-      
-      <script>
-      
-      let tabHeader = document.getElementsByClassName("tab-header")[0];
-      let tabIndicator = document.getElementsByClassName("tab-indicator")[0];
-      let tabBody = document.getElementsByClassName("tab-body")[0];
-      
-      let tabsPane =tabHeader.getElementsByTagName("div")
-      for(let i=0;i<tabsPane.length;i++){
-      tabsPane[i].addEventListener("click",function(){
-      tabHeader.getElementsByClassName("active")[0].classList.remove("active");
-      tabsPane[i].classList.add("active");
-      
-      tabBody.getElementsByClassName("activ")[0].classList.remove("activ");
-      tabBody.getElementsByTagName("div")[i].classList.add("activ");
-      
-        tabIndicator.style.left = 'calc(calc(100% / 3) * ${i})';
-      
-      });
-      }
-      
-      
-      </script>
-      
-     
-    
-  
-  
-  
-</section>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+  <table id="example"  class="table  text-white" style="overflow-y: scroll ;margin-bottom:20rem;">
+    <thead>
+      <tr>
+        <th id="nameHeader">Name</th>
+        <th>Description</th>
+        <th>Sales Rate</th>
+        <th>Purchase Rate</th>
+        <th>HSN/SAC</th> 
+        <th id="stockHeader">Stock on Inventory</th>
+        <th>Usage Unit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in view %}
 
-   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      <tr>
+      
 
+        <td onclick="location.href ='{% url 'detail' v.id %}' " > {{v.Name}}</td>
+        <td>{{v.s_desc}}</td>
+        <td>{{v.s_price}}</td>
+        <td>{{v.p_price}}
+        <td>{{v.hsn}}</td> 
+    
+         <td>{{v.stock}}</td> 
+      
+        <td>{{v.unit.unit}}</td>
+
+      
+      </tr>
+      {% endfor %}
  
+    </tbody>
+  </table>
+ 
+
+<script>
+  $('#example').DataTable({
+    pagingType: 'full_numbers',
+});
+
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const filterButton = document.getElementById('filterButton');
+
+    filterButton.addEventListener('click', () => {
+      const sortingOption = document.getElementById('sortingOption').value;
+      sortTable(sortingOption);
+    });
+
+    function sortTable(sortingOption) {
+      const table = document.getElementById('example');
+      const tbody = table.tBodies[0];
+      const rows = Array.from(tbody.rows);
+
+      if (sortingOption === 'name') {
+        rows.sort((a, b) => {
+          const aValue = a.cells[0].innerText.toLowerCase();
+          const bValue = b.cells[0].innerText.toLowerCase();
+          return aValue.localeCompare(bValue);
+        });
+      } else if (sortingOption === 'stock') {
+        rows.sort((a, b) => {
+          const aValue = parseFloat(a.cells[5].innerText);
+          const bValue = parseFloat(b.cells[5].innerText);
+          return aValue - bValue;
+        });
+      }
+
+      // Remove the current sorted rows
+      rows.forEach((row) => {
+        tbody.removeChild(row);
+      });
+
+      // Append the sorted rows back to the table body
+      rows.forEach((row) => {
+        tbody.appendChild(row);
+      });
+    }
+  });
+</script>
+
+
+
+</section>
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
 {% endblock %}

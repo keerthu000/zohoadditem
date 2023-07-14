@@ -24,9 +24,7 @@ urlpatterns = [
     path('sample/',views.sample,name="sample"),
     path('view_vendor_list/',views.view_vendor_list,name='view_vendor_list'),
     path('view_vendor_details/<int:pk>',views.view_vendor_details,name='view_vendor_details'),
-    path('comment/<int:id>', views.comment, name='comment'),
-    path('commentdb/<int:id>',views.commentdb,name='commentdb'),
-
+     path('comment', views.comment, name='comment'),
     path('commentdb/<int:id>',views.commentdb,name='commentdb'),
     path('add_comment/<int:pk>',views.add_comment,name='add_comment'),
     path('sendmail/<int:pk>',views.sendmail,name='sendmail'),

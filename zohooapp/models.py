@@ -48,7 +48,6 @@ class Unit(models.Model):
 
     
     
-    
 class AddItem(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,default='')
     type=models.TextField(max_length=255)
@@ -69,6 +68,11 @@ class AddItem(models.Model):
     tax=models.TextField(max_length=255,null=True)
     invacc=models.TextField(max_length=255,null=True)
     stock=models.IntegerField(blank=True,null=True,)
+
+class Comments_item(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE,default='')
+    item=models.ForeignKey(AddItem,on_delete=models.CASCADE,null=True,blank=True)
+    content = models.TextField(max_length=255,null=True,blank=True)
     
 
 class History(models.Model):
