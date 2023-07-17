@@ -12,8 +12,10 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 from django.views import View
 from .forms import EmailForm
+from django.urls import reverse
 from django.http import JsonResponse
 from django.core import serializers
+from zohoapp.models import Comments_item
 
 
 def index(request):
@@ -105,6 +107,8 @@ def base(request):
             Sales(Account_type='INCOME',Account_name='Other Charges',Account_desc='salesincome').save()
     if not Sales.objects.filter(Account_name='Shipping Charge').exists():
             Sales(Account_type='INCOME',Account_name='Shipping Charge',Account_desc='salesincome').save()
+    
+
 
 
     if not  Purchase.objects.filter(Account_name='Advertising & Marketing').exists():
@@ -206,13 +210,14 @@ def additem(request):
 @login_required(login_url='login')
 def add_account(request):
     if request.method=='POST':
-        Account_type  =request.POST['acc_type']
-        Account_name =request.POST['acc_name']
-        Account_desc =request.POST['acc_desc']
-       
-        acc=Purchase(Account_type=Account_type,Account_name=Account_name,Account_desc=Account_desc)
-        acc.save()                 
-        return redirect("additem")
+        Account_type  =request.POST.get('acc_type')
+        if Account_type is not None:
+            Account_name =request.POST['acc_name']
+            Account_desc =request.POST['acc_desc']
+        
+            acc=Purchase(Account_type=Account_type,Account_name=Account_name,Account_desc=Account_desc)
+            acc.save()                 
+            return redirect("additem")
         
     return render(request,'additem.html')
 
@@ -235,6 +240,7 @@ def add(request):
                 name=request.POST['name']
                 unit=request.POST['unit']
                 hsn=request.POST['hsn']
+                status=request.POST.get('status')
                 sel_price=request.POST.get('sel_price')
                 sel_acc=request.POST.get('sel_acc')
                 s_desc=request.POST.get('sel_desc')
@@ -250,7 +256,7 @@ def add(request):
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
                 invacc=request.POST.get('invacc')
-                    
+                stock=request.POST.get('stock')
            
                     
                 
@@ -265,6 +271,7 @@ def add(request):
                                 unit=unit,
                                 sales=sel,
                                 purchase=cost,
+                                satus=status,
                                 user=user,
                                 creat=history,
                                 interstate=inter,
@@ -308,6 +315,7 @@ def add(request):
                                 sales=sel,
                                 tax=tax,
                                 purchase=cost,
+                                satus = 'Non-Activate',
                                 user=user,
                                 creat=history,
                                 interstate='none',
@@ -384,7 +392,7 @@ def edit_db(request,id):
             cost_acc=request.POST['cost_acc']        
             edit.p_desc=request.POST['cost_desc']
             edit.hsn=request.POST['hsn']
-            
+            edit.satus=request.POST.get('status')
             edit.unit=Unit.objects.get(id=unit)
             edit.sales=Sales.objects.get(id=sel_acc)
             edit.purchase=Purchase.objects.get(id=cost_acc)
@@ -411,6 +419,8 @@ def detail(request,id):
     }
     
     return render(request,'demo.html',context)
+
+
 
 
 
@@ -452,11 +462,6 @@ def commentdb(request, id):
 
 
 
- 
-
-
-
-
 @login_required(login_url='login')
 def Action(request,id):
     user=request.user.id
@@ -481,7 +486,6 @@ def cleer(request,id):
     dl=AddItem.objects.get(id=id)
     dl.delete()
     return redirect('itemview')
-
 
 login_required(login_url='login')
 def add_unit(request):

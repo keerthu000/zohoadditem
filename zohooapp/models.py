@@ -30,7 +30,12 @@ class Sales(models.Model):
 
 
 class Purchase(models.Model):
-    Account_type=models.TextField(max_length=255)
+    ACC_TYPE_CHOICES = (
+        ('1', 'EXPENSE'),
+        ('2', 'Cost of Goods Sold'),
+        ('3', 'Fixed Asset'),
+    )
+    Account_type=models.CharField(max_length=255,choices=ACC_TYPE_CHOICES)
     Account_name=models.TextField(max_length=255)
     Acount_code=models.TextField(max_length=255)
     Account_desc=models.TextField(max_length=255)
@@ -55,7 +60,8 @@ class AddItem(models.Model):
     unit=models.ForeignKey(Unit,on_delete=models.CASCADE)
     hsn=models.IntegerField(null=True,blank=True)
     sales=models.ForeignKey(Sales,on_delete=models.CASCADE)
-    purchase=models.ForeignKey(Purchase,on_delete=models.CASCADE)
+
+    # purchase=models.ForeignKey(Purchase,on_delete=models.CASCADE)
     date=models.DateTimeField(auto_now_add=True)
     s_desc=models.TextField(max_length=255)
     p_desc=models.TextField(max_length=255)

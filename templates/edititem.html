@@ -152,7 +152,7 @@
                       </label>
                     </div>
                     <div class="form-check ml-5">
-                      <input class="form-check-input" type="radio" name="type" id="gridRadios2" value="Services" required>
+                      <input class="form-check-input" type="radio" name="type" id="gridRadios2" value="Services"  style="margin-left:50px;" required>
                       <label class="form-check-label" for="gridRadios2">
                        Services
                       </label>
@@ -279,6 +279,10 @@
    
    
                                     <select name="cost_acc" class="form-control">
+                                      <option>Advertising & Markting<option>
+                                      <option>Automobile expense<option>
+                                      <option>bad debt</option>
+
                                       {% for s in p %}    
                                       {% if s.id == e.purchase.id %}
                                       <option value="{{s.id}} " selected >{{e.purchase.Account_name}}</option>
@@ -319,11 +323,11 @@
                     <label class="col-form-label col-sm-2 pt-3">Activation tag<i class="fa fa-question-circle"></i></label>
                     <div class="col-sm-10 form-inline">
                       <div class="form-check ">
-                        <input required class="form-check-input" type="radio" name="radio" id="gridRadios1" value="Activate" >
+                        <input required class="form-check-input" type="radio" name="status" id="gridRadios1" value="Active" >
                         <label class="form-check-label" for="gridRadios1">Activate</label>
                       </div>
                       <div class="form-check ml-5">
-                        <input required class="form-check-input" type="radio" name="radio" id="gridRadios2" value="Non-Activate">
+                        <input required class="form-check-input" type="radio" name="status" id="gridRadios2" value="Inactive" style="margin-left:50px;">
                         <label class="form-check-label" for="gridRadios2">Non-Activate</label>
                       </div>
                         
@@ -384,11 +388,11 @@
                     <label class="col-form-label col-sm-2 pt-3">Activation tag<i class="fa fa-question-circle"></i></label>
                     <div class="col-sm-10 form-inline">
                       <div class="form-check ">
-                        <input required class="form-check-input" type="radio" name="radio" id="gridRadios1" value="Activate" >
+                        <input required class="form-check-input" type="radio" name="satus" id="gridRadios1" value="Activate" >
                         <label class="form-check-label" for="gridRadios1">Activate</label>
                       </div>
                       <div class="form-check ml-5">
-                        <input required class="form-check-input" type="radio" name="radio" id="gridRadios2" value="Non-Activate">
+                        <input required class="form-check-input" type="radio" name="satus" id="gridRadios2" value="Non-Activate" style="margin-left:50px;">
                         <label class="form-check-label" for="gridRadios2">Non-Activate</label>
                       </div>
                         
@@ -399,7 +403,7 @@
            
           <div class="form-inline">
             <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-            <input type="submit" class="btn btn-secondary but" value="Cancel">
+            <input type="submit" class="btn btn-secondary but" value="Cancel" style="margin-left:20px;">
           </div>
           </form>
         </section>

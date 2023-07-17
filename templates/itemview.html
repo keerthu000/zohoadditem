@@ -3,33 +3,43 @@
 {% block content %}
 <style>
   .dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #aaa;
+    border: 2px solid #aaa;
     border-radius: 3px;
     padding: 5px;
     background-color: transparent; 
     color:white;
-    margin-right:700px;
+    margin-right:950px;
+    margin-top:-3.5rem;
+    display: inline-flex;
 }
-</style>
-    
-<section >
-  <div class="row" style="top: 7rem; margin-left:1rem;" >
+  .dataTables_wrapper{
+    margin-top:1.5rem;
+  }
   
-    <div class="col-md-10 ">
-        <div class="row">
-            <div class="col-md-3"><a class="text-white" style="font-size: 2rem;">All Items</a></div>
-            <div class="col-md-6 form-inline" style="margin-left: 40rem;margin-top: -3rem;"><a style="color: #000;" class="btn btn-secondary mr-2" href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
-              <a style="color: #ccc;"href="#3"> </a>  
-              <div class="col-md-9 form-inline" style="margin-left: 7rem;margin-top: -2.9rem;">
-                <div class="btn-group">
-                  <select id="sortingOption" class="btn btn-secondary form-control">
-                    <option >Filter</option>
-                    <option value="name">Name</option>
-                    <option value="stock">Stock on Inventory</option>
-                  </select>
-                </div>
-                <button class="btn btn-secondary" id="filterButton" style="height:2.5rem;"><i class="fa fa-light fa-chevron-down"></i></button>
-              </div>
+
+</style>
+<section > 
+  <div class="row " style="margin-top: -3rem; margin-left:1rem;" >
+    <div class="col-md-12 form-inline ">
+      <div class="row">
+        <div class="col-md-9"><a class="text-white" style="font-size: 2rem;">All Items</a></div>
+        <input type="text"  id="searchInput" class="form-control" placeholder="Search Items..." style="margin-top: 25px; width: 30%;">
+        <div class="col-md-9 form-inline"  style="margin-top: -1.8rem; margin-left:59rem;display:inline-flex;"><a style="color: #000;" class="btn btn-secondary mr-2" href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
+          <a style="color: #ccc;"href="#3"> </a> 
+        </div> 
+        <div class="col-md-9 form-inline" style="margin-left: 51rem;margin-top:-1.9rem;display:inline-flex;">
+          <div class="btn-group">
+            <select id="sortingOption" class="btn btn-secondary "  style="width:6rem;height: 2rem;">
+              <option >Filter</option>
+              <option value="name">Name</option>
+              <option value="stock">Stock on Inventory</option>
+            </select>
+          </div>
+          <button class="btn btn-secondary" id="filterButton" style="height:2rem;display:inline"></button>
+        </div>
+      </div>
+    </div>
+  </div>
               
               
                 {% comment %} <form action="  " method="post">
@@ -45,18 +55,9 @@
                   {% comment %} </div> {% endcomment %}
                 {% comment %} </form> </a> {% endcomment %}
         
-            </div>
-          </div>   
-    
-      
-
           
-          </div>
-
-    </div>
-  </div>
-  <table id="example"  class="table  text-white" style="overflow-y: scroll ;margin-bottom:20rem;">
-    <thead>
+  <table id="example"  class="table  text-white" style="overflow-y: scroll ;width:100%;  margin-top: 40px;">
+    <thead >
       <tr>
         <th id="nameHeader">Name</th>
         <th>Description</th>
@@ -91,12 +92,33 @@
   </table>
  
 
-<script>
-  $('#example').DataTable({
-    pagingType: 'full_numbers',
-});
 
-</script>
+
+
+  <script>
+    var searchInput = document.getElementById('searchInput');
+    var tableRows = document.querySelectorAll('#example tbody tr');
+  
+    // Add event listener to the search input
+    searchInput.addEventListener('input', function () {
+      var searchValue = searchInput.value.toLowerCase();
+  
+      // Loop through table rows and show/hide based on search value
+      tableRows.forEach(function (row) {
+        var cellValue = row.querySelector('td:nth-child(1)').textContent.toLowerCase(); // Modify this selector to target the correct column
+  
+        if (cellValue.includes(searchValue)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  </script>
+  
+
+
+
 <script>
   window.addEventListener('DOMContentLoaded', (event) => {
     const filterButton = document.getElementById('filterButton');
