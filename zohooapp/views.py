@@ -182,16 +182,6 @@ def additem(request):
     unit=Unit.objects.all()
     sale=Sales.objects.all()
     purchase=Purchase.objects.all()
-    
-    
-
-
-  
-    
-        
-
-
-
     accounts = Purchase.objects.all()
     account_types = set(Purchase.objects.values_list('Account_type', flat=True))
 
@@ -258,7 +248,7 @@ def add(request):
                 invacc=request.POST.get('invacc')
                 stock=request.POST.get('stock')
            
-                    
+                print('satus')
                 
                 ad_item=AddItem(type=type,
                                 Name=name,
@@ -315,7 +305,7 @@ def add(request):
                                 sales=sel,
                                 tax=tax,
                                 purchase=cost,
-                                satus = 'Non-Activate',
+                                satus = 'Inactive',
                                 user=user,
                                 creat=history,
                                 interstate='none',
@@ -492,7 +482,7 @@ def add_unit(request):
     if request.method=='POST':
         unit_name=request.POST['unit_name']
         Unit(unit=unit_name).save()
-        return redirect('additem')
+        return JsonResponse({"unit_name":unit_name})
     return render(request,"additem.html")
 
 
