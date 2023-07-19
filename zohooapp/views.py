@@ -207,7 +207,7 @@ def add_account(request):
         
             acc=Purchase(Account_type=Account_type,Account_name=Account_name,Account_desc=Account_desc)
             acc.save()                 
-            return redirect("additem")
+            return JsonResponse({"Account_type":Account_type,"Account_name":Account_name,"Account_desc":Account_desc})
         
     return render(request,'additem.html')
 
