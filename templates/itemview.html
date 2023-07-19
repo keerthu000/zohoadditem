@@ -8,8 +8,9 @@
       <div class="row">
         <div class="col-md-9"><a class="text-white" style="font-size: 2rem;">All Items</a></div>
         <input type="text"  id="searchInput" class="form-control" placeholder="Search Items..." style="margin-top: 25px; width: 30%;">
-         
-        
+        <div class="col-md-9 form-inline"  style="margin-top: -1.8rem; margin-left:49rem;"><a style="color: #000;" class="btn btn-secondary " href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
+          <a style="color: #ccc;"href="#3"> </a>
+        </div> 
         <div class="col-md-9 form-inline" style="margin-left: 40rem;margin-top:-1.9rem;display:inline-flex;">
           <div class="btn-group">
             <select id="sortingOption" class="btn btn-secondary "  style="width:6rem;height: 2rem;">
@@ -20,9 +21,8 @@
           </div>
           <button class="btn btn-secondary" id="filterButton" style="height:2rem;display:inline"></button>
         </div>
-        <div class="col-md-9 form-inline"  style="margin-top: -1.8rem; margin-left:49rem;"><a style="color: #000;" class="btn btn-secondary " href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
-          <a style="color: #ccc;"href="#3"> </a>
-        </div> 
+        
+        
       </div>
     </div>
   </div>
