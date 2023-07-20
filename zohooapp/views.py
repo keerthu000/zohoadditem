@@ -84,7 +84,7 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def base(request):
    
        
@@ -119,6 +119,80 @@ def base(request):
             Purchase(Account_type='EXPENCES',Account_name='Labour Charge',Account_desc='Labour Exp').save()
     if not Purchase.objects.filter(Account_name='Raw Meterials').exists():
             Purchase(Account_type='EXPENCES',Account_name='Raw Meterials',Account_desc='Raw Meterials Exp').save()
+    if not Purchase.objects.filter(Account_name='Automobile Expense').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Automobile Expense',Account_desc='Automobile Expense').save()
+    if not Purchase.objects.filter(Account_name='Bad Debt').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Bad Debt',Account_desc='Bad Debt').save()
+    if not Purchase.objects.filter(Account_name='Bank Fees and Charges').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Bank Fees and Charges',Account_desc='Bank Fees and Charges').save()
+    if not Purchase.objects.filter(Account_name='Consultant Expense').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Consultant Expense',Account_desc='Consultant Expense').save()
+    if not Purchase.objects.filter(Account_name='Credit card Charges').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Credit card Charges',Account_desc='Credit card Charges').save()
+    if not Purchase.objects.filter(Account_name='Depreciation Charges').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Depreciation Charges',Account_desc='Depreciation Charges').save()
+    if not Purchase.objects.filter(Account_name='IT and Internet Expense').exists():
+            Purchase(Account_type='EXPENCES',Account_name='IT and Internet Expense',Account_desc='IT and Internet Expense').save()
+    if not Purchase.objects.filter(Account_name='Janitorial Expense').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Janitorial Expense',Account_desc='Janitorial Expense').save()
+    if not Purchase.objects.filter(Account_name='Lodging').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Lodging',Account_desc='Lodging').save()
+    if not Purchase.objects.filter(Account_name='Meals and Entertinment').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Meals and Entertinment',Account_desc='Meals and Entertinment').save()
+    if not Purchase.objects.filter(Account_name='Office Supplies').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Office Supplies',Account_desc='Office Supplies').save()
+    if not Purchase.objects.filter(Account_name='Other Expenses').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Other Expenses',Account_desc='Other Expenses').save()
+    if not Purchase.objects.filter(Account_name='Postage').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Printing and sationary',Account_desc='Postage').save()
+    if not Purchase.objects.filter(Account_name='Postage').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Printing and sationary',Account_desc='Printing and sationary').save()
+    if not Purchase.objects.filter(Account_name='Rent Expenses').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Rent Expenses',Account_desc='Rent Expenses').save()
+    if not Purchase.objects.filter(Account_name='Repair and maintenance').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Repair and maintenance',Account_desc='Repair and maintenance').save()
+    if not Purchase.objects.filter(Account_name='Salaries and Employee wages').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Salaries and Employee wages',Account_desc='Salaries and Employee wages').save()
+    if not Purchase.objects.filter(Account_name='Telephonic Expenses').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Telephonic Expenses',Account_desc='Telephonic Expenses').save()
+    if not Purchase.objects.filter(Account_name='Travel Expenses').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Travel Expenses',Account_desc='Travel Expenses').save()
+    if not Purchase.objects.filter(Account_name='Uncategorized').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Uncategorized',Account_desc='Uncategorized').save()
+    if not Purchase.objects.filter(Account_name='Contract Assets').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Contract Assets',Account_desc='Contract Assets').save()
+    if not Purchase.objects.filter(Account_name='Depreciation and Amoritisation').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Depreciation and Amoritisation',Account_desc='Depreciation and Amoritisation').save()
+    if not Purchase.objects.filter(Account_name='Merchandise').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Merchandise',Account_desc='Merchandise').save()
+    if not Purchase.objects.filter(Account_name='Raw material and Consumables').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Raw material and Consumables',Account_desc='Raw material and Consumables').save()
+    if not Purchase.objects.filter(Account_name='Transportation Expenses').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Transportation Expenses',Account_desc='Transportation Expenses').save()
+    if not Purchase.objects.filter(Account_name='Transportation Expenses').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Transportation Expenses',Account_desc='Transportation Expenses').save()
+    if not Purchase.objects.filter(Account_name='Cost Of Goods Sold').exists():
+            Purchase(Account_type='Cost Of Goods Sold',Account_name='Cost Of Goods Sold',Account_desc='Cost Of Goods Sold').save()
+    if not Purchase.objects.filter(Account_name='Job Costing').exists():
+            Purchase(Account_type='Cost Of Goods Sold',Account_name='Job Costing',Account_desc='Job Costing').save()
+    if not Purchase.objects.filter(Account_name='Labour').exists():
+            Purchase(Account_type='Cost Of Goods Sold',Account_name='Labour',Account_desc='Labour').save()
+    if not Purchase.objects.filter(Account_name='Materials').exists():
+            Purchase(Account_type='Cost Of Goods Sold',Account_name='Materials',Account_desc='Materials').save()
+    if not Purchase.objects.filter(Account_name='Subcontractor').exists():
+            Purchase(Account_type='Cost Of Goods Sold',Account_name='Subcontractor',Account_desc='Subcontractor').save()
+    if not Purchase.objects.filter(Account_name='Furniture and Equipment').exists():
+            Purchase(Account_type='Fixed Asset',Account_name='Furniture and Equipment',Account_desc='Furniture and Equipment').save()
+    
+    
+    
+    
+    
+    
+
+    
+
+
 
     company = company_details.objects.get(user = request.user)
     context = {
@@ -285,6 +359,7 @@ def add(request):
                 cost_acc=request.POST.get('cost_acc')      
                 p_desc=request.POST.get('cost_desc')
                 tax=request.POST.get('radio')
+                status=request.POST.get('status')
                 u=request.user.id
                 us=request.user
                 history="Created by" + str(us)
@@ -305,7 +380,7 @@ def add(request):
                                 sales=sel,
                                 tax=tax,
                                 purchase=cost,
-                                satus = 'Inactive',
+                                satus = status,
                                 user=user,
                                 creat=history,
                                 interstate='none',
