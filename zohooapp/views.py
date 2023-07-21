@@ -94,6 +94,22 @@ def base(request):
             Unit(unit='UNIT').save()
     if not Unit.objects.filter(unit='LITRE').exists():
             Unit(unit='LITRE').save()
+    if not Unit.objects.filter(unit='DOZEN').exists():
+            Unit(unit='DOZEN').save()
+    if not Unit.objects.filter(unit='DOZEN').exists():
+            Unit(unit='DOZEN').save()
+    if not Unit.objects.filter(unit='GRAMS').exists():
+            Unit(unit='GRAMS').save()
+    if not Unit.objects.filter(unit='KILOGRAMS').exists():
+            Unit(unit='KILOGRAMS').save()
+    if not Unit.objects.filter(unit='METERS').exists():
+            Unit(unit='METERS').save()
+    if not Unit.objects.filter(unit='TABLETS').exists():
+            Unit(unit='TABLETS').save()
+    if not Unit.objects.filter(unit='PIECES').exists():
+            Unit(unit='PIECES').save()
+    if not Unit.objects.filter(unit='PAIRS').exists():
+            Unit(unit='PAIRS').save()
 
     if not Sales.objects.filter(Account_name='General Income').exists():
             Sales(Account_type='INCOME',Account_name='General Income',Account_desc='salesincome').save()
@@ -110,9 +126,10 @@ def base(request):
     
 
 
-
-    if not  Purchase.objects.filter(Account_name='Advertising & Marketing').exists():
-            Purchase(Account_type='EXPENCES',Account_name='Advertising & Markting',Account_desc='Advertsing Exp').save()
+   
+    if not  Purchase.objects.filter(Account_name='Advertising & Markting').exists():        
+        Purchase(Account_type='EXPENCES',Account_name='Advertising & Markting',Account_desc='Advertsing Exp').save()
+    
     if not Purchase.objects.filter(Account_name='Debit Charge').exists():
             Purchase(Account_type='EXPENCES',Account_name='Debit Charge',Account_desc='Debited Exp').save()
     if not Purchase.objects.filter(Account_name='Labour Charge').exists():
@@ -143,9 +160,10 @@ def base(request):
             Purchase(Account_type='EXPENCES',Account_name='Office Supplies',Account_desc='Office Supplies').save()
     if not Purchase.objects.filter(Account_name='Other Expenses').exists():
             Purchase(Account_type='EXPENCES',Account_name='Other Expenses',Account_desc='Other Expenses').save()
+            
     if not Purchase.objects.filter(Account_name='Postage').exists():
-            Purchase(Account_type='EXPENCES',Account_name='Printing and sationary',Account_desc='Postage').save()
-    if not Purchase.objects.filter(Account_name='Postage').exists():
+            Purchase(Account_type='EXPENCES',Account_name='Postage',Account_desc='Postage').save()
+    if not Purchase.objects.filter(Account_name='Printing and sationary').exists():
             Purchase(Account_type='EXPENCES',Account_name='Printing and sationary',Account_desc='Printing and sationary').save()
     if not Purchase.objects.filter(Account_name='Rent Expenses').exists():
             Purchase(Account_type='EXPENCES',Account_name='Rent Expenses',Account_desc='Rent Expenses').save()
@@ -183,17 +201,6 @@ def base(request):
             Purchase(Account_type='Cost Of Goods Sold',Account_name='Subcontractor',Account_desc='Subcontractor').save()
     if not Purchase.objects.filter(Account_name='Furniture and Equipment').exists():
             Purchase(Account_type='Fixed Asset',Account_name='Furniture and Equipment',Account_desc='Furniture and Equipment').save()
-    
-    
-    
-    
-    
-    
-
-    
-
-
-
     company = company_details.objects.get(user = request.user)
     context = {
                 'company' : company
@@ -245,7 +252,7 @@ def edit_profile(request,pk):
             }
     return render(request,'edit_profile.html',context)
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def itemview(request):
     viewitem=AddItem.objects.all()
     return render(request,'item_view.html',{'view':viewitem})
@@ -320,9 +327,9 @@ def add(request):
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
                 invacc=request.POST.get('invacc')
-                stock=request.POST.get('stock')
+                stock=request.POST.get('openstock')
            
-                print('satus')
+                
                 
                 ad_item=AddItem(type=type,
                                 Name=name,
@@ -449,7 +456,7 @@ def edit_db(request,id):
             edit=AddItem.objects.get(id=id)
             edit.type=request.POST.get('type')
             edit.Name=request.POST['name']
-            unit=request.POST['unit']
+            unit=request.POST.get('unit')
             edit.s_price=request.POST['sel_price']
             sel_acc=request.POST['sel_acc']
             edit.s_desc=request.POST['sel_desc']
@@ -457,6 +464,7 @@ def edit_db(request,id):
             cost_acc=request.POST['cost_acc']        
             edit.p_desc=request.POST['cost_desc']
             edit.hsn=request.POST['hsn']
+            edit.stock=request.POST['openstock']
             edit.satus=request.POST.get('status')
             edit.unit=Unit.objects.get(id=unit)
             edit.sales=Sales.objects.get(id=sel_acc)
