@@ -7,41 +7,23 @@
     <div class="col-md-12 form-inline ">
       <div class="row">
         <div class="col-md-9"><a class="text-white" style="font-size: 2rem;">All Items</a></div>
-        <input type="text"  id="searchInput" class="form-control" placeholder="Search Items..." style="margin-top: 25px; width: 30%;">
-         
-        
-        <div class="col-md-9 form-inline" style="margin-left: 56rem;margin-top:-1.9rem;display:inline-flex;">
-          <div class="btn-group">
-            <select id="sortingOption" class="btn btn-secondary "  style="width:6rem;height: 2rem;">
-              <option >Filter</option>
-              <option value="name">Name</option>
-              <option value="stock">Stock on Inventory</option>
-            </select>
+        <input type="text"  id="searchInput" class="form-control bg-dark" placeholder="Search Items..." style="margin-top: 25px; width: 30%;">
+        <div class="btn-group" role="group"  style="margin-left: 58rem;margin-top:-1.9rem;display:inline-flex;width:4rem">
+          <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Filter
+          </button>
+          <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+            <a class="dropdown-item" href="#"  data-sort="name">Name</a>
+            <a class="dropdown-item" href="#" data-sort="stock">Stock on inventory</a>
+            <a class="dropdown-item" href="#" data-sort="all">All</a>
           </div>
-          <button class="btn btn-secondary" id="filterButton" style="height:2rem;display:inline"></button>
         </div>
-        <div class="col-md-9 form-inline"  style="margin-top: -2rem; margin-left:64rem;"><a style="color: #000;height:2rem;" class="btn btn-secondary " href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
+        <div class="col-md-9 form-inline"  style="margin-top: -2rem; margin-left:64rem;"><a style="color: #000;" class="btn btn-secondary " href="{% url 'additem' %}"><i class="fa-solid fa-plus "></i>New Item</a>
           <a style="color: #ccc;"href="#3"> </a>
         </div> 
       </div>
     </div>
-  </div>
-              
-              
-                {% comment %} <form action="  " method="post">
-                  {% csrf_token %} {% endcomment %}
-                  {% comment %} <div class="input-group">
-                    <div class="form-outline">
-                      <input type="text" id="searchInput" name='search_query' placeholder="Search..." >
-                      <label class="form-label"  placeholder="Search"></label>
-                    </div> {% endcomment %}
-                    {% comment %} <button id="dataTable" type="button" class="btn btn-primary">
-                      <i class=" fas fa-search"></i>Search
-                    </button> {% endcomment %}
-                  {% comment %} </div> {% endcomment %}
-                {% comment %} </form> </a> {% endcomment %}
-        
-          
+  </div>   
   <table id="dataTable" class="table  text-white" style="overflow-y: scroll ;width:100%;  margin-top: 40px;">
     <thead >
       <tr>
@@ -117,49 +99,54 @@
 
 
 
-
-
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  window.addEventListener('DOMContentLoaded', (event) => {
-    const filterButton = document.getElementById('filterButton');
+$(document).ready(function() {
+  var originalTable = $('#dataTable').clone(); // Clone the original table on page load
 
-    filterButton.addEventListener('click', () => {
-      const sortingOption = document.getElementById('sortingOption').value;
-      sortTable(sortingOption);
+  // Function to sort items by name
+  function sortByName() {
+    var rows = $('#dataTable tbody tr').get();
+    rows.sort(function(a, b) {
+      var keyA = $(a).children('td').eq(0).text().toUpperCase();
+      var keyB = $(b).children('td').eq(0).text().toUpperCase();
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      return 0;
     });
+    $.each(rows, function(index, row) {
+      $('#dataTable').children('tbody').append(row);
+    });
+  }
 
-    function sortTable(sortingOption) {
-      const table = document.getElementById('example');
-      const tbody = table.tBodies[0];
-      const rows = Array.from(tbody.rows);
+  // Function to sort items by stock on inventory
+  function sortByStock() {
+    var rows = $('#dataTable tbody tr').get();
+    rows.sort(function(a, b) {
+      var keyA = parseInt($(a).children('td').eq(5).text());
+      var keyB = parseInt($(b).children('td').eq(5).text());
+      return keyA - keyB;
+    });
+    $.each(rows, function(index, row) {
+      $('#dataTable').children('tbody').append(row);
+    });
+  }
 
-      if (sortingOption === 'name') {
-        rows.sort((a, b) => {
-          const aValue = a.cells[0].innerText.toLowerCase();
-          const bValue = b.cells[0].innerText.toLowerCase();
-          return aValue.localeCompare(bValue);
-        });
-      } else if (sortingOption === 'stock') {
-        rows.sort((a, b) => {
-          const aValue = parseFloat(a.cells[5].innerText);
-          const bValue = parseFloat(b.cells[5].innerText);
-          return aValue - bValue;
-        });
-      }
-
-      // Remove the current sorted rows
-      rows.forEach((row) => {
-        tbody.removeChild(row);
-      });
-
-      // Append the sorted rows back to the table body
-      rows.forEach((row) => {
-        tbody.appendChild(row);
-      });
+  // Event handler for the "Filter" dropdown
+  $('.dropdown-item').on('click', function() {
+    var sortType = $(this).data('sort');
+    if (sortType === 'name') {
+      sortByName();
+    } else if (sortType === 'stock') {
+      sortByStock();
+    } else if (sortType === 'all') {
+      // Reset the table to its original order
+      $('#dataTable').replaceWith(originalTable.clone());
     }
   });
+});
 </script>
+
 
 
 
