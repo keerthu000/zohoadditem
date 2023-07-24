@@ -2,11 +2,38 @@
 {% load static %}
 {% block content %}
 <style>
-  .comment-box {
-      display: none;
-      margin-top: 10px;
-      width:1000px;
+  /* Style for the black overlay */
+  .modal-overlay {
+    position: fixed;
+    top: 100px;
+    left:300px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Black semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index:9;
   }
+  
+  /* Style for the modal content */
+  .modal-content {
+    background-color: white; /* White background for the modal */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* You can adjust the width as needed */
+    position: relative;
+  }
+  
+  /* Style for the close button (you can customize this) */
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
 </style>
 
 <section class="item" id="navbar-example2" >
@@ -73,92 +100,128 @@
                     <a href="{% url 'cleer' product.id %}" style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 4.5rem;font-size: 18px"  class="btn btn-secondary  text-dark " >Delete</a>
                   </div>
                 </div>
-              
-              
-                <div id="over"  class="toggle2">
-                  <button onclick="fieldset2_function()"  style="margin-top:-6.5rem;font-size: 18px;margin-left:29.5rem;" class="btn btn-secondary text-dark">Comments</button></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <div id="over"  class="toggle2">
+                  <button onclick="showModal()"   style="margin-top:-6.5rem;font-size: 18px;margin-left:29.5rem;" class="btn btn-secondary text-dark">Comments</button></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   
-                  </div>
-                  <button  id="viewcomment" class="btn btn-secondary " style="margin-left:41rem;" >View Comment</button>
-                  <input type="text" value="{{product.id}}" id="inputproductid" style="display:none">
-                  <div id="productNamesDiv"></div>
-             
-              <fieldset id="comments" style="display: none;">
                 
-                
-                <form action="{% url 'commentdb' product.id %}" method="post"> 
-
-                  {% csrf_token %}
-                  <div class="form-group row mt-4">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-
-                      <textarea name="comment" id="" cols="60" rows="5" required></textarea>
-                      <div class="valid-feedback">Valid.</div>
-                      <div class="invalid-feedback">Please fill out this field.</div>
-                      <label>(For Internal Use)</label>
+                <div id="commentModal" class="modal-overlay modal-centered"   style="display: none;">
+                  <div class="modal-content">
+                      <span class="close" onclick="closeModal()">&times;</span>
+                      <form action="{% url 'commentdb' product.id %}" method="post"> 
+                        {% csrf_token %}
+                        <label for="comment">Comment:</label><br>
+                        <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
+                        <button type="submit">Submit</button>
+                      </form>
                     </div>
-                  </div>
-                  <div class="row mt-4">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                      <input type="submit" id="addCommentBtn" class="btn btn-primary form-control" value="Add Comment">
-                    </div>
-                  </div>
-                </form>
-               
-                
-              </fieldset>
-           
-             
+                </div>
+                <div id="productNamesDiv"></div>
+              </div>
+
+             <script>
+              function showModal() {
+                var modal = document.getElementById("commentModal");
+                modal.style.display = "flex"; // Change display style to 'flex' to use flexbox centering
+                loadComments(); // Load comments when the modal is displayed
+              }
               
+              function closeModal() {
+                var modal = document.getElementById("commentModal");
+                modal.style.display = "none";
+              }
+              
+              function loadComments() {
+                // Assuming you have an element with the ID 'commentsDisplay' to show the comments
+                var commentsDisplay = document.getElementById("commentsDisplay");
+              
+                // Simulate loading comments (replace this with your actual logic to fetch comments)
+                var comments = [
+                  "This is a great product!",
+                  "I love this! Highly recommended.",
+                  "Could be better, but overall not bad.",
+                ];
+              
+                // Clear existing comments
+                commentsDisplay.innerHTML = "";
+              
+                // Display the comments in the 'commentsDisplay' element
+                comments.forEach(function (comment) {
+                  var commentElement = document.createElement("p");
+                  commentElement.innerText = comment;
+                  commentsDisplay.appendChild(commentElement);
+                });
+              }
+              
+             </script>
+
+            
+                
+                
+                
+                
               
             {% comment %} <div class="col-sm-6"> {% endcomment %}
               <div class="card">
                 <div class="card-body">
                   <h5 class="mr-5">Account Type</h5>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.type}}</h6> 
+                  <h6 style="margin-top: -1.6rem; margin-left: 13rem;" >{{product.type}}</h6> 
               
                   <h5 class="mr-5">Unit</h5>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.unit.unit}}</h6> 
+                  <h6 style="margin-top: -1.6rem; margin-left: 13rem;" >{{product.unit.unit}}</h6> 
               
                   <h6 class="mr-4 ">Created Source</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem; margin-bottom: 2rem;"  >{{product.user.username}}</h6> 
+                  <h6 style="margin-top: -1.6rem; margin-left: 13rem; margin-bottom: 2rem;"  >{{product.user.username}}</h6> 
                   <h6 class="mr-4 ">HSN Code</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem; margin-bottom: 2rem;"  >{{product.hsn}}</h6> 
+                  <h6 style="margin-top: -1.6rem; margin-left: 13rem; margin-bottom: 2rem;"  >{{product.hsn}}</h6> 
                   <h6 class="mr-4 ">Tax Prefrence</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem; margin-bottom: 2rem;"  >{{product.tax}}</h6> 
+                  <h6 style="margin-top: -1.6rem; margin-left: 13rem; margin-bottom: 2rem;"  >{{product.tax}}</h6> 
+                  <h6 class="mr-4 ">Stock on Inventory</h6>
+                  <h6 style="margin-top: -1.6rem; margin-left: 13rem; margin-bottom: 2rem;"  >{{product.stock}}</h6> 
+                  <h6 class="mr-5">Cost price</h6> <br>
+                  <h6 style="margin-top: -2.7rem; margin-left: 13rem;" >{{product.p_price}}</h6> <br>
+                  <h6 class="mr-5">Purchase Account :</h6>
+                  <h6 style="margin-top: -1.5rem; margin-left: 13rem;" >{{product.purchase.Account_name}}</h6> <br>
+                  <h6 class="mr-5">Selling  price</h6> <br>
+                  <h6 style="margin-top: -3rem; margin-left: 13rem;" >{{product.s_price}}</h6> <br>
+                  <h6 class="mr-5">Sales  Account</h6>
+                  <h6 style="margin-top: -1.6rem; margin-left: 13rem;" >{{product.sales.Account_name}}</h6> <br>
+                  
+                
+                 
+
                 </div>
               </div><br><br>
             {% comment %} </div> {% endcomment %}
-          <div class="row" style="margin-top:30px;">
-            <div class="col-sm-5">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="mb-3"><b>Purchase Information</b></h4>
-                  <h6 class="mr-5">Cost price</h6> <br>
-                  <h6 style="margin-top: -2.5rem; margin-left: 8rem;" >{{product.p_price}}</h6> <br>
-                  <h6 class="mr-5">Purchase Account</h6>
-                  <h6 style="margin-top: -1.5rem; margin-left: 10rem;" >{{product.purchase.Account_name}}</h6> <br>
-                  <h6 class="mr-5">Description</h6>
-                  <h6 style="margin-top: -1.8rem; margin-left: 10rem;" >{{product.p_desc}}</h6> 
+            {% comment %} <div class="row" style="margin-top:30px;">
+              <div class="col-sm-5">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="mb-3"><b>Purchase Information</b></h4>
+                    <h6 class="mr-5">Cost price</h6> <br>
+                    <h6 style="margin-top: -2.5rem; margin-left: 8rem;" >{{product.p_price}}</h6> <br>
+                    <h6 class="mr-5">Purchase Account</h6>
+                    <h6 style="margin-top: -1.5rem; margin-left: 10rem;" >{{product.purchase.Account_name}}</h6> <br>
+                    <h6 class="mr-5">Description</h6>
+                    <h6 style="margin-top: -1.8rem; margin-left: 10rem;" >{{product.p_desc}}</h6> 
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="card" >
-                <div class="card-body">
-      
-                  <h4 class="mb-2 mt-3"><b>Sales Information</b></h4>
-                  <h6 class="mr-5">Selling  price</h6> <br>
-                  <h6 style="margin-top: -3rem; margin-left: 10rem;" >{{product.s_price}}</h6> <br>
-                  <h6 class="mr-5">Sales  Account</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.sales.Account_name}}</h6> <br>
-                  <h6 class="mr-5">Description</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.s_desc}}</h6>
-                </div> 
+              <div class="col-sm-6">
+                <div class="card" >
+                  <div class="card-body">
+        
+                    <h4 class="mb-2 mt-3"><b>Sales Information</b></h4>
+                    <h6 class="mr-5">Selling  price</h6> <br>
+                    <h6 style="margin-top: -3rem; margin-left: 10rem;" >{{product.s_price}}</h6> <br>
+                    <h6 class="mr-5">Sales  Account</h6>
+                    <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.sales.Account_name}}</h6> <br>
+                    <h6 class="mr-5">Description</h6>
+                    <h6 style="margin-top: -1.6rem; margin-left: 10rem;" >{{product.s_desc}}</h6>
+                  </div> 
+                </div>
               </div>
-            </div>
-          <div>
-          <div class="container" >
+            <div> {% endcomment %}
+          {% comment %} <div class="container" >
             <h2 style="margin-left:150px;">There is no transaction yet</h2>
             <p style="margin-left:280px;">do something</p>
        
@@ -178,7 +241,7 @@
                   </tr>
                   {% endfor %}
                 </thead>
-              </table>
+              </table> {% endcomment %}
                 
               
                 
@@ -211,41 +274,14 @@
   }
 </script>
 
-<script>
+{% comment %} <script>
   function fieldset2_function() {
     document.getElementById("over").style.display = "none";
     document.getElementById("comments").style.display = "block";
     document.getElementById("addCommentBtn").style.display = "block"; // Show the "Add Comment" button
   }
 
-</script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#viewcomment').click(function() {
-            var productId = $('#inputproductid').val(); // Get the product ID from the input field
-            console.log(productId)
-            $.ajax({
-                type: 'GET',
-                url: " {% url 'comment' %}", // Replace with the actual URL of your Django view
-                data: {
-                    'product_id': productId // Pass the product ID as a parameter
-                },
-                success: function(response) {
-                    var productNames = response.comments ; // Assuming the response contains a list of product names
-                    var productNamesHtml = '';
-                    for (var i = 0; i < productNames.length; i++) {
-                        productNamesHtml += '<p>' + productNames[i] + '</p>';
-                    }
-                    $('#productNamesDiv').html(productNamesHtml); // Display the product names in the <div> or <p> tag
-                },
-                error: function(xhr, errmsg, err) {
-                    console.log(xhr.status + ": " + xhr.responseText);
-                }
-            });
-        });
-    });
-</script>
+</script> {% endcomment %}
 
 
 <script>
@@ -369,3 +405,4 @@
 
  
 {% endblock %}
+ 

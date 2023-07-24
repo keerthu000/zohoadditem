@@ -395,8 +395,25 @@
                           <div class="col-sm-6">
                             <input type="number" class="form-control bg-dark" name="inventoryaccntperunit">
                           </div>
+
                         </div>
-                      </div>
+                      </div><fieldset class="form-group">
+                        <div class="row">
+                          <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
+                          <div class="col-sm-10 form-inline">
+                            <div class="form-check ">
+                              <input required class="form-check-input" type="radio" name="satus" id="gridRadios1" value="Activate"  style="margin-left:5px;" >
+                              <label class="form-check-label" for="gridRadios1">Activate</label>
+                            </div>
+                            <div class="form-check ml-5">
+                              <input required class="form-check-input" type="radio" name="satus" id="gridRadios2" value="Non-Activate"  style="margin-left:50px;">
+                              <label class="form-check-label" for="gridRadios2">Non-Activate</label>
+                            </div>
+                                        
+                          </div>
+                        </div>
+                      </fieldset>
+
                     </div>
                   </div>
                 </div>
@@ -413,22 +430,7 @@
                   }
                 }
               </script>
-          <fieldset class="form-group">
-            <div class="row">
-              <label class="col-form-label col-sm-2 pt-2">Activation tag<i class="fa fa-question-circle"></i></label>
-              <div class="col-sm-10 form-inline">
-                <div class="form-check ">
-                  <input required class="form-check-input" type="radio" name="satus" id="gridRadios1" value="Activate"  style="margin-left:5px;" >
-                  <label class="form-check-label" for="gridRadios1">Activate</label>
-                </div>
-                <div class="form-check ml-5">
-                  <input required class="form-check-input" type="radio" name="satus" id="gridRadios2" value="Non-Activate"  style="margin-left:50px;">
-                  <label class="form-check-label" for="gridRadios2">Non-Activate</label>
-                </div>
-                            
-              </div>
-            </div>
-          </fieldset>
+          
           <div class="form-inline " style="margin-bottom: 30rem;">
             <button type="submit"  class="mr-3 btn btn-success"  value="Save">Save</button>
             <button type="button" class="mr-3 btn btn-secondary " onclick="resetForm()" value="Cancel" style="margin-left:10px;">Cancel</button>
