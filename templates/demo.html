@@ -3,22 +3,23 @@
 {% block content %}
 <style>
   /* Style for the black overlay */
-  .modal-overlay {
+  .modal {
     position: fixed;
     top: 100px;
-    left:300px;
-    width: 100%;
+    left:400px;
+    width:100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7); /* Black semi-transparent background */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index:9;
+    z-index:99;
   }
   
   /* Style for the modal content */
   .modal-content {
-    background-color: white; /* White background for the modal */
+    background-color: black; /* White background for the modal */
+    color:white;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -91,106 +92,88 @@
                   <button class="btn btn-dark text-white mt-3" style="border: 2px solid red;"  >{{product.satus}}</button>
                 {% endif %}</div>
               
-                  <div class="col-md-6 " style="margin-top:-3rem;margin-left: 14rem;"><a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 1rem;" class="btn btn-secondary text-dark" onclick="location.href ='{% url 'edititem' product.id %}' "><i class="fa fa-pencil"></i></a>
-                    <a style="color: #e0e0e0;"href="#3">      
+                  <div class="col-md-6 " style="margin-top:-3rem;">
+                    <a style="color:#e0e0e0;width: 4rem;height: 2rem;margin-top: 1rem;margin-left: 12.5rem" class="btn btn-secondary text-dark" href ="{% url 'edititem' product.id %} "><i class="fa fa-pencil"></i></a>
+                    <a style="color: #e0e0e0;"href="#3">
+                  </div>      
                   
-                  <div class="col-md-4 " style="margin-top:-2rem;margin-left:5rem;position: relative;z-index:9;">
+                  <div class="col-md-4 " style="margin-top:-2rem;position: relative;z-index:9;">
                     <input type="file" id="attachment" style="display: none;">
-                    <button onclick="document.getElementById('attachment').click();" id="comment-box" style= "font-size: 18px;"  class="btn btn-secondary text-dark"> File</button>
-                    <a href="{% url 'cleer' product.id %}" style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 4.5rem;font-size: 18px"  class="btn btn-secondary  text-dark " >Delete</a>
+                    <button onclick="document.getElementById('attachment').click();" id="comment-box" style= "margin-left:20rem;font-size: 18px;"  class="btn btn-secondary text-dark"> File</button>
+                    <a href="{% url 'cleer' product.id %}" style="color: #ccc;height: 2rem;margin-top: -3.6rem;margin-left: 24rem;font-size: 18px"  class="btn btn-secondary  text-dark " >Delete</a>
                   </div>
                 </div>
-              <div id="over"  class="toggle2">
-                  <button onclick="showModal()"   style="margin-top:-6.5rem;font-size: 18px;margin-left:29.5rem;" class="btn btn-secondary text-dark">Comments</button></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  
-                
-                <div id="commentModal" class="modal-overlay modal-centered"   style="display: none;">
-                  <div class="modal-content">
-                      <span class="close" onclick="closeModal()">&times;</span>
-                      <form action="{% url 'commentdb' product.id %}" method="post"> 
-                        {% csrf_token %}
-                        <label for="comment">Comment:</label><br>
-                        <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
-                        <button type="submit">Submit</button>
-                      </form>
-                    </div>
+                <div class="toggle2">
+                  <button onclick="openModal()" style="margin-top: -6.5rem; font-size: 18px; margin-left: 43.5rem;" class="btn btn-secondary text-dark">Comments</button>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              
+              {% comment %} <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h4 class="modal-title" id="myModalLabel">Add Comment</h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                                  <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                            <form id="commentForm" method="post" action="{% url 'commentdb' product.id %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="commentInput">Comment:</label>
+                                    <textarea class="form-control" id="commentInput" name="comment" rows="3"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-primary" id="submitCommentBtn" onclick="submitComment()">Submit</button>
+                              </div>
+                          
+                                <div class="container-fluid">
+                                  <table class="table table-responsive-md mt-4">
+                                    <thead>
+                                        <tr>
+                                            <th>sl no.</th>
+                                            <th>Comments</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for com in comments %}
+                                            <tr class="table-row">
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ com.content }}</td>  <!-- Use com.comment instead of com.content -->
+                                                <td><a href="{% url 'delete_comment' product.id com.id %}">Delete</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                  </table>   {% endcomment %}
+                                </div>
+                        </div>
+                        
+                             
+                  </div>
                 </div>
-                <div id="productNamesDiv"></div>
-              </div>
-
-             <script>
-              function showModal() {
-                var modal = document.getElementById("commentModal");
-                modal.style.display = "flex"; // Change display style to 'flex' to use flexbox centering
-                loadComments(); // Load comments when the modal is displayed
-              }
-              
-              function closeModal() {
-                var modal = document.getElementById("commentModal");
-                modal.style.display = "none";
-              }
-              
-              function loadComments() {
-                // Assuming you have an element with the ID 'commentsDisplay' to show the comments
-                var commentsDisplay = document.getElementById("commentsDisplay");
-              
-                // Simulate loading comments (replace this with your actual logic to fetch comments)
-                var comments = [
-                  "This is a great product!",
-                  "I love this! Highly recommended.",
-                  "Could be better, but overall not bad.",
-                ];
-              
-                // Clear existing comments
-                commentsDisplay.innerHTML = "";
-              
-                // Display the comments in the 'commentsDisplay' element
-                comments.forEach(function (comment) {
-                  var commentElement = document.createElement("p");
-                  commentElement.innerText = comment;
-                  commentsDisplay.appendChild(commentElement);
-                });
-              }
-              
-             </script>
-
+                        
+              <script>
+                function openModal() {
+                  document.getElementById("myModal").style.display = "block";
+                }
+                
+                function closeModal() {
+                  document.getElementById("myModal").style.display = "none";
+                }
+              </script>
+              <script>
+                function submitComment() {
+                    document.getElementById('commentForm').submit();
+                }
+            </script>
             
-                
-                
-                
-                
+           
               
-            {% comment %} <div class="col-sm-6"> {% endcomment %}
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="mr-5">Account Type</h5>
-                  <h6 style="margin-top: -1.6rem; margin-left: 13rem;" >{{product.type}}</h6> 
               
-                  <h5 class="mr-5">Unit</h5>
-                  <h6 style="margin-top: -1.6rem; margin-left: 13rem;" >{{product.unit.unit}}</h6> 
+            
               
-                  <h6 class="mr-4 ">Created Source</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 13rem; margin-bottom: 2rem;"  >{{product.user.username}}</h6> 
-                  <h6 class="mr-4 ">HSN Code</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 13rem; margin-bottom: 2rem;"  >{{product.hsn}}</h6> 
-                  <h6 class="mr-4 ">Tax Prefrence</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 13rem; margin-bottom: 2rem;"  >{{product.tax}}</h6> 
-                  <h6 class="mr-4 ">Stock on Inventory</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 13rem; margin-bottom: 2rem;"  >{{product.stock}}</h6> 
-                  <h6 class="mr-5">Cost price</h6> <br>
-                  <h6 style="margin-top: -2.7rem; margin-left: 13rem;" >{{product.p_price}}</h6> <br>
-                  <h6 class="mr-5">Purchase Account :</h6>
-                  <h6 style="margin-top: -1.5rem; margin-left: 13rem;" >{{product.purchase.Account_name}}</h6> <br>
-                  <h6 class="mr-5">Selling  price</h6> <br>
-                  <h6 style="margin-top: -3rem; margin-left: 13rem;" >{{product.s_price}}</h6> <br>
-                  <h6 class="mr-5">Sales  Account</h6>
-                  <h6 style="margin-top: -1.6rem; margin-left: 13rem;" >{{product.sales.Account_name}}</h6> <br>
-                  
-                
-                 
-
-                </div>
-              </div><br><br>
+              
             {% comment %} </div> {% endcomment %}
             {% comment %} <div class="row" style="margin-top:30px;">
               <div class="col-sm-5">
