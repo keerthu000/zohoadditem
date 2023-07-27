@@ -26,6 +26,7 @@ urlpatterns = [
     path('view_vendor_details/<int:pk>',views.view_vendor_details,name='view_vendor_details'),
      path('comment', views.comment, name='comment'),
     path('commentdb/<int:id>',views.commentdb,name='commentdb'),
+    path('delete_comment/<int:product_id>/<int:comment_id>/', views.delete_comment, name='delete_comment'),
     path('add_comment/<int:pk>',views.add_comment,name='add_comment'),
     path('sendmail/<int:pk>',views.sendmail,name='sendmail'),
     path('edit_vendor/<int:pk>',views.edit_vendor,name='edit_vendor'),

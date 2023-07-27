@@ -532,7 +532,15 @@ def commentdb(request, id):
         comments.save()  # Save the project object with the updated comment
         print(item)
         return redirect('detail',item.id)
+@login_required(login_url='login')
+def delete_comment(request, product_id, comment_id):
+    try:
+        comment = Comments_item.objects.get(id=comment_id, item_id=product_id, user=request.user)
+        comment.delete()
+    except Comments_item.DoesNotExist:
+        pass
 
+    return redirect('detail', product_id)
 
 
 @login_required(login_url='login')
