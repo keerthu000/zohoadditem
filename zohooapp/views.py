@@ -306,6 +306,7 @@ def add(request):
     
                 
                 inter=request.POST['inter']
+                print(inter)
                 intra=request.POST['intra']
                 type=request.POST.get('type')
                 name=request.POST['name']
@@ -348,7 +349,7 @@ def add(request):
                                 interstate=inter,
                                 intrastate=intra,
                                 invacc=invacc,
-                                stock=istock
+                                stock=stock
                                 )
                 ad_item.save()
                 
@@ -374,7 +375,7 @@ def add(request):
                 unit=Unit.objects.get(id=unit)
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
-                istock = request.POST['openstock']
+                stock = request.POST['openstock']
                
                 ad_item=AddItem(type=type,
                                 Name=name,
@@ -392,7 +393,7 @@ def add(request):
                                 creat=history,
                                 interstate='none',
                                 intrastate='none',
-                                stock=istock
+                                stock=stock
                             
                                
                                 )
@@ -432,7 +433,7 @@ def add(request):
 
 #         # Return the serialized results as JSON response
 #         return JsonResponse(serialized_results, safe=False)
-login_required(login_url='login')
+@login_required(login_url='login')
 def edititem(request,id):
     pedit=AddItem.objects.get(id=id)
     p=Purchase.objects.all()
@@ -481,6 +482,7 @@ def detail(request,id):
     items=AddItem.objects.all()
     product=AddItem.objects.get(id=id)
     history=History.objects.filter(p_id=product.id)
+    comments = Comments_item.objects.filter(item=id).order_by('-id')
     print(product.id)
     
     
@@ -488,6 +490,7 @@ def detail(request,id):
        "allproduct":items,
        "product":product,
        "history":history,
+       "comments":comments,
       
     }
     
@@ -496,42 +499,48 @@ def detail(request,id):
 
 
 
+@login_required(login_url='login')
+def comment(request, product_id):
+    if request.method == 'POST':
+        user = request.user
+        product = AddItem.objects.get(id=product_id)
+        new_comment = request.POST.get('comment')
+        
+        # Save the new comment to the database
+        Comments_item.objects.create(item=product, user=user, content=new_comment)
 
-def comment(request):
-    product_id = request.GET.get('product_id') # Retrieve the product ID from the AJAX request
-   
-    
-    user=User.objects.get(id=int(request.user.id))
-    
-    product=AddItem.objects.get(id=product_id)
-    # Filter the data based on the product ID
-    comment = Comments_item.objects.filter(item=product,user=user)
-    comments = [c.content for c in comment]
-    
-   
+    # Retrieve all the comments for the product
+    comments = Comments_item.objects.filter(item=product_id).values_list('content', flat=True)
 
-    
-    response_data = {'comments': comments}
+    response_data = {'comments': list(comments)}
     return JsonResponse(response_data)
 
-
-def commentdb(request, id):
+@login_required(login_url='login')
+def commentdb(request, product_id):
     if request.method == 'POST':
-        comment = request.POST['comment']
-        user_id = request.user.id
-        user= User.objects.get(id=user_id)
-        item = AddItem.objects.get(id=id)  # Retrieve the project with the provided ID
-          # Set the comment field of the project
-        item.user = user  # Associate the project with the user
-        item.save()
-        comments=Comments_item()
-        comments.content=comment
-        comments.item=item
-        comments.user=user
+        user = request.user
+        items=AddItem.objects.all()
+        product = AddItem.objects.get(id=product_id)
+        history=History.objects.filter(p_id=product.id)
+        new_comment = request.POST.get('comment')  # Use 'comment' here
         
-        comments.save()  # Save the project object with the updated comment
-        print(item)
-        return redirect('detail',item.id)
+
+        # Save the new comment to the database
+        Comments_item.objects.create(item=product, user=user, content=new_comment)  # Use 'comment' here
+
+    # Retrieve all the comments for the product
+        comments = Comments_item.objects.filter(item=product_id).order_by('id')
+
+        context={
+        "allproduct":items,
+        "product":product,
+        "history":history,
+        "comments":comments,
+        
+        }
+
+    return render(request, 'demo.html', context)
+
 @login_required(login_url='login')
 def delete_comment(request, product_id, comment_id):
     try:
@@ -568,7 +577,7 @@ def cleer(request,id):
     dl.delete()
     return redirect('itemview')
 
-login_required(login_url='login')
+@login_required(login_url='login')
 def add_unit(request):
     if request.method=='POST':
         unit_name=request.POST['unit_name']

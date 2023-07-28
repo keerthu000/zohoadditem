@@ -51,7 +51,7 @@
                 <a style="color: #ccc;"href="#3">
                   <div class="col-md-4 form-inline" style="margin-left: -6rem;margin-top: -1.3rem;">
                    
-                    <button class="btn btn-secondary" id="filterButton" style="margin-left:10rem;margin-top:-.6rem;">Filter</button>
+                    <button class="btn btn-secondary" id="filterButton" style="margin-left:10rem;margin-top:-.5rem;">Filter</button>
                   </div>      
              
               </div>
@@ -61,7 +61,7 @@
               <thead>
                 <tr>
                   <th>Name</th>
-                  
+                  <th>HSN</th>
                 </tr>
                 
               </thead>
@@ -71,6 +71,7 @@
                 <tr>
         
                   <td ><a class="text-white " href="{% url 'detail' v.id %}">{{v.Name}}</a></td>
+                  <td ><a class="text-white " href="{% url 'detail' v.id %}">{{v.hsn}}</a></td>
                 
                 </tr>
                 
@@ -135,7 +136,7 @@
                               </div>
                           
                                 <div class="container-fluid">
-                                  <table class="table table-responsive-md mt-4">
+                                  <table class="table table-responsive-md mt-4 table  text-white">
                                     <thead>
                                         <tr>
                                             <th>sl no.</th>
