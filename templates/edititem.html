@@ -142,25 +142,24 @@
             {% csrf_token %}
    
             <fieldset class="form-group">
-                <div class="row">
+              <div class="row">
                   <label class="col-form-label col-sm-2 pt-3">Type <i class="fa fa-question-circle"></i></label>
                   <div class="col-sm-10 form-inline">
-                    <div class="form-check ">
-                      <input class="form-check-input" type="radio" name="type" id="gridRadios1" value="Goods" required >
-                      <label class="form-check-label" for="gridRadios1">
-                        Goods
-                      </label>
-                    </div>
-                    <div class="form-check ml-5">
-                      <input class="form-check-input" type="radio" name="type" id="gridRadios2" value="Services"  style="margin-left:50px;" required>
-                      <label class="form-check-label" for="gridRadios2">
-                       Services
-                      </label>
-                    </div>
-                   
+                      <div class="form-check">
+                          <input class="form-check-input" type="radio" name="type" id="gridRadios1" value="Goods" {% if e.type == 'Goods' %}checked{% endif %} required>
+                          <label class="form-check-label" for="gridRadios1">
+                              Goods
+                          </label>
+                      </div>
+                      <div class="form-check ml-5">
+                          <input class="form-check-input" type="radio" name="type" id="gridRadios2" value="Services" {% if e.type == 'Services' %}checked{% endif %} style="margin-left:50px;" required>
+                          <label class="form-check-label" for="gridRadios2">
+                              Services
+                          </label>
+                      </div>
                   </div>
-                </div>
-              </fieldset>
+              </div>
+          </fieldset>
             <div class="form-group row">
               <label  class="col-sm-2 col-form-label">Name *</label>
               <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
@@ -315,11 +314,11 @@
                     <label class="col-form-label col-sm-2 pt-3">Activation tag<i class="fa fa-question-circle"></i></label>
                     <div class="col-sm-10 form-inline">
                       <div class="form-check ">
-                        <input required class="form-check-input" type="radio" name="status" id="gridRadios1" value="Active" >
+                        <input required class="form-check-input" type="radio" name="status" id="gridRadios1" value="Active"  {% if e.satus == 'Active' %}checked{% endif %} >
                         <label class="form-check-label" for="gridRadios1">Activate</label>
                       </div>
                       <div class="form-check ml-5">
-                        <input required class="form-check-input" type="radio" name="status" id="gridRadios2" value="Inactive" style="margin-left:50px;">
+                        <input required class="form-check-input" type="radio" name="status" id="gridRadios2" value="Inactive"   {% if e.satus == 'Inactive' %}checked{% endif %} style="margin-left:50px;">
                         <label class="form-check-label" for="gridRadios2">Non-Activate</label>
                       </div>
                         
@@ -339,9 +338,9 @@
                       <div class="form-group row" >
                         <label class="col-sm-2 col-form-label">Inventory Account *</label>
                         <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
-                          <select class="form-select form-select-sm mt-3" name="invacc" value="{{e.invacc}}" >
+                          <select class="form-select form-select-sm mt-3" name="invacc"  value="{{ existing_inventory_account }}" >
                             <option>Choose..</option>
-                            <option value="inventory assets">Inventory Asset</option>
+                            <option value="inventory assets" {% if e.invacc == 'inventory assets' %}selected{% endif %}>Inventory Asset</option>
                           </select>
                         </div>
                       </div>
@@ -354,7 +353,7 @@
                           <div class="row align-items-center">
                             <label class="col-sm-6 col-form-label">Opening Stock Rate per Unit</label>
                             <div class="col-sm-6">
-                              <input type="number" class="form-control  bg-dark" name="inventoryaccntperunit" >
+                              <input type="number" class="form-control  bg-dark" name="inventoryaccntperunit" value="{{ e.rate }}" >
                             </div>
                           </div>
                         </div>
@@ -363,11 +362,11 @@
                             <label class="col-form-label col-sm-2 pt-3">Activation tag<i class="fa fa-question-circle"></i></label>
                             <div class="col-sm-10 form-inline">
                               <div class="form-check ">
-                                <input  class="form-check-input" type="radio" name="satus" id="gridRadios1" value="Activate" >
+                                <input  class="form-check-input" type="radio" name="satus" id="gridRadios1" value="Active" {% if e.status_stock == 'Active' %}checked{% endif %}>
                                 <label class="form-check-label" for="gridRadios1">Activate</label>
                               </div>
                               <div class="form-check ml-5">
-                                <input  class="form-check-input" type="radio" name="satus" id="gridRadios2" value="Non-Activate" style="margin-left:50px;">
+                                <input  class="form-check-input" type="radio" name="satus" id="gridRadios2" value="inactive" style="margin-left:50px;" {% if e.status_stock == 'inactive' %}checked{% endif %}>
                                 <label class="form-check-label" for="gridRadios2">Non-Activate</label>
                               </div>
                                 
@@ -489,53 +488,7 @@
 </div>
 
 
-  
-<script>
 
-
-  function addAccount() {
-    // Get the form and form data
-    let accountForm = document.getElementById("accountForm");
-    let formData = new FormData(accountForm);
-
-    // Send the form data through AJAX
-    $.ajax({
-      url: "{% url 'add_account' %}",
-      type: "POST",
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function(response) {
-        data=response.Account_type
-        data1=response.Account_name
-        // Handle the success response
-        console.log(response);
-
-        var x = document.getElementById("myaccount");
-        var option = document.createElement("option");
-        option.text = data1;
-        x.add(option);
-        // Close the form and perform any other actions
-        closeForm1();
-      },
-      error: function(error) {
-        // Handle the error response
-        console.log(error);
-      }
-    });
-  }
-
-  function showForm() {
-    let formContainer = document.getElementById("myForm1");
-    formContainer.style.display = "block";
-  }
-
-  function closeForm1() {
-    let formContainer = document.getElementById("myForm1");
-    formContainer.style.display = "none";
-  }
-
-</script>
 
 
  

@@ -43,46 +43,52 @@
       <div class="col-md-12" style="right:0;">
         <div class="row">
          
-          <div class="col-md-3" style="border-right: 1px solid white;height: 100vh;position: absolute;z-index:99;margin-top:-3rem;">
+          <div class="col-md-3" style="border-right: 1px solid white; height: 100vh; position: absolute; z-index:99; margin-top:-3rem;">
             <div class="row">
               <div class="col-md-4"><a class="text-white" style="font-size: 1.5rem;">All Items</a></div>
-              
-              <div class="col-md-4 " style="margin-left:9rem; margin-top:-1.8rem;"><a style="color: black;margin-top: 3.1rem;" class="btn btn-secondary" href="{% url 'additem' %}">New</a>
-                <a style="color: #ccc;"href="#3">
-                  <div class="col-md-4 form-inline" style="margin-left: -6rem;margin-top: -1.3rem;">
-                   
-                    <button class="btn btn-secondary" id="filterButton" style="margin-left:10rem;margin-top:-.5rem;">Filter</button>
-                  </div>      
-             
+              <div class="col-md-4 " style="margin-left: 9rem; margin-top: -1.8rem;">
+                <a style="color: black; margin-top: 3.1rem;" class="btn btn-secondary" href="{% url 'additem' %}">New</a>
+                <div class="col-md-4 form-inline" style="margin-left: 4rem; margin-top: -1.8rem;">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Filter
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="filterButton">
+                      <a class="dropdown-item" href="#" data-sort="name">Name</a>
+                      <a class="dropdown-item" href="#" data-sort="hsn">HSN Number</a>
+                      <a class="dropdown-item" href="#" data-sort="all">All</a>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div> 
-            <input type="text"  id="searchInput" class="form-control" placeholder="Search Items..." style="margin-top:-2rem; width: 45%;margin-left:-3rem;">
-            <table  class="table  text-white" style="margin-top:4rem;">
+            </div>
+            <input type="text" id="searchInput" class="form-control bg-dark" placeholder="Search Items..." style="margin-top: -2rem; width: 45%; margin-left: -3rem;">
+            <table class="table text-white" style="margin-top: 4rem;" id="dataTable">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>HSN</th>
                 </tr>
-                
               </thead>
               <tbody id="tableBody">
                 {% for v in allproduct %}
-        
+          
                 <tr>
-        
-                  <td ><a class="text-white " href="{% url 'detail' v.id %}">{{v.Name}}</a></td>
-                  <td ><a class="text-white " href="{% url 'detail' v.id %}">{{v.hsn}}</a></td>
-                
+          
+                  <td><a class="text-white" href="{% url 'detail' v.id %}">{{v.Name}}</a></td>
+                  <td><a class="text-white" href="{% url 'detail' v.id %}">{{v.hsn}}</a></td>
+          
                 </tr>
-                
+          
                 {% endfor %}
-                <tr>
-                  <td><hr></td>
-                  </tr>
+                {% comment %} <tr>
+                <td><hr></td>
+                </tr> {% endcomment %}
               </tbody>
             </table>
           
-          </div> 
+          </div>
+          
           
           <div class="col-md-12 " style="margin-left: 22rem;"  data-spy="scroll" data-target="#navbar-example2" data-offset="0">
             <div class="row" style="position: relative;z-index:99">
@@ -97,7 +103,7 @@
               
                     <div class="col-md-6" style="margin-top: 2rem;">
                       <a style="color: #e0e0e0; width: 4rem; height: 2rem; margin-top: 1rem; margin-left: 80%;" class="btn btn-secondary text-dark" onclick="location.href ='{% url 'edititem' product.id %}'">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-solid fa-pencil "></i>
                       </a>
                     </div>
                     </div>      
@@ -129,7 +135,7 @@
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="commentInput">Comment:</label>
-                                    <textarea class="form-control" id="commentInput" name="comment" rows="3"></textarea>
+                                    <textarea class="form-control bg-dark" id="commentInput" name="comment" rows="3"></textarea>
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-primary" id="submitCommentBtn" onclick="submitComment()">Submit</button>
@@ -305,27 +311,32 @@
 
 
 
-<script>
-  var searchInput = document.getElementById("searchInput");
-  searchInput.addEventListener("input", searchItems);
-
-  function searchItems() {
-    var query = searchInput.value.toLowerCase();
-    var rows = document.getElementById("tableBody").getElementsByTagName("tr");
-
-    for (var i = 0; i < rows.length; i++) {
-      var row = rows[i];
-      var nameCell = row.querySelector("td:first-child");
-      var itemName = nameCell.textContent.toLowerCase();
-
-      if (itemName.includes(query)) {
-        row.style.display = ""; // Display the row
-      } else {
-        row.style.display = "none"; // Hide the row
-      }
-    }
-  }
-</script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Attach keyup and paste event handlers to the search input
+      $("#searchInput").on("keyup paste", function() {
+        var filter = $(this).val().toUpperCase();
+        var table = $("#tableBody");
+        var tr = table.find("tr");
+  
+        // Loop through all table rows, show/hide based on search query
+        tr.each(function() {
+          var td_name = $(this).find("td:eq(0)");
+          var td_hsn = $(this).find("td:eq(1)");
+          var txtValue_name = td_name.text().toUpperCase();
+          var txtValue_hsn = td_hsn.text().toUpperCase();
+  
+          if (txtValue_name.indexOf(filter) > -1 || txtValue_hsn.indexOf(filter) > -1) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      });
+    });
+  </script>
+  
 
 {% comment %} <script>
   function fieldset2_function() {
@@ -338,93 +349,52 @@
 
 
 <script>
-  window.addEventListener('DOMContentLoaded', (event) => {
-    const filterButton = document.getElementById('filterButton');
+  $(document).ready(function() {
+    var originalTable = $('#dataTable').clone(); // Clone the original table on page load
 
-    filterButton.addEventListener('click', () => {
-      sortNames();
-    });
-
-    function sortNames() {
-      const table = document.querySelector('#navbar-example2 table');
-      const tbody = table.tBodies[0];
-      const rows = Array.from(tbody.rows);
-
-      rows.sort((a, b) => {
-        const aValue = a.cells[0].innerText.toLowerCase();
-        const bValue = b.cells[0].innerText.toLowerCase();
-        return aValue.localeCompare(bValue);
+    // Function to sort items by name
+    function sortByName() {
+      var rows = $('#dataTable tbody tr').get();
+      rows.sort(function(a, b) {
+        var keyA = $(a).find('td:eq(0)').text().toUpperCase();
+        var keyB = $(b).find('td:eq(0)').text().toUpperCase();
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
       });
+      $.each(rows, function(index, row) {
+        $('#dataTable').children('tbody').append(row);
+      });
+    }
 
-      // Clear the table body
-      while (tbody.firstChild) {
-        tbody.removeChild(tbody.firstChild);
+    // Function to sort items by HSN number
+    function sortByHSN() {
+      var rows = $('#dataTable tbody tr').get();
+      rows.sort(function(a, b) {
+        var keyA = $(a).find('td:eq(1)').text();
+        var keyB = $(b).find('td:eq(1)').text();
+        return keyA.localeCompare(keyB);
+      });
+      $.each(rows, function(index, row) {
+        $('#dataTable').children('tbody').append(row);
+      });
+    }
+
+    // Event handler for the "Filter" dropdown
+    $('.dropdown-item').on('click', function() {
+      var sortType = $(this).data('sort');
+      if (sortType === 'name') {
+        sortByName();
+      } else if (sortType === 'hsn') {
+        sortByHSN();
+      } else if (sortType === 'all') {
+        // Reset the table to its original order
+        $('#dataTable').replaceWith(originalTable.clone());
       }
-
-      // Append rows in the sorted order
-      rows.forEach((row) => {
-        tbody.appendChild(row);
-      });
-    }
-  });
-</script>
-
-<script>
-  window.addEventListener('DOMContentLoaded', (event) => {
-    const filterButton = document.getElementById('filterButton');
-
-    filterButton.addEventListener('click', () => {
-      sortNames();
     });
-
-    function sortNames() {
-      const table = document.querySelector('#navbar-example2 table');
-      const tbody = table.tBodies[0];
-      const rows = Array.from(tbody.rows);
-
-      const filteredRows = rows.filter((row) => {
-        return row.style.display !== 'none';
-      });
-
-      const sortedRows = filteredRows.sort((a, b) => {
-        const aValue = a.cells[0].innerText.toLowerCase();
-        const bValue = b.cells[0].innerText.toLowerCase();
-        return aValue.localeCompare(bValue);
-      });
-
-      // Create a new temporary table
-      const tempTable = document.createElement('table');
-      const tempTbody = document.createElement('tbody');
-
-      // Clone the heading row and append it to the temporary table
-      const headingRow = table.rows[0].cloneNode(true);
-      tempTable.appendChild(headingRow);
-
-      // Append filtered and sorted rows to the temporary table
-      sortedRows.forEach((row) => {
-        tempTbody.appendChild(row.cloneNode(true));
-      });
-
-      // Append the temporary tbody to the temporary table
-      tempTable.appendChild(tempTbody);
-
-      // Replace the existing table with the temporary table
-      table.parentNode.replaceChild(tempTable, table);
-    }
   });
 </script>
 
-
-  
-
-  
-  
-  
-      
-      
-     
-    
-  
   
   
 

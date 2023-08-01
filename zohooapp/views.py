@@ -292,7 +292,6 @@ def add_account(request):
         
     return render(request,'additem.html')
 
-
 @login_required(login_url='login')
 def add(request):
     if request.user.is_authenticated:
@@ -329,6 +328,9 @@ def add(request):
                 cost=Purchase.objects.get(id=cost_acc)
                 invacc=request.POST.get('invacc')
                 stock=request.POST.get('openstock')
+                rate=request.POST.get('inventoryaccntperunit')
+                status_stock=request.POST.get('satus')
+               
            
                 
                 
@@ -349,7 +351,10 @@ def add(request):
                                 interstate=inter,
                                 intrastate=intra,
                                 invacc=invacc,
-                                stock=stock
+                                stock=stock,
+                                rate=rate,
+                                status_stock=status_stock
+                                
                                 )
                 ad_item.save()
                 
@@ -376,6 +381,10 @@ def add(request):
                 sel=Sales.objects.get(id=sel_acc)
                 cost=Purchase.objects.get(id=cost_acc)
                 stock = request.POST['openstock']
+                invacc=request.POST.get('invacc')
+                rate=request.POST.get('inventoryaccntperunit')
+                status_stock=request.POST.get('satus')
+               
                
                 ad_item=AddItem(type=type,
                                 Name=name,
@@ -393,7 +402,11 @@ def add(request):
                                 creat=history,
                                 interstate='none',
                                 intrastate='none',
-                                stock=stock
+                                invacc=invacc,
+                                stock=stock,
+                                rate=rate,
+                                status_stock=status_stock
+                              
                             
                                
                                 )
@@ -404,37 +417,10 @@ def add(request):
             return redirect("itemview")
     return render(request,'additem.html')
 
-# def search_data(request):
-#     if request.method == 'GET':
-#         search_query = request.GET.get('search_query')
-#         print(search_query)
 
-#         # Build the query dynamically to search across all fields
-#         query = Q()
-#         fields = AddItem._meta.get_fields()
-#         for field in fields:
-#             if field.get_internal_type() == 'CharField':
-#                 query |= Q(**{f'{field.name}__icontains': search_query})
-#             elif field.get_internal_type() == 'IntegerField' or field.get_internal_type() == 'FloatField':
-#                 try:
-#                     search_value = int(search_query)
-#                 except ValueError:
-#                     try:
-#                         search_value = float(search_query)
-#                     except ValueError:
-#                         continue
-#                 query |= Q(**{f'{field.name}': search_value})
-
-#         # Perform the search query on your model
-#         results = AddItem.objects.filter(query)
-
-#         # Serialize the results to JSON
-#         serialized_results = serializers.serialize('json', results)
-
-#         # Return the serialized results as JSON response
-#         return JsonResponse(serialized_results, safe=False)
 @login_required(login_url='login')
 def edititem(request,id):
+    item=AddItem.objects.all
     pedit=AddItem.objects.get(id=id)
     p=Purchase.objects.all()
     s=Sales.objects.all()
@@ -448,7 +434,7 @@ def edititem(request,id):
     account = Sales.objects.all()
     account_type = set(Sales.objects.values_list('Account_type', flat=True))
     
-    return render(request,'edititem.html',{"account":account,"account_type":account_type,'e':pedit,'p':p,'s':s,'u':u,"accounts":accounts,"account_types":account_types})
+    return render(request,'edititem.html',{"account":account,"account_type":account_type,'e':pedit,'p':p,'s':s,'u':u,"accounts":accounts,"account_types":account_types,'item':item})
 
 
 @login_required(login_url='login')
@@ -467,14 +453,20 @@ def edit_db(request,id):
             edit.hsn=request.POST['hsn']
             edit.stock=request.POST['openstock']
             edit.satus=request.POST.get('status')
+            edit.invacc=request.POST.get('invacc')
+            edit.rate=request.POST['inventoryaccntperunit']
+            edit.status_stock=request.POST.get('satus')
             edit.unit=Unit.objects.get(id=unit)
             edit.sales=Sales.objects.get(id=sel_acc)
             edit.purchase=Purchase.objects.get(id=cost_acc)
+            
+
             edit.save()
-            return redirect('itemview')
+            
+            return redirect('detail', id=edit.id)
+
 
         return render(request,'edititem.html')
-
 
 @login_required(login_url='login')
 def detail(request,id):

@@ -13,7 +13,6 @@
     {% comment %} right: 250px;
     bottom: 450px; {% endcomment %}
     width: 180px;
-    z-index: 0;
   }
 
   /* The popup form - hidden by default */
@@ -127,6 +126,24 @@
 
   .form-popup1 .close:hover {
     color: black;
+  }
+
+  /* Style for the highlighted account type options */
+  option.highlight-account-type {
+    background-color: #f3f3f3; /* Example background color */
+    color: #666; /* Example text color */
+    font-weight: bold; /* Example font weight */
+    /* Add any other styles you want to customize the look of the highlighted account type options */
+  }
+  
+  /* Additional style for hovering over the highlighted account type options (optional) */
+  option.highlight-account-type:hover {
+    background-color: #f5f5f5; /* Example hover background color */
+    /* Add any other styles you want for the hover state */
+  }
+  .highlight-account-type {
+    text-align: left;
+    padding-left: 10px;
   }
 </style>
 
@@ -285,7 +302,7 @@
                          
                     
                     {% for account_type in account_type %}
-                      <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
+                      <option value="" disabled class="btn btn-dark text-light highlight-account-type"><b>{{ account_type }}</b></option>
                       {% for account in account %}
                       {% if account.Account_type == account_type %}
                       <option value="{{account.id}}">{{ account.Account_name }}</option>
@@ -318,21 +335,18 @@
                 </div>
               </div>
               <div class="form-group row in">
-                <label  class="col-sm-2 col-form-label">Account *</label>
-                  <div class="col-sm-10 col-md-7 col-9">
-                    <select name="cost_acc" class="form-control bg-dark"  id="myaccount">
-                      {% for account_type in account_types %}
-                        
-                      <option value="" disabled class="btn btn-dark text-white"><b>{{ account_type }}</b></option>
-                        {% for account in accounts %}
-                        {% if account.Account_type == account_type %}
-                      <option value="{{account.id}}">{{ account.Account_name }}</option>
-                        {% endif %}
-                        {% endfor %}
-                        {% endfor %}
-
-                    </select>  
-                                          
+                <label class="col-sm-2 col-form-label">Account *</label>
+                <div class="col-sm-10 col-md-7 col-9">
+                  <select name="cost_acc" class="form-control bg-dark" id="myaccount">
+                    {% for account_type in account_types %}
+                    <option value="" disabled class="btn btn-dark text-light highlight-account-type"><b>{{ account_type }}</b></option>
+                    {% for account in accounts %}
+                    {% if account.Account_type == account_type %}
+                    <option value="{{account.id}}">{{ account.Account_name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                  </select>             
 
                   </div>
                   {% comment %} <button style="width: 4rem;height: 2rem;" class="openbutton" id="showFormButton"   onclick="showForm">Add</button> {% endcomment %}
@@ -587,126 +601,13 @@ function closeForm1() {
 </script>
 
 
+
+
+
+
+
   
 
-      {% comment %} <div id="hider"></div>
-        <div class="popup" id="popup">
-          <form style="margin-top: 5rem;" action="{% url 'add_account' %}" method="post">
-            {% csrf_token %}
-            <div style="margin-top: 2rem;float:right" class="display-flex">
-              <h4 class="text-light" >Add Account</h4>
-              <h6 class="float-right text-light" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
-            </div>
-            
-          
-              <label class=" text-light" >Accout type</label> <br>
-              <input class=""  type="text" value="EXPENCES" name="acc_type" id=""> <br>
-              <label  class="text-light" >Accout Name</label> <br>
-              <input required type="text" name="acc_name" id=""> <br>
-            
-              <label class="text-light" >Accout Description</label> <br>
-              <input type="text" name="acc_desc" id=""> <br> <br>
-
-              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-              <input type="button" class="mr-3 btn btn-secondary but" onclick="closepopup()" value="Cancel">
-          </form>
-
-
-            <script>
-              let popup=document.getElementById("popup");
-
-              function openpopup(){
-                popup.style.display = "block";
-              }
-              function closepopup(){
-                popup.style.display = "none";
-              }
-              
-
-            </script>
-          </div>
-
-          <div class="popup-1" id="popup-1" >
-            <div style="margin-top: 2rem;" class="display-flex">
-            <h4 class="text-light" >Add Unit</h4>
-            <button class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick=" closeForm()">X</button>
-            </div>
-            
-            <form style="margin-top: 3rem;" action="{% url 'add_unit' %}" method="post">
-              {% csrf_token %}
-              <label class="text-light" >Unit</label> <br>
-              <input required  type="text" name="unit_name" id=""> <br>
-              
-              <br>
-              <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-              <input type="button" class=" mr-3 btn btn-secondary "  onclick=" closeForm()"  value="Cancel">
-          <p class="text-light">eg:KL,PCS,BOX,LTR</p>
-            </form>
-      
-      
-            <script>
-              function openForm() {
-                let formContainer = document.getElementById("popup-1");
-                formContainer.style.display = "block";
-              }
-              
-              function closeForm() {
-                let formContainer = document.getElementById("popup-1");
-                formContainer.style.display = "none";
-              }
-      
-            </script>
-          </div>
-
-
-          <div class="popup-2" id="popup-2">
-            <div style="margin-top: 2rem;" class="display-flex">
-            <h4 class="text-dark" >Add SALES</h4>
-            <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closep()">X</h6>
-            </div>
-            
-            <form style="margin-top: 3rem;" action="{% url 'add_sales' %}" method="post">
-              {% csrf_token %}
-              <label class="text-dark" >Accout type</label> <br>
-              <input  required type="text" name="acc_type" id=""> <br>
-              <label class="text-dark" >Accout Name</label> <br>
-              <input required type="text" name="acc_name" id=""> <br>
-              <label class="text-dark" >Accout Code</label> <br>
-              <input type="text" name="acc_code" id=""> <br>
-              <label class="text-dark" >Accout Description</label> <br>
-              <input type="text" name="acc_desc" id=""> <br> <br>
-              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-              <input type="button" class="mr-3 btn btn-secondary but" onclick="close()" value="Cancel">
-            </form>
-
-      
-      
-            <script>
-              let pop = document.getElementById("popup-2");
-
-              function openp() {
-                  pop.style.display = "block";
-              }
-      
-              function closep() {
-                  pop.style.display = "none";
-              }
-      
-      
-            </script> 
-          </div>{% endcomment %}
-
-        </div>
-       </div> 
-
+  
 </section>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
-
 {% endblock %}
