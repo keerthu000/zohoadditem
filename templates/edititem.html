@@ -325,72 +325,84 @@
                     </div>
                   </div>
                 </fieldset>
-                <div class="row" >
+                <div class="row">
                   <div class="col-md-10">
-                    {% comment %} <label><input type="checkbox" value="trackstate" name="trackstate" onclick="toggleForm()" style="display: none;">
-                   Track Inventory for this item</label> {% endcomment %}
-                    {% comment %} <input type="hidden" name="trackState" id="trackState" value="" unchecked> {% endcomment %}
                     <label>
-                      <input type="checkbox" name="trackstate" value="trackstate"  onclick="toggleFormFields()">
+                      <input type="checkbox" name="trackstate" value="trackstate" onclick="toggleFormFields()">
                       Track Inventory for this item
                     </label><br><br>
-                    <div id="formFields" style="display: none;"> 
-                      <div class="form-group row" >
+                    <div id="formFields" style="display: none;">
+                      <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Inventory Account *</label>
                         <div class="col-sm-10 col-md-7 col-9" style="margin-left: -1rem;">
-                          <select class="form-select form-select-sm mt-3" name="invacc"  value="{{ existing_inventory_account }}" >
+                          <select class="form-select form-select-sm mt-3" name="invacc" value="{{e.invacc}}">
                             <option>Choose..</option>
                             <option value="inventory assets" {% if e.invacc == 'inventory assets' %}selected{% endif %}>Inventory Asset</option>
                           </select>
                         </div>
                       </div>
-                      <div class="form-group row ">
+                      <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Opening Stock</label>
-                        <div class=" col-md-5">
-                          <input  type="number" class="form-control  bg-dark" name="openstock" value="{{e.stock}}">
+                        <div class="col-md-5">
+                          <input type="number" class="form-control bg-dark" name="openstock" value="{{e.stock}}">
                         </div>
-                        <div class="col-md-5  ">
+                        <div class="col-md-5">
                           <div class="row align-items-center">
                             <label class="col-sm-6 col-form-label">Opening Stock Rate per Unit</label>
                             <div class="col-sm-6">
-                              <input type="number" class="form-control  bg-dark" name="inventoryaccntperunit" value="{{ e.rate }}" >
+                              <input type="number" class="form-control bg-dark" name="inventoryaccntperunit" value="{{ e.rate }}">
                             </div>
                           </div>
                         </div>
                         <fieldset class="form-group">
                           <div class="row">
-                            <label class="col-form-label col-sm-2 pt-3">Activation tag<i class="fa fa-question-circle"></i></label>
-                            <div class="col-sm-10 form-inline">
-                              <div class="form-check ">
-                                <input  class="form-check-input" type="radio" name="satus" id="gridRadios1" value="Active" {% if e.status_stock == 'Active' %}checked{% endif %}>
-                                <label class="form-check-label" for="gridRadios1">Activate</label>
+                              <label class="col-form-label col-sm-2 pt-3">Activation tag<i class="fa fa-question-circle"></i></label>
+                              <div class="col-sm-10 form-inline">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="radio" name="satus" id="gridRadios1" value="Active" {% if e.status_stock == 'Active' %}checked{% endif %}>
+                                      <label class="form-check-label" for="gridRadios1">Activate</label>
+                                  </div>
+                                  <div class="form-check ml-5">
+                                      <input class="form-check-input" type="radio" name="satus" id="gridRadios2" value="Inactive" {% if e.status_stock == 'Inactive' %}checked{% endif %} style="margin-left: 50px;">
+                                      <label class="form-check-label" for="gridRadios2">Non-Activate</label>
+                                  </div>
                               </div>
-                              <div class="form-check ml-5">
-                                <input  class="form-check-input" type="radio" name="satus" id="gridRadios2" value="inactive" style="margin-left:50px;" {% if e.status_stock == 'inactive' %}checked{% endif %}>
-                                <label class="form-check-label" for="gridRadios2">Non-Activate</label>
-                              </div>
-                                
-                            </div>
                           </div>
-                        </fieldset>
+                      </fieldset>
+                      
                       </div>
                     </div>
                   </div>
                 </div>
-                <script>
-                  function toggleFormFields() {
-                    var formFields = document.getElementById("formFields");
-                    var checkbox = document.querySelector("input[name=trackstate]");
-              
-                    if (checkbox.checked) {
-                      formFields.style.display = "block";
-                    } else {
-                      formFields.style.display = "none";
-                    }
-                  }
-                </script>
-        
                 
+       
+
+
+<!-- Your HTML code remains unchanged -->
+
+<script>
+  function toggleFormFields() {
+    var formFieldsDiv = document.getElementById("formFields");
+    var checkbox = document.getElementsByName("trackstate")[0];
+    var inventoryAccount = document.getElementsByName("invacc")[0].value;
+    var openingStock = parseFloat(document.getElementsByName("openstock")[0].value);
+    var openingStockRate = parseFloat(document.getElementsByName("inventoryaccntperunit")[0].value);
+    var openingStatus = parseFloat(document.getElementsByName("status")[0].value);
+
+    // Check if the selected inventory account is "inventory assets" OR if the checkbox is explicitly checked
+    if (inventoryAccount === "inventory assets" || checkbox.checked || openingStock || openingStockRate  || openingStatus) {
+      checkbox.checked = true; // Ensure the checkbox is checked when any of the conditions are met
+      formFieldsDiv.style.display = "block";
+    } else {
+      checkbox.checked = false; // Ensure the checkbox is unchecked when none of the conditions are met
+      formFieldsDiv.style.display = "none";
+    }
+  }
+
+  // Call the function initially to set the initial state of the checkbox and form fields
+  toggleFormFields();
+</script>
+
 
            
           <div class="form-inline">
@@ -474,8 +486,8 @@
     <label class="text-dark"><b>Account type</b></label>
     <select class="form-select" aria-label="Default select example" name="acc_type" value={{e.Account_type}}>
       <option selected></option>
-      <option value="EXPENSE">EXPENSE</option>
-      <option value="Cost of Goods Sold">Cost of Goods Sold</option>
+      <option value="EXPENSE">EXPENCES</option>
+      <option value="Cost of Goods Sold">Cost Of Goods Sold</option>
       <option value="Fixed Asset">Fixed Asset</option>
     </select>
     <label class="text-dark"><b>Account Name</b></label>
