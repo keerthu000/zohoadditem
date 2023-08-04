@@ -351,8 +351,7 @@
                   </select>             
 
                   </div>
-                  {% comment %} <button style="width: 4rem;height: 2rem;" class="openbutton" id="showFormButton"   onclick="showForm">Add</button> {% endcomment %}
-                  <button id="showFormButton" style="width:5rem;" class="openbutton" onclick="showForm()">Add</button>
+                <button id="showFormButton" style="width:5rem;" class="openbutton" onclick="showForm()">Add</button>
               </div>
               
 
@@ -556,40 +555,88 @@ function closeForm() {
 
 
 <script>
-
-
-function addAccount() {
-  // Get the form and form data
-  let accountForm = document.getElementById("accountForm");
-  let formData = new FormData(accountForm);
-
-  // Send the form data through AJAX
-  $.ajax({
-    url: "{% url 'add_account' %}",
-    type: "POST",
-    data: formData,
-    processData: false,
-    contentType: false,
-    success: function(response) {
-      data=response.Account_type
-      data1=response.Account_name
-      // Handle the success response
-      console.log(response);
-
-      var x = document.getElementById("myaccount");
-      var option = document.createElement("option");
-      option.text = data1;
-      x.add(option);
-      // Close the form and perform any other actions
-      closeForm1();
-    },
-    error: function(error) {
-      // Handle the error response
-      console.log(error);
-    }
+  function addAccount() {
+    // Get the form and form data
+    let accountForm = document.getElementById("accountForm");
+    let formData = new FormData(accountForm);
+  
+    // Send the form data through AJAX
+    $.ajax({
+      url: "{% url 'add_account' %}",
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        const accountType = response.Account_type;
+        const accountName = response.Account_name;
+        const accountId = response.account_id; // Assume the server returns the account ID
+  
+        // Handle the success response
+        console.log(response);
+  
+        // Get the dropdown element
+        const dropdown = document.getElementById("myaccount");
+  
+        // Create and add the new account option
+        const newAccountOption = document.createElement("option");
+        newAccountOption.value = accountId;
+        newAccountOption.text = accountName;
+  
+        // Find the correct position to insert the new account option
+        let foundAccountType = false;
+        for (let i = 0; i < dropdown.options.length; i++) {
+          const option = dropdown.options[i];
+          if (option.disabled && option.innerText === accountType) {
+            foundAccountType = true;
+            // Move to the next option to find the correct position within the account type
+            continue;
+          }
+          if (foundAccountType) {
+            if (!option.disabled) {
+              // Insert the new account option before the first non-disabled option within the account type
+              dropdown.add(newAccountOption, i);
+              break;
+            }
+          }
+        }
+  
+        // If the account type option doesn't exist, create and add it along with the new account option
+        if (!foundAccountType) {
+          const accountTypeOption = document.createElement("option");
+          accountTypeOption.text = accountType;
+          accountTypeOption.disabled = true;
+          accountTypeOption.className = "btn btn-dark text-light highlight-account-type";
+          dropdown.add(accountTypeOption);
+          dropdown.add(newAccountOption);
+        }
+  
+        // Select the newly added account option to display it as the current selection
+        newAccountOption.selected = true;
+  
+        // Close the form and perform any other actions
+        closeForm1();
+      },
+      error: function (error) {
+        // Handle the error response
+        console.log(error);
+      }
+    });
+  }
+  
+  // Add an event listener to the <select> element
+  const dropdown = document.getElementById("myaccount");
+  dropdown.addEventListener("change", function () {
+    // Get the selected option from the dropdown
+    const selectedOption = dropdown.selectedOptions[0];
+    // Get the account ID from the selected option's value attribute
+    const selectedAccountId = selectedOption.value;
+  
+    // Now you can use selectedAccountId for further processing or display
+    console.log("Selected Account ID:", selectedAccountId);
   });
-}
-
+  
+  
 function showForm() {
   let formContainer = document.getElementById("myForm1");
   formContainer.style.display = "block";
@@ -605,9 +652,117 @@ function closeForm1() {
 
   
 
+      {% comment %} <div id="hider"></div>
+        <div class="popup" id="popup">
+          <form style="margin-top: 5rem;" action="{% url 'add_account' %}" method="post">
+            {% csrf_token %}
+            <div style="margin-top: 2rem;float:right" class="display-flex">
+              <h4 class="text-light" >Add Account</h4>
+              <h6 class="float-right text-light" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
+            </div>
+            
+          
+              <label class=" text-light" >Accout type</label> <br>
+              <input class=""  type="text" value="EXPENCES" name="acc_type" id=""> <br>
+              <label  class="text-light" >Accout Name</label> <br>
+              <input required type="text" name="acc_name" id=""> <br>
+            
+              <label class="text-light" >Accout Description</label> <br>
+              <input type="text" name="acc_desc" id=""> <br> <br>
+
+              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
+              <input type="button" class="mr-3 btn btn-secondary but" onclick="closepopup()" value="Cancel">
+          </form>
 
 
-   
+            <script>
+              let popup=document.getElementById("popup");
+
+              function openpopup(){
+                popup.style.display = "block";
+              }
+              function closepopup(){
+                popup.style.display = "none";
+              }
+              
+
+            </script>
+          </div>
+
+          <div class="popup-1" id="popup-1" >
+            <div style="margin-top: 2rem;" class="display-flex">
+            <h4 class="text-light" >Add Unit</h4>
+            <button class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick=" closeForm()">X</button>
+            </div>
+            
+            <form style="margin-top: 3rem;" action="{% url 'add_unit' %}" method="post">
+              {% csrf_token %}
+              <label class="text-light" >Unit</label> <br>
+              <input required  type="text" name="unit_name" id=""> <br>
+              
+              <br>
+              <input type="submit"  class="mr-3 btn btn-success"  value="Save">
+              <input type="button" class=" mr-3 btn btn-secondary "  onclick=" closeForm()"  value="Cancel">
+          <p class="text-light">eg:KL,PCS,BOX,LTR</p>
+            </form>
+      
+      
+            <script>
+              function openForm() {
+                let formContainer = document.getElementById("popup-1");
+                formContainer.style.display = "block";
+              }
+              
+              function closeForm() {
+                let formContainer = document.getElementById("popup-1");
+                formContainer.style.display = "none";
+              }
+      
+            </script>
+          </div>
+
+
+          <div class="popup-2" id="popup-2">
+            <div style="margin-top: 2rem;" class="display-flex">
+            <h4 class="text-dark" >Add SALES</h4>
+            <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closep()">X</h6>
+            </div>
+            
+            <form style="margin-top: 3rem;" action="{% url 'add_sales' %}" method="post">
+              {% csrf_token %}
+              <label class="text-dark" >Accout type</label> <br>
+              <input  required type="text" name="acc_type" id=""> <br>
+              <label class="text-dark" >Accout Name</label> <br>
+              <input required type="text" name="acc_name" id=""> <br>
+              <label class="text-dark" >Accout Code</label> <br>
+              <input type="text" name="acc_code" id=""> <br>
+              <label class="text-dark" >Accout Description</label> <br>
+              <input type="text" name="acc_desc" id=""> <br> <br>
+              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
+              <input type="button" class="mr-3 btn btn-secondary but" onclick="close()" value="Cancel">
+            </form>
+
+      
+      
+            <script>
+              let pop = document.getElementById("popup-2");
+
+              function openp() {
+                  pop.style.display = "block";
+              }
+      
+              function closep() {
+                  pop.style.display = "none";
+              }
+      
+      
+            </script> 
+          </div>{% endcomment %}
+
+        </div>
+       </div> 
+
+
 
   
 
