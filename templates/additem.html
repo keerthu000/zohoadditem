@@ -182,21 +182,16 @@
               </div>
             </div>
             <div class="form-group row">
-              <label  class="col-sm-2 col-form-label ">Unit <i class="fa fa-question-circle"></i></label>
-                <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
-                  <select  name="unit" class="form-control bg-dark " id="myunit">
-                    {% for u in unit %}
+              <label class="col-sm-2 col-form-label">Unit <i class="fa fa-question-circle"></i></label>
+              <div class="col-sm-10 col-md-7 col-9" style="margin-left: -2.2rem;">
+                  <select name="unit" class="form-control bg-dark" id="unit">
+                      {% for u in unit %}
                       <option value="{{u.id}}">{{u.unit}}</option>
-                    {% endfor %}
-                  </select> 
-                          
-                </div>
-            
-              {% comment %} <button class="trigger btn btn-secondary" style="width:5rem;" id="myBtn">Add Unit</button> {% endcomment %}
-              <button  style="width:5rem;" class="open-button" onclick="openForm()">Add Unit</button>
-        
-            </div>
-            
+                      {% endfor %}
+                  </select>
+              </div>
+              <button style="width: 5rem;" class="open-button" onclick="openForm()">Add Unit</button>
+          </div>
 
             <div class="form-group row">
               <label  class="col-sm-2 col-form-label">HSN Code</label> 
@@ -345,6 +340,7 @@
                     {% for account in accounts %}
                     {% if account.Account_type == account_type %}
                     <option value="{{account.id}}">{{ account.Account_name }}</option>
+                    
                     {% endif %}
                     {% endfor %}
                     {% endfor %}
@@ -472,84 +468,98 @@
 <!-- ============================ modal for account adding  -->
 
 <div class="form-popup" id="myForm">
-<form onsubmit="event.preventDefault(); addUnit();"  class="form-container" id="unitForm"  >
-  {% csrf_token %}
-  <span class="close" onclick="closeForm()">&times;</span><br>
-  <h1 class="text-dark">Add Unit</h1>
+  <form onsubmit="event.preventDefault(); addUnit();" class="form-container" id="unitForm">
+      {% csrf_token %}
+      <span class="close" onclick="closeForm()">&times;</span><br>
+      <h1 class="text-dark">Add Unit</h1>
 
-  <label class="text-dark" for="unit"><b>Unit</b></label>
-  <input type="text" placeholder="Enter unit" id="unit" name="unit_name" required>
-  <p class="text-dark">eg:KL,PCS,BOX,LTR</p>
+      <label class="text-dark" for="unit"><b>Unit</b></label>
+      <input type="text" placeholder="Enter unit" id="unitName" name="unit_name" required>
+      <p class="text-dark">eg:KL,PCS,BOX,LTR</p>
 
-  <button type="submit"  class="btn">Add</button>
- 
-</form>
+      <button type="submit" class="btn add-button">Add</button>
+  </form>
 </div>
 
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 function addUnit() {
-  // Get the form and form data
-  let unitForm = document.getElementById("unitForm");
-  let formData = new FormData(unitForm);
+    // Get the form and form data
+    let unitForm = document.getElementById("unitForm");
+    let formData = new FormData(unitForm);
 
-  // Send the form data through AJAX
-  $.ajax({
-    url: "{% url 'add_unit' %}",
-    type: "POST",
-    data: formData,
-    processData: false,
-    contentType: false,
-    success: function(response) {
-      // Handle the success response
-      console.log(response);
-      data=response.unit_name
-      var x = document.getElementById("myunit");
-      var option = document.createElement("option");
-      option.text = data;
-      x.add(option);
-      // Close the form and perform any other actions
-      closeForm();
-    },
-    error: function(error) {
-      // Handle the error response
-      console.log(error);
-    }
-  });
+    // Send the form data through AJAX
+    $.ajax({
+        url: "{% url 'add_unit' %}",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            const unitName = response.unit_name;
+            const unitId = response.unit_id; // Assume the server returns the unit ID
+
+            // Handle the success response
+            console.log(response);
+
+            // Get the dropdown element
+            const dropdown = document.getElementById("unit");
+
+            // Create and add the new unit option
+            const newUnitOption = document.createElement("option");
+            newUnitOption.value = unitId;
+            newUnitOption.text = unitName;
+
+            // Add the new unit option to the dropdown
+            dropdown.add(newUnitOption);
+
+            // Select the newly added unit option to display it as the current selection
+            newUnitOption.selected = true;
+
+            // Close the form and perform any other actions
+            closeForm();
+        },
+        error: function (error) {
+            // Handle the error response
+            console.log(error);
+        }
+    });
 }
 
 function openForm() {
-  let formContainer = document.getElementById("myForm");
-  formContainer.style.display = "block";
+    let formContainer = document.getElementById("myForm");
+    formContainer.style.display = "block";
 }
 
 function closeForm() {
-  let formContainer = document.getElementById("myForm");
-  formContainer.style.display = "none";
+    let formContainer = document.getElementById("myForm");
+    formContainer.style.display = "none";
 }
 </script>
 
 <div class="form-popup1" id="myForm1" >
-<form style="margin-top: 5rem;" onsubmit="event.preventDefault(); addAccount();" class="form-container" id="accountForm">
-  {% csrf_token %}
-  <span class="close" onclick="closeForm1()">&times;</span><br>
-  <h1 class="text-dark" >Add Account</h1><br>
+  <form style="margin-top: 5rem;" onsubmit="event.preventDefault(); addAccount();" class="form-container" id="accountForm">
+    {% csrf_token %}
+    <span class="close" onclick="closeForm1()">&times;</span><br>
+    <h1 class="text-dark" >Add Account</h1><br>
+    
+    <label class="text-dark"><b>Account type</b></label>
+    <select class="form-select" aria-label="Default select example" name="acc_type">
+      <option selected></option>
+      <option value="EXPENCES">EXPENCES</option>
+      <option value="Cost Of Goods Sold">Cost Of Goods Sold</option>
+      <option value="Fixed Asset">Fixed Asset</option>
+    </select>
+    <label class="text-dark"><b>Account Name</b></label>
+    
+    <input type="text" placeholder="Enter account Name" id="unit" name="acc_name" required>
+    <label class="text-dark"><b>Description</b></label>
+    <input type="text" placeholder="Description"name="acc_desc">
+    <button type="submit" class="btn add-button" >Add</button>
   
-  <label class="text-dark"><b>Account type</b></label>
-  <select class="form-select" aria-label="Default select example" name="acc_type">
-    <option selected></option>
-    <option value="EXPENCES">EXPENCES</option>
-    <option value="Cost Of Goods Sold">Cost Of Goods Sold</option>
-    <option value="Fixed Asset">Fixed Asset</option>
-  </select>
-  <label class="text-dark"><b>Account Name</b></label>
-  <input type="text" placeholder="Enter account Name" id="unit" name="acc_name" required>
-  <label class="text-dark"><b>Description</b></label>
-  <input type="text" placeholder="Description"name="acc_desc">
-  <button type="submit" class="btn add-button" >Add</button>
- 
-</form>
+  </form>
 </div>
 
 
@@ -587,7 +597,7 @@ function closeForm() {
         let foundAccountType = false;
         for (let i = 0; i < dropdown.options.length; i++) {
           const option = dropdown.options[i];
-          if (option.disabled && option.innerText === accountType) {
+          if (option.disabled && option.innerText === accountType)   {
             foundAccountType = true;
             // Move to the next option to find the correct position within the account type
             continue;
@@ -623,19 +633,16 @@ function closeForm() {
       }
     });
   }
-  
-  // Add an event listener to the <select> element
   const dropdown = document.getElementById("myaccount");
   dropdown.addEventListener("change", function () {
-    // Get the selected option from the dropdown
-    const selectedOption = dropdown.selectedOptions[0];
-    // Get the account ID from the selected option's value attribute
-    const selectedAccountId = selectedOption.value;
-  
-    // Now you can use selectedAccountId for further processing or display
-    console.log("Selected Account ID:", selectedAccountId);
-  });
-  
+  // Get the selected option from the dropdown
+  const selectedOption = dropdown.selectedOptions[0];
+  // Get the account ID from the selected option's value attribute
+  const selectedAccountId = selectedOption.value;
+
+  // Now you can use selectedAccountId for further processing or display
+  console.log("Selected Account ID:", selectedAccountId);
+});
   
 function showForm() {
   let formContainer = document.getElementById("myForm1");
@@ -652,117 +659,7 @@ function closeForm1() {
 
   
 
-      {% comment %} <div id="hider"></div>
-        <div class="popup" id="popup">
-          <form style="margin-top: 5rem;" action="{% url 'add_account' %}" method="post">
-            {% csrf_token %}
-            <div style="margin-top: 2rem;float:right" class="display-flex">
-              <h4 class="text-light" >Add Account</h4>
-              <h6 class="float-right text-light" style="margin-right: 1rem; margin-top: -2rem;" onclick="closepopup()">X</h6>
-            </div>
-            
-          
-              <label class=" text-light" >Accout type</label> <br>
-              <input class=""  type="text" value="EXPENCES" name="acc_type" id=""> <br>
-              <label  class="text-light" >Accout Name</label> <br>
-              <input required type="text" name="acc_name" id=""> <br>
-            
-              <label class="text-light" >Accout Description</label> <br>
-              <input type="text" name="acc_desc" id=""> <br> <br>
-
-              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-              <input type="button" class="mr-3 btn btn-secondary but" onclick="closepopup()" value="Cancel">
-          </form>
-
-
-            <script>
-              let popup=document.getElementById("popup");
-
-              function openpopup(){
-                popup.style.display = "block";
-              }
-              function closepopup(){
-                popup.style.display = "none";
-              }
-              
-
-            </script>
-          </div>
-
-          <div class="popup-1" id="popup-1" >
-            <div style="margin-top: 2rem;" class="display-flex">
-            <h4 class="text-light" >Add Unit</h4>
-            <button class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick=" closeForm()">X</button>
-            </div>
-            
-            <form style="margin-top: 3rem;" action="{% url 'add_unit' %}" method="post">
-              {% csrf_token %}
-              <label class="text-light" >Unit</label> <br>
-              <input required  type="text" name="unit_name" id=""> <br>
-              
-              <br>
-              <input type="submit"  class="mr-3 btn btn-success"  value="Save">
-              <input type="button" class=" mr-3 btn btn-secondary "  onclick=" closeForm()"  value="Cancel">
-          <p class="text-light">eg:KL,PCS,BOX,LTR</p>
-            </form>
-      
-      
-            <script>
-              function openForm() {
-                let formContainer = document.getElementById("popup-1");
-                formContainer.style.display = "block";
-              }
-              
-              function closeForm() {
-                let formContainer = document.getElementById("popup-1");
-                formContainer.style.display = "none";
-              }
-      
-            </script>
-          </div>
-
-
-          <div class="popup-2" id="popup-2">
-            <div style="margin-top: 2rem;" class="display-flex">
-            <h4 class="text-dark" >Add SALES</h4>
-            <h6 class="float-right text-dark" style="margin-right: 1rem; margin-top: -2rem;" onclick="closep()">X</h6>
-            </div>
-            
-            <form style="margin-top: 3rem;" action="{% url 'add_sales' %}" method="post">
-              {% csrf_token %}
-              <label class="text-dark" >Accout type</label> <br>
-              <input  required type="text" name="acc_type" id=""> <br>
-              <label class="text-dark" >Accout Name</label> <br>
-              <input required type="text" name="acc_name" id=""> <br>
-              <label class="text-dark" >Accout Code</label> <br>
-              <input type="text" name="acc_code" id=""> <br>
-              <label class="text-dark" >Accout Description</label> <br>
-              <input type="text" name="acc_desc" id=""> <br> <br>
-              <input  style="width: 5rem; height: 2rem; color: black;" class="btn btn-success" type="submit"  value="submit">
-              <input type="button" class="mr-3 btn btn-secondary but" onclick="close()" value="Cancel">
-            </form>
-
-      
-      
-            <script>
-              let pop = document.getElementById("popup-2");
-
-              function openp() {
-                  pop.style.display = "block";
-              }
-      
-              function closep() {
-                  pop.style.display = "none";
-              }
-      
-      
-            </script> 
-          </div>{% endcomment %}
-
-        </div>
-       </div> 
-
-
+  
 
   
 
